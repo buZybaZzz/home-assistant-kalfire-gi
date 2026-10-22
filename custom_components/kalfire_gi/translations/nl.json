@@ -1,0 +1,105 @@
+{
+  "title": "Kalfire Gi Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Verbind met je Kalfire Gi",
+        "description": "Vul het adres van de haard op je vertrouwde thuisnetwerk in. Configureren leest alleen gegevens uit.",
+        "data": {
+          "host": "IP-adres of hostnaam",
+          "port": "Poort"
+        }
+      },
+      "trust": {
+        "title": "Dit haardcertificaat vertrouwen?",
+        "description": "Het apparaat op {host} presenteert deze SHA256-certificaatvingerafdruk:\n\n{fingerprint}\n\nControleer of dit adres bij jouw haard hoort. Accepteer alleen op een vertrouwd netwerk. Dit is vertrouwen bij het eerste gebruik, geen controle van de fabrikant-CA. Elke nieuwe verbinding controleert deze vingerafdruk. Er is nog geen apparaattoken verstuurd."
+      },
+      "auth_method": {
+        "title": "Lokaal koppelen",
+        "menu_options": {
+          "pair": "Koppelen met de afstandsbediening",
+          "existing_token": "Bestaand lokaal token gebruiken"
+        }
+      },
+      "pair": {
+        "title": "Open het koppelvenster",
+        "description": "Houd de officiële afstandsbediening gekoppeld en bij de haard. Houd de rechter ronde knop direct boven M3 3 seconden ingedrukt en kies meteen Verzenden. Dit volgt de Gi-app en start de haard niet. Op het geteste apparaat bleef de bestaande app werken."
+      },
+      "existing_token": {
+        "title": "Bestaand lokaal apparaattoken",
+        "description": "Vul een eerder gekoppeld lokaal token van 24 tekens in. Dit is niet je cloudwachtwoord. Het token blijft in Home Assistant.",
+        "data": {
+          "token": "Lokaal apparaattoken"
+        }
+      },
+      "reconfigure": {
+        "title": "Apparaatadres wijzigen",
+        "description": "De bestaande certificaatvingerafdruk en apparaatidentiteit moeten blijven overeenkomen. Een gewijzigd certificaat wordt niet automatisch vertrouwd.",
+        "data": {
+          "host": "IP-adres of hostnaam",
+          "port": "Poort"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Vul een IP-adres of hostnaam in zonder URL-schema of pad.",
+      "cannot_connect": "Geen communicatie met de lokale haard. Controleer het adres en UDP-poort 5684.",
+      "certificate_changed": "Certificaat gewijzigd. Controleer het apparaat voordat je de integratie verwijdert en opnieuw toevoegt om het nieuwe certificaat te vertrouwen.",
+      "pairing_failed": "Token geweigerd. Open het koppelvenster met de afstandsbediening en kies opnieuw Verzenden.",
+      "invalid_auth": "Lokaal token geweigerd. Koppel opnieuw met de afstandsbediening.",
+      "invalid_token": "Vul precies 24 kleine hexadecimale tekens in."
+    },
+    "abort": {
+      "already_configured": "Deze haard is al geconfigureerd.",
+      "wrong_device": "Dit adres hoort bij een andere haard.",
+      "reauth_successful": "Lokale koppeling bijgewerkt.",
+      "reconfigure_successful": "Adres bijgewerkt."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Kalfire Gi-opties",
+        "description": "Bediening voegt een aan/uit-schakelaar toe die de gashaard kan ontsteken. Gebruik deze bewust terwijl iemand aanwezig is. Gebruik geen onbeheerde ontsteking of automatische foutreset. Een opdracht met een verloren antwoord wordt niet herhaald. Uitzetten gebruikt de normale stopopdracht uit de app; die is in de eerste proef nog niet fysiek gevalideerd.",
+        "data": {
+          "enable_control": "Expliciete aan/uit-bediening inschakelen (experimenteel)",
+          "poll_interval": "Uitleesinterval (seconden)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperatuur"
+      },
+      "state": {
+        "name": "Toestand",
+        "state": {
+          "no_request": "Geen aanvraag",
+          "waiting": "Wachten",
+          "safety": "Veiligheidscontrole",
+          "purge": "Doorspoelen",
+          "startup": "Opstarten",
+          "running": "In bedrijf",
+          "lockout": "Vergrendeld",
+          "e_mode": "E-modus"
+        }
+      },
+      "error_code": {
+        "name": "Foutcode"
+      },
+      "status_bits": {
+        "name": "Ruwe statusbits"
+      },
+      "flame_height": {
+        "name": "Vlamhoogte-instelling"
+      }
+    },
+    "switch": {
+      "fireplace": {
+        "name": "Haard"
+      }
+    }
+  }
+}
