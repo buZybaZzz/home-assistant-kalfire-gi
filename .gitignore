@@ -1,0 +1,15 @@
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+*.pyc
+*.token
+*.pcap
+*.apk
+*.xapk
+.env
+secrets.yaml
+.storage/
+*.log
