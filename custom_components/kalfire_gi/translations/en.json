@@ -1,0 +1,105 @@
+{
+  "title": "Kalfire Gi Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to your Kalfire Gi",
+        "description": "Enter the fireplace address on your trusted home network. Setup only reads data.",
+        "data": {
+          "host": "IP address or hostname",
+          "port": "Port"
+        }
+      },
+      "trust": {
+        "title": "Trust this fireplace certificate?",
+        "description": "The device at {host} presented this SHA256 certificate fingerprint:\n\n{fingerprint}\n\nCheck that the address belongs to your fireplace. Accept only on a trusted network. This is trust on first use, not manufacturer CA validation. The pin will be checked on every new connection. No device token has been sent yet."
+      },
+      "auth_method": {
+        "title": "Local pairing",
+        "menu_options": {
+          "pair": "Pair using the remote control",
+          "existing_token": "Use an existing local token"
+        }
+      },
+      "pair": {
+        "title": "Open the pairing window",
+        "description": "Keep the official remote paired and nearby. Hold the right round button directly above M3 for 3 seconds, then immediately select Submit. This follows the Gi app pairing sequence and does not start the fireplace. Existing app operation was retained on the tested device."
+      },
+      "existing_token": {
+        "title": "Existing local device token",
+        "description": "Enter a previously paired 24-character local token. This is not your cloud account password. The token stays in Home Assistant.",
+        "data": {
+          "token": "Local device token"
+        }
+      },
+      "reconfigure": {
+        "title": "Update the device address",
+        "description": "The existing certificate pin and device identity must still match. A changed certificate is not accepted automatically.",
+        "data": {
+          "host": "IP address or hostname",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Enter an IP address or hostname, without a URL scheme or path.",
+      "cannot_connect": "Could not communicate with the local fireplace. Check its address and UDP port 5684.",
+      "certificate_changed": "Certificate changed. Check the device before removing and adding this integration to explicitly trust the new certificate.",
+      "pairing_failed": "The token was rejected. Open the physical pairing window with the remote and try Submit again.",
+      "invalid_auth": "The local token was rejected. Pair using the remote control.",
+      "invalid_token": "Enter exactly 24 lowercase hexadecimal characters."
+    },
+    "abort": {
+      "already_configured": "This fireplace is already configured.",
+      "wrong_device": "The address belongs to a different fireplace.",
+      "reauth_successful": "Local pairing updated.",
+      "reconfigure_successful": "Address updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Kalfire Gi options",
+        "description": "Controls create an on/off switch that can ignite the gas fireplace. Enable only for deliberate use while someone is present. Do not use unattended ignition or automatic fault resets. A lost command response is never retried. Turning off uses the app-derived normal stop command; it has not yet been physically validated in the initial test.",
+        "data": {
+          "enable_control": "Enable explicit on/off controls (experimental)",
+          "poll_interval": "Polling interval (seconds)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperature"
+      },
+      "state": {
+        "name": "State",
+        "state": {
+          "no_request": "No request",
+          "waiting": "Waiting",
+          "safety": "Safety checks",
+          "purge": "Purge",
+          "startup": "Starting",
+          "running": "Running",
+          "lockout": "Lockout",
+          "e_mode": "E-mode"
+        }
+      },
+      "error_code": {
+        "name": "Error code"
+      },
+      "status_bits": {
+        "name": "Raw status bits"
+      },
+      "flame_height": {
+        "name": "Flame height setting"
+      }
+    },
+    "switch": {
+      "fireplace": {
+        "name": "Fireplace"
+      }
+    }
+  }
+}
