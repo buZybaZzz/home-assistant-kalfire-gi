@@ -7,7 +7,7 @@ An independent Home Assistant integration for Kalfire **Gi** gas fireplaces usin
 ## Features
 
 - Local temperature, operating state, error code and flame-height **setting** sensors.
-- Firmware version in device information; optional raw status bits for diagnostics.
+- Firmware version in device information; the read-only flame-height setting is under Diagnostics, alongside optional raw status bits.
 - Setup through **Settings → Devices & services → Add integration → Kalfire Gi Local**.
 - Physical pairing with the official remote; alternatively import an existing local device token.
 - Explicitly accepted SHA256 certificate pin, checked on every connection.
@@ -89,7 +89,7 @@ Tests use fake peers and Home Assistant fixtures; they never address a live fire
 
 - Improve post-command state feedback and investigate the observed startup read timeout. HACS installation, sensors and supervised HA start/stop have been confirmed on Home Assistant Green.
 - Validate more Gi models/firmwares, independently verify WAN blocking and test cold-start/long-duration offline behavior.
-- Validate the beta 2 HA level controls on the installed device. Research Ember Glow next, followed by moods and native temperature modes.
+- Installed beta 2 flame-height, Spark and normal stop were physically confirmed by the owner. Research Ember Glow next, followed by moods and native temperature modes.
 - Consider HACS default-directory inclusion after broader testing. Core inclusion would also benefit from publishing the independent protocol client as a separate Python package.
 
 ## License
