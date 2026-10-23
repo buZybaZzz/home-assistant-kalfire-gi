@@ -29,6 +29,7 @@ READ_FIELDS = frozenset(
         "modbus.1107",
         "modbus.1111",
         "sys.control.flame_height",
+        "modbus.2007",
     }
 )
 STATE_NAMES = {
@@ -52,6 +53,7 @@ class Snapshot:
     error_code: int
     status_bits: int
     flame_height: int
+    spark: int | None = None
 
 
 def validate_token(token: str) -> str:
@@ -89,7 +91,13 @@ class GiClient:
         """One application request. Never retransmit a timed-out command."""
         request_id = secrets.randbelow(999)
         payload = json.dumps(
-            {"id": request_id, "method": method, "params": params}, separators=(",", ":")
+            {
+                "id": request_id,
+                "method": method,
+                "params": params,
+                **({"type": "integer"} if method == "rset" else {}),
+            },
+            separators=(",", ":"),
         ).encode()
         packet, token, mid = request(payload, self._token)
         transport = await self._connect()
@@ -129,7 +137,11 @@ class GiClient:
                     return result["result"]
         except (OSError, SSL.Error, TimeoutError, KalfireError) as err:
             self.close()
-            if method == "syscmd" and submitted and not isinstance(err, AuthenticationError):
+            if (
+                method in ("syscmd", "rset")
+                and submitted
+                and not isinstance(err, AuthenticationError)
+            ):
                 raise CommandUncertain(
                     "Command outcome unknown; check the fireplace before any new command"
                 ) from err
@@ -164,7 +176,7 @@ class GiClient:
                 raise ProtocolError("Invalid firmware string")
             return mac.lower(), firmware
 
-    async def snapshot(self) -> Snapshot:
+    async def snapshot(self, *, include_spark: bool = False) -> Snapshot:
         async with self._lock:
             values = [
                 await self._read(field)
@@ -180,7 +192,29 @@ class GiClient:
                 raise ProtocolError("Unexpected register value type")
             if values[1] not in STATE_NAMES:
                 raise ProtocolError("Unknown fireplace state")
-            return Snapshot(values[0] / 10, *values[1:])
+            spark = await self._read("modbus.2007") if include_spark else None
+            if include_spark and (type(spark) is not int or spark not in range(6)):
+                raise ProtocolError("Invalid Spark value")
+            return Snapshot(values[0] / 10, *values[1:], spark=spark)
+
+    async def set_level(self, key: str, value: int) -> None:
+        """Set only tested normal levels, while running without a reported fault."""
+        fields = {"flame_height": ("sys.control.flame_height", 1), "spark": ("modbus.2007", 0)}
+        if key not in fields or type(value) is not int:
+            raise ValueError("Unsupported setting or non-integer level")
+        field, minimum = fields[key]
+        if not minimum <= value <= 5:
+            raise ValueError("Level outside supported range")
+        async with self._lock:
+            fault = await self._read("modbus.1107")
+            state = await self._read("modbus.1111")
+            if type(fault) is not int or type(state) is not int or fault != 0 or state != 5:
+                raise KalfireError("Settings require a running fireplace without a reported fault")
+            result = await self._exchange("rset", {"name": field, "value": value})
+            if result != "success":
+                raise CommandUncertain(
+                    "Setting was not confirmed; check before issuing another command"
+                )
 
     async def start(self) -> None:
         """Normal app syscmd mode=1; no reset or direct valve writes."""
