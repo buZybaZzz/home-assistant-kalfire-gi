@@ -40,3 +40,7 @@ Sources used for interoperability research:
 - [pyOpenSSL](https://pyopenssl.org/en/stable/api/ssl.html)
 
 The inspected Android package was version 1.0.42, obtained through a distribution mirror. Its signing identity was not independently compared against a Google Play download. It was not executed. Static observations were followed by successful local reads and one explicit, supervised physical start test. This repository contains an original implementation of those observed messages, not the vendor application or its disassembly.
+
+## Additional normal app settings
+
+The inspected Gi app maps flameHeight to `sys.control.flame_height` and Spark to `modbus.2007`, using `rset` with top-level `type: integer` and params containing `name` and `value`. The normal Spark meter uses 0 through 5; the Gi manual describes five flame-height levels. A supervised test of value 2 for each returned success and later read back 2. Flame height also had physical confirmation. The observed baseline flame-height read was 0, but an attempt to restore that status value as a setting was rejected with error -31001. Normal setting 1 succeeded and read back 1. Treat flame height as writable only from 1 through 5; never offer 0 as a normal control value. Do not infer arbitrary register ranges from these observations. Application acceptance is distinct from physical effect, and readback may lag.
