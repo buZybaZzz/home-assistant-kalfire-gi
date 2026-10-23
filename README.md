@@ -51,7 +51,7 @@ In integration options, **Enable explicit on/off controls** creates a normal HA 
 
 The on/off commands follow the normal Gi app interface (`syscmd mode=1` and `mode=0`). The fireplace executes its own startup sequence. Start is refused when an error is reported or the fireplace is not idle. Application commands are sent once; a missing response is reported as uncertain and is **never automatically retried**. A new poll after that only reads state.
 
-**Validation:** normal start has been confirmed by visible flames, device state `running` and error code 0. The normal stop command has been derived from the same app implementation and covered by offline tests, but **has not yet been physically tested**. The fireplace was deliberately left running during development. Keep controls disabled until you are comfortable testing this beta while present.
+**Validation:** normal start and stop through the HA switch have both been physically confirmed by the owner. HA subsequently reported `running` and `no_request`, with error code 0. During startup one read timed out and recovered automatically. Immediate post-command reads can briefly show the previous state; see [validation](docs/validation.md). These beta limitations remain under investigation.
 
 ## Transport security and limits
 
@@ -85,7 +85,7 @@ Tests use fake peers and Home Assistant fixtures; they never address a live fire
 
 ## Roadmap
 
-- Complete supervised validation of normal stop. HACS installation and read-only sensor operation on Home Assistant Green have been confirmed.
+- Improve post-command state feedback and investigate the observed startup read timeout. HACS installation, sensors and supervised HA start/stop have been confirmed on Home Assistant Green.
 - Validate more Gi models/firmwares and internet-loss behavior.
 - Extend normal controls (flame height, operating mode, lights, moods) only as their bounds and behavior are established.
 - Consider HACS default-directory inclusion after broader testing. Core inclusion would also benefit from publishing the independent protocol client as a separate Python package.
