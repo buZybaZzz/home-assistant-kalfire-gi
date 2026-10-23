@@ -1,0 +1,121 @@
+{
+  "title": "Kalfire Gi Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Forbind til din Kalfire Gi",
+        "description": "Indtast pejsens adresse på dit betroede hjemmenetværk. Opsætningen læser kun data.",
+        "data": {
+          "host": "IP-adresse eller værtsnavn",
+          "port": "Port"
+        }
+      },
+      "trust": {
+        "title": "Vil du stole på dette pejsecertifikat?",
+        "description": "Enheden på {host} viste dette SHA256-certifikatfingeraftryk:\n\n{fingerprint}\n\nKontrollér, at adressen tilhører din pejs. Acceptér kun på et betroet netværk. Dette er tillid ved første brug, ikke validering via producentens certifikatmyndighed. Fingeraftrykket kontrolleres ved hver ny forbindelse. Der er endnu ikke sendt et enhedstoken."
+      },
+      "auth_method": {
+        "title": "Lokal parring",
+        "menu_options": {
+          "pair": "Par med fjernbetjeningen",
+          "existing_token": "Brug et eksisterende lokalt token"
+        }
+      },
+      "pair": {
+        "title": "Åbn parringsvinduet",
+        "description": "Lad den officielle fjernbetjening forblive parret og i nærheden. Hold den højre runde knap lige over M3 nede i tre sekunder, og vælg straks Send. Dette følger parringen i Gi-appen og starter ikke pejsen. Den eksisterende app fungerede fortsat på den testede enhed."
+      },
+      "existing_token": {
+        "title": "Eksisterende lokalt enhedstoken",
+        "description": "Indtast et tidligere parret lokalt token på 24 tegn. Det er ikke adgangskoden til din cloudkonto. Tokenet bliver i Home Assistant.",
+        "data": {
+          "token": "Lokalt enhedstoken"
+        }
+      },
+      "reconfigure": {
+        "title": "Opdatér enhedens adresse",
+        "description": "Det gemte certifikatfingeraftryk og enhedens identitet skal stadig stemme overens. Et ændret certifikat accepteres ikke automatisk.",
+        "data": {
+          "host": "IP-adresse eller værtsnavn",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Indtast en IP-adresse eller et værtsnavn uden URL-skema eller sti.",
+      "cannot_connect": "Kunne ikke kommunikere med den lokale pejs. Kontrollér adressen og UDP-port 5684.",
+      "certificate_changed": "Certifikatet er ændret. Kontrollér enheden, før du fjerner og tilføjer integrationen igen for udtrykkeligt at stole på det nye certifikat.",
+      "pairing_failed": "Tokenet blev afvist. Åbn parringsvinduet med fjernbetjeningen, og vælg Send igen.",
+      "invalid_auth": "Det lokale token blev afvist. Par med fjernbetjeningen.",
+      "invalid_token": "Indtast præcis 24 hexadecimale tegn med små bogstaver."
+    },
+    "abort": {
+      "already_configured": "Denne pejs er allerede konfigureret.",
+      "wrong_device": "Adressen tilhører en anden pejs.",
+      "reauth_successful": "Lokal parring opdateret.",
+      "reconfigure_successful": "Adresse opdateret."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Kalfire Gi-indstillinger",
+        "description": "Aktivér kun tænd/sluk og niveauregulering til bevidst betjening. Flammehøjde og gnister kræver en pejs i drift uden rapporterede fejl. Ember Glow virker også med gasbrænderen slukket. Aktivér kun gnister, hvis den valgfrie generator er installeret. Tænd kun pejsen, når nogen er til stede. Kommandoer uden bekræftelse gentages aldrig automatisk.",
+        "data": {
+          "enable_control": "Aktivér tænd/sluk og niveauregulering",
+          "poll_interval": "Aflæsningsinterval (sekunder)",
+          "enable_spark": "Natural Spark Generator installeret",
+          "enable_ember_glow": "Aktivér Ember Glow-belysning"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "state": {
+        "name": "Status",
+        "state": {
+          "no_request": "Ingen anmodning",
+          "waiting": "Venter",
+          "safety": "Sikkerhedskontrol",
+          "purge": "Udluftning",
+          "startup": "Starter",
+          "running": "I drift",
+          "lockout": "Sikkerhedslåsning",
+          "e_mode": "E-tilstand"
+        }
+      },
+      "error_code": {
+        "name": "Fejlkode"
+      },
+      "status_bits": {
+        "name": "Rå statusbits"
+      },
+      "flame_height": {
+        "name": "Indstillet flammehøjde"
+      }
+    },
+    "switch": {
+      "fireplace": {
+        "name": "Pejs"
+      },
+      "ember_flicker": {
+        "name": "Flimren"
+      }
+    },
+    "number": {
+      "flame_height": {
+        "name": "Flammehøjde"
+      },
+      "spark": {
+        "name": "Gnister"
+      },
+      "ember_glow": {
+        "name": "Ember Glow"
+      }
+    }
+  }
+}
