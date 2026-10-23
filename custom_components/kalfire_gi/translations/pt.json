@@ -1,0 +1,121 @@
+{
+  "title": "Kalfire Gi Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ligar ao seu Kalfire Gi",
+        "description": "Introduza o endereço da lareira na sua rede doméstica de confiança. A configuração apenas lê dados.",
+        "data": {
+          "host": "Endereço IP ou nome do anfitrião",
+          "port": "Porta"
+        }
+      },
+      "trust": {
+        "title": "Confiar neste certificado da lareira?",
+        "description": "O dispositivo em {host} apresentou esta impressão digital do certificado SHA256:\n\n{fingerprint}\n\nVerifique se o endereço pertence à sua lareira. Aceite apenas numa rede de confiança. Trata-se de confiança na primeira utilização, não de validação pela autoridade de certificação do fabricante. A impressão digital será verificada em cada nova ligação. Ainda não foi enviado nenhum token ao dispositivo."
+      },
+      "auth_method": {
+        "title": "Emparelhamento local",
+        "menu_options": {
+          "pair": "Emparelhar com o comando",
+          "existing_token": "Usar um token local existente"
+        }
+      },
+      "pair": {
+        "title": "Abrir a janela de emparelhamento",
+        "description": "Mantenha o comando oficial emparelhado e por perto. Prima durante três segundos o botão redondo direito diretamente acima de M3 e selecione imediatamente Enviar. Este procedimento segue o da aplicação Gi e não acende a lareira. A aplicação existente continuou a funcionar no dispositivo testado."
+      },
+      "existing_token": {
+        "title": "Token local existente do dispositivo",
+        "description": "Introduza um token local de 24 caracteres já emparelhado. Não é a palavra-passe da sua conta na nuvem. O token permanece no Home Assistant.",
+        "data": {
+          "token": "Token local do dispositivo"
+        }
+      },
+      "reconfigure": {
+        "title": "Atualizar o endereço do dispositivo",
+        "description": "A impressão digital do certificado guardada e a identidade do dispositivo têm de continuar a corresponder. Um certificado alterado não é aceite automaticamente.",
+        "data": {
+          "host": "Endereço IP ou nome do anfitrião",
+          "port": "Porta"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Introduza um endereço IP ou nome do anfitrião, sem esquema de URL nem caminho.",
+      "cannot_connect": "Não foi possível comunicar com a lareira local. Verifique o endereço e a porta UDP 5684.",
+      "certificate_changed": "O certificado foi alterado. Verifique o dispositivo antes de remover e voltar a adicionar a integração para aceitar explicitamente o novo certificado.",
+      "pairing_failed": "Token rejeitado. Abra a janela de emparelhamento com o comando e selecione Enviar novamente.",
+      "invalid_auth": "Token local rejeitado. Emparelhe o dispositivo com o comando.",
+      "invalid_token": "Introduza exatamente 24 caracteres hexadecimais em minúsculas."
+    },
+    "abort": {
+      "already_configured": "Esta lareira já está configurada.",
+      "wrong_device": "O endereço pertence a outra lareira.",
+      "reauth_successful": "Emparelhamento local atualizado.",
+      "reconfigure_successful": "Endereço atualizado."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opções do Kalfire Gi",
+        "description": "Ative os controlos de ligar/desligar e de nível apenas para uma utilização deliberada. A altura da chama e as faíscas requerem a lareira em funcionamento sem erros indicados. O Ember Glow também funciona com o queimador de gás desligado. Ative as faíscas apenas se o gerador opcional estiver instalado. Acenda a lareira apenas quando alguém estiver presente. Os comandos sem confirmação nunca são repetidos automaticamente.",
+        "data": {
+          "enable_control": "Ativar controlos de ligar/desligar e de nível",
+          "poll_interval": "Intervalo de leitura (segundos)",
+          "enable_spark": "Natural Spark Generator instalado",
+          "enable_ember_glow": "Ativar iluminação Ember Glow"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "state": {
+        "name": "Estado",
+        "state": {
+          "no_request": "Sem pedido",
+          "waiting": "Em espera",
+          "safety": "Verificações de segurança",
+          "purge": "Purga",
+          "startup": "A iniciar",
+          "running": "Em funcionamento",
+          "lockout": "Bloqueio de segurança",
+          "e_mode": "Modo E"
+        }
+      },
+      "error_code": {
+        "name": "Código de erro"
+      },
+      "status_bits": {
+        "name": "Bits de estado em bruto"
+      },
+      "flame_height": {
+        "name": "Definição da altura da chama"
+      }
+    },
+    "switch": {
+      "fireplace": {
+        "name": "Lareira"
+      },
+      "ember_flicker": {
+        "name": "Cintilação"
+      }
+    },
+    "number": {
+      "flame_height": {
+        "name": "Altura da chama"
+      },
+      "spark": {
+        "name": "Faíscas"
+      },
+      "ember_glow": {
+        "name": "Ember Glow"
+      }
+    }
+  }
+}
