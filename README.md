@@ -13,6 +13,8 @@ An independent Home Assistant integration for Kalfire **Gi** gas fireplaces usin
 - Explicitly accepted SHA256 certificate pin, checked on every connection.
 - Optional normal on/off switch and flame-height slider (1–5), enabled through integration options. Controls are off by default.
 - Optional Natural Spark slider (0–5); enable only if the generator is installed.
+- Optional Ember Glow light: five steady brightness levels and native Flicker effect (level 6), including LED-only operation while the gas fireplace is off. Enable it in integration options.
+- Ember Glow uses the active LED level for state/brightness, separate from its stored setting. Setup and polling never toggle the LEDs.
 - Level controls are available only while running without a reported fault. They never ignite the fireplace. Readback can lag an accepted command until a later poll.
 - Address reconfiguration, reauthentication, redacted diagnostics and Dutch/English UI.
 
@@ -89,7 +91,7 @@ Tests use fake peers and Home Assistant fixtures; they never address a live fire
 
 - Improve post-command state feedback and investigate the observed startup read timeout. HACS installation, sensors and supervised HA start/stop have been confirmed on Home Assistant Green.
 - Validate more Gi models/firmwares, independently verify WAN blocking and test cold-start/long-duration offline behavior.
-- Installed beta 2 flame-height, Spark and normal stop were physically confirmed by the owner. Research Ember Glow next, followed by moods and native temperature modes.
+- Installed beta 2 flame-height, Spark and normal stop were physically confirmed by the owner. Physically validate the new Ember Glow light, followed by research into moods and native temperature modes.
 - Consider HACS default-directory inclusion after broader testing. Core inclusion would also benefit from publishing the independent protocol client as a separate Python package.
 
 ## License
