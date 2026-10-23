@@ -6,7 +6,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import GiConfigEntry
-from .const import CONF_CONTROL, CONF_SPARK
+from .const import CONF_CONTROL, CONF_EMBER, CONF_SPARK
 from .entity import GiEntity
 from .gi.errors import KalfireError
 
@@ -18,6 +18,8 @@ async def async_setup_entry(
         entities = [GiLevel(entry.runtime_data, "flame_height")]
         if entry.options.get(CONF_SPARK, False):
             entities.append(GiLevel(entry.runtime_data, "spark"))
+        if entry.options.get(CONF_EMBER, False):
+            entities.append(GiEmberLevel(entry.runtime_data))
         async_add_entities(entities)
 
 
@@ -60,4 +62,44 @@ class GiLevel(GiEntity, NumberEntity):
             raise HomeAssistantError(str(err)) from err
         finally:
             # Readback may lag; subsequent periodic polls remain read-only.
+            await self.coordinator.async_request_refresh()
+
+
+class GiEmberLevel(GiEntity, NumberEntity):
+    """Discrete active LED level; steady brightness does not apply during flicker."""
+
+    _attr_translation_key = "ember_glow"
+    _attr_icon = "mdi:lightbulb"
+    _attr_native_min_value = 0
+    _attr_native_max_value = 5
+    _attr_native_step = 1
+    _attr_mode = NumberMode.SLIDER
+
+    def __init__(self, coordinator) -> None:
+        super().__init__(coordinator, "ember_glow")
+
+    @property
+    def available(self) -> bool:
+        data = self.coordinator.data
+        return (
+            super().available
+            and data is not None
+            and data.state in (0, 5)
+            and data.error_code == 0
+            and data.ember_status in range(6)
+        )
+
+    @property
+    def native_value(self) -> float | None:
+        level = self.coordinator.data.ember_status
+        return level if level in range(6) else None
+
+    async def async_set_native_value(self, value: float) -> None:
+        if isinstance(value, bool) or not 0 <= value <= 5 or value % 1:
+            raise HomeAssistantError("Choose an Ember Glow level from 0 through 5")
+        try:
+            await self.coordinator.client.set_ember(int(value))
+        except KalfireError as err:
+            raise HomeAssistantError(str(err)) from err
+        finally:
             await self.coordinator.async_request_refresh()
