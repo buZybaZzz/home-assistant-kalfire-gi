@@ -8,7 +8,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import GiConfigEntry
-from .const import CONF_CONTROL
+from .const import CONF_CONTROL, CONF_EMBER
 from .entity import GiEntity
 from .gi.errors import KalfireError
 
@@ -18,7 +18,10 @@ async def async_setup_entry(
 ) -> None:
     # No command entity exists until the user explicitly enables controls.
     if entry.options.get(CONF_CONTROL, False):
-        async_add_entities([GiSwitch(entry.runtime_data)])
+        entities = [GiSwitch(entry.runtime_data)]
+        if entry.options.get(CONF_EMBER, False):
+            entities.append(GiEmberFlicker(entry.runtime_data))
+        async_add_entities(entities)
 
 
 class GiSwitch(GiEntity, SwitchEntity):
@@ -49,3 +52,43 @@ class GiSwitch(GiEntity, SwitchEntity):
             raise HomeAssistantError(str(err)) from err
         finally:
             await self.coordinator.async_request_refresh()
+
+
+class GiEmberFlicker(GiEntity, SwitchEntity):
+    """The appliance's separate native LED shuffle mode, not a brightness effect."""
+
+    _attr_translation_key = "ember_flicker"
+    _attr_icon = "mdi:fire"
+
+    def __init__(self, coordinator) -> None:
+        super().__init__(coordinator, "ember_flicker")
+
+    @property
+    def available(self) -> bool:
+        data = self.coordinator.data
+        return (
+            super().available
+            and data is not None
+            and data.state in (0, 5)
+            and data.error_code == 0
+            and data.ember_status in range(7)
+        )
+
+    @property
+    def is_on(self) -> bool:
+        return self.coordinator.data.ember_status == 6
+
+    async def _set_level(self, level: int) -> None:
+        try:
+            await self.coordinator.client.set_ember(level)
+        except KalfireError as err:
+            raise HomeAssistantError(str(err)) from err
+        finally:
+            await self.coordinator.async_request_refresh()
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self._set_level(6)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        if self.is_on:
+            await self._set_level(self.coordinator.last_ember_steady)
