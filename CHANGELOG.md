@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0b3 — clearer device layout
+
+- Move the read-only flame-height setting sensor to Diagnostics, keeping the number control under Controls. Existing entity IDs and stored setting values are retained.
+- Owner confirmed installed beta 2 flame-height and Spark controls work correctly, and normal stop through HA extinguished the fireplace.
+
+
 ## 0.1.0b2 — normal level controls
 
 - Add flame-height (1–5) and optional Natural Spark (0–5) number entities.
@@ -7,7 +13,7 @@
 - Permit only the two named normal settings, with fresh running/fault checks and no command retries or value restoration.
 - Show device readback rather than optimistically accepting the requested setting.
 - 62 offline tests pass, including real Home Assistant service calls, delayed readback, unavailable devices, exact write format and timeout handling.
-- Prior supervised hardware tests confirmed both flame-height changes and Spark 5; installed beta 2 controls still require runtime validation.
+- Prior supervised hardware tests confirmed both flame-height changes and Spark 5; installed beta 2 controls were subsequently physically validated by the owner.
 - Normal HA start and stop were physically validated, also under a configured fireplace-only UniFi Internet block.
 
 
