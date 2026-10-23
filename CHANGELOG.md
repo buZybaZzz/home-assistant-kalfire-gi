@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0b4 — Ember Glow lighting
+
+- Add an opt-in Ember Glow light with five steady brightness levels and native Flicker effect. LED-only operation works while the gas burner is off.
+- Read active LED level separately from stored brightness. Never optimistically report an accepted request as the new light state.
+- Use the normal app LED-only standby toggle when necessary; never send a gas start command, restore a light state, or retry a toggle.
+- Local probes confirmed stored/active levels 3 and 6, with gas state 0 and error code 0. Physical observation and installed HA light control validation remain separate.
+- 78 offline tests pass, including idle light service calls without gas ignition and uncertain-toggle handling.
+
+
 ## 0.1.0b3 — clearer device layout
 
 - Move the read-only flame-height setting sensor to Diagnostics, keeping the number control under Controls. Existing entity IDs and stored setting values are retained.
