@@ -241,3 +241,49 @@ async def test_rset_wire_type_and_uncertain_timeout(client):
     payload = json.loads(decode(transport.send.await_args.args[0]).payload)
     assert payload["type"] == "integer"
     transport.close.assert_called_once()
+
+
+@pytest.mark.parametrize("level", [-1, 7, True, 2.5])
+async def test_ember_rejects_invalid_without_network(client, level):
+    client._read = AsyncMock()
+    with pytest.raises(ValueError):
+        await client.set_ember(level)
+    client._read.assert_not_awaited()
+
+
+@pytest.mark.parametrize("state,fault", [(2, 0), (4, 0), (6, 0), (0, 1), (False, 0)])
+async def test_ember_refuses_transitions_and_faults(client, state, fault):
+    client._read = AsyncMock(side_effect=[fault, state])
+    client._exchange = AsyncMock()
+    with pytest.raises(KalfireError):
+        await client.set_ember(3)
+    client._exchange.assert_not_awaited()
+
+
+@pytest.mark.parametrize(
+    "status,level,toggle", [(0, 3, True), (1, 0, True), (1, 6, False), (0, 0, False)]
+)
+async def test_ember_idle_led_only_sequence(client, status, level, toggle):
+    client._read = AsyncMock(side_effect=[0, 0, status])
+    client._exchange = AsyncMock(return_value="success")
+    await client.set_ember(level)
+    calls = [call.args for call in client._exchange.await_args_list]
+    expected = [("rset", {"name": "modbus.2005", "value": level})]
+    if toggle:
+        expected.insert(0, ("rset", {"name": "modbus.2011", "value": 1}))
+    assert calls == expected
+
+
+async def test_ember_toggle_failure_never_sends_level_or_retries(client):
+    client._read = AsyncMock(side_effect=[0, 0, 0])
+    client._exchange = AsyncMock(side_effect=CommandUncertain("lost"))
+    with pytest.raises(CommandUncertain):
+        await client.set_ember(3)
+    client._exchange.assert_awaited_once_with("rset", {"name": "modbus.2011", "value": 1})
+
+
+async def test_ember_running_never_toggles_standby_led(client):
+    client._read = AsyncMock(side_effect=[0, 5])
+    client._exchange = AsyncMock(return_value="success")
+    await client.set_ember(6)
+    client._exchange.assert_awaited_once_with("rset", {"name": "modbus.2005", "value": 6})
