@@ -89,7 +89,7 @@ Tests use fake peers and Home Assistant fixtures; they never address a live fire
 
 - Improve post-command state feedback and investigate the observed startup read timeout. HACS installation, sensors and supervised HA start/stop have been confirmed on Home Assistant Green.
 - Validate more Gi models/firmwares, independently verify WAN blocking and test cold-start/long-duration offline behavior.
-- Add HA controls for flame height (normal levels 1–5) and Spark (0–5), following the supervised setting probes documented in validation. These are not yet HA controls in this beta. Research mode, lights and moods separately.
+- Validate the beta 2 HA level controls on the installed device. Research Ember Glow next, followed by moods and native temperature modes.
 - Consider HACS default-directory inclusion after broader testing. Core inclusion would also benefit from publishing the independent protocol client as a separate Python package.
 
 ## License
