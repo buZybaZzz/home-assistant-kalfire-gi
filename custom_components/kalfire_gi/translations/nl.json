@@ -64,7 +64,8 @@
         "data": {
           "enable_control": "Expliciete aan/uit-bediening inschakelen (experimenteel)",
           "poll_interval": "Uitleesinterval (seconden)",
-          "enable_spark": "Natural Spark Generator aanwezig"
+          "enable_spark": "Natural Spark Generator aanwezig",
+          "enable_ember_glow": "Ember Glow-verlichting inschakelen"
         }
       }
     }
@@ -108,6 +109,11 @@
       },
       "spark": {
         "name": "Spark"
+      }
+    },
+    "light": {
+      "ember_glow": {
+        "name": "Ember Glow"
       }
     }
   }
