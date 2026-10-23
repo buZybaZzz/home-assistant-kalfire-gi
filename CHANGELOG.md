@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0b5 — discrete Ember Glow controls
+
+- Replace the percentage light with a 0–5 slider and separate Flicker switch. The slider is unavailable during flicker; switching flicker off returns to the last observed steady level (fallback 3).
+- Rename Spark to Sparks without changing existing entity IDs.
+- Remove only the former integration-owned Ember Glow light registry entry during setup, without issuing device commands. Update dashboard cards/automations that referred to that light.
+- Owner confirmed physical Ember Glow brightness changes and native flicker in beta 4.
+- 78 offline tests cover migration, discrete service calls, flicker readback, return to the prior steady level, and no ignition.
+
+
 ## 0.1.0b4 — Ember Glow lighting
 
 - Add an opt-in Ember Glow light with five steady brightness levels and native Flicker effect. LED-only operation works while the gas burner is off.
