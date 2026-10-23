@@ -1,0 +1,121 @@
+{
+  "title": "Kalfire Gi Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connecter votre Kalfire Gi",
+        "description": "Saisissez l’adresse du foyer sur votre réseau domestique de confiance. La configuration ne fait que lire des données.",
+        "data": {
+          "host": "Adresse IP ou nom d’hôte",
+          "port": "Port"
+        }
+      },
+      "trust": {
+        "title": "Faire confiance à ce certificat du foyer ?",
+        "description": "L’appareil à l’adresse {host} a présenté cette empreinte de certificat SHA256 :\n\n{fingerprint}\n\nVérifiez que l’adresse correspond à votre foyer. Acceptez uniquement sur un réseau de confiance. Il s’agit d’une confiance à la première utilisation, sans validation par une autorité de certification du fabricant. L’empreinte sera vérifiée à chaque nouvelle connexion. Aucun jeton n’a encore été envoyé à l’appareil."
+      },
+      "auth_method": {
+        "title": "Association locale",
+        "menu_options": {
+          "pair": "Associer avec la télécommande",
+          "existing_token": "Utiliser un jeton local existant"
+        }
+      },
+      "pair": {
+        "title": "Ouvrir la fenêtre d’association",
+        "description": "Gardez la télécommande officielle associée et à proximité. Maintenez le bouton rond droit juste au-dessus de M3 pendant trois secondes, puis sélectionnez immédiatement Envoyer. Cette procédure suit celle de l’application Gi et ne démarre pas le foyer. L’application existante est restée fonctionnelle sur l’appareil testé."
+      },
+      "existing_token": {
+        "title": "Jeton local existant de l’appareil",
+        "description": "Saisissez un jeton local de 24 caractères déjà associé. Ce n’est pas le mot de passe de votre compte cloud. Le jeton reste dans Home Assistant.",
+        "data": {
+          "token": "Jeton local de l’appareil"
+        }
+      },
+      "reconfigure": {
+        "title": "Mettre à jour l’adresse de l’appareil",
+        "description": "L’empreinte du certificat enregistrée et l’identité de l’appareil doivent toujours correspondre. Un certificat modifié n’est pas accepté automatiquement.",
+        "data": {
+          "host": "Adresse IP ou nom d’hôte",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Saisissez une adresse IP ou un nom d’hôte, sans schéma d’URL ni chemin.",
+      "cannot_connect": "Impossible de communiquer avec le foyer local. Vérifiez son adresse et le port UDP 5684.",
+      "certificate_changed": "Certificat modifié. Vérifiez l’appareil avant de supprimer puis de rajouter l’intégration pour accepter explicitement le nouveau certificat.",
+      "pairing_failed": "Jeton refusé. Ouvrez la fenêtre d’association avec la télécommande et sélectionnez à nouveau Envoyer.",
+      "invalid_auth": "Jeton local refusé. Associez l’appareil avec la télécommande.",
+      "invalid_token": "Saisissez exactement 24 caractères hexadécimaux en minuscules."
+    },
+    "abort": {
+      "already_configured": "Ce foyer est déjà configuré.",
+      "wrong_device": "L’adresse correspond à un autre foyer.",
+      "reauth_successful": "Association locale mise à jour.",
+      "reconfigure_successful": "Adresse mise à jour."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options Kalfire Gi",
+        "description": "Activez les commandes marche/arrêt et de niveau uniquement pour une utilisation volontaire. La hauteur des flammes et les étincelles nécessitent un foyer en fonctionnement sans erreur signalée. Ember Glow fonctionne aussi avec le brûleur à gaz éteint. Activez les étincelles uniquement si le générateur optionnel est installé. Allumez le foyer uniquement en présence de quelqu’un. Les commandes sans confirmation ne sont jamais répétées automatiquement.",
+        "data": {
+          "enable_control": "Activer les commandes marche/arrêt et de niveau",
+          "poll_interval": "Intervalle de lecture (secondes)",
+          "enable_spark": "Natural Spark Generator installé",
+          "enable_ember_glow": "Activer l’éclairage Ember Glow"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Température"
+      },
+      "state": {
+        "name": "État",
+        "state": {
+          "no_request": "Aucune demande",
+          "waiting": "En attente",
+          "safety": "Contrôles de sécurité",
+          "purge": "Purge",
+          "startup": "Démarrage",
+          "running": "En fonctionnement",
+          "lockout": "Verrouillage de sécurité",
+          "e_mode": "Mode E"
+        }
+      },
+      "error_code": {
+        "name": "Code d’erreur"
+      },
+      "status_bits": {
+        "name": "Bits d’état bruts"
+      },
+      "flame_height": {
+        "name": "Réglage de hauteur des flammes"
+      }
+    },
+    "switch": {
+      "fireplace": {
+        "name": "Foyer"
+      },
+      "ember_flicker": {
+        "name": "Scintillement"
+      }
+    },
+    "number": {
+      "flame_height": {
+        "name": "Hauteur des flammes"
+      },
+      "spark": {
+        "name": "Étincelles"
+      },
+      "ember_glow": {
+        "name": "Ember Glow"
+      }
+    }
+  }
+}
