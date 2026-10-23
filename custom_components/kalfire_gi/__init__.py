@@ -10,7 +10,7 @@ from .coordinator import GiCoordinator
 from .gi import GiClient
 from .gi.errors import AuthenticationError, KalfireError
 
-PLATFORMS = [Platform.SENSOR, Platform.SWITCH, Platform.NUMBER]
+PLATFORMS = [Platform.SENSOR, Platform.SWITCH, Platform.NUMBER, Platform.LIGHT]
 type GiConfigEntry = ConfigEntry[GiCoordinator]
 
 
