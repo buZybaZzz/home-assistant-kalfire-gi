@@ -60,10 +60,11 @@
     "step": {
       "init": {
         "title": "Kalfire Gi-opties",
-        "description": "Bediening voegt een aan/uit-schakelaar toe die de gashaard kan ontsteken. Gebruik deze bewust terwijl iemand aanwezig is. Gebruik geen onbeheerde ontsteking of automatische foutreset. Een opdracht met een verloren antwoord wordt niet herhaald. Uitzetten gebruikt de normale stopopdracht uit de app; die is in de eerste proef nog niet fysiek gevalideerd.",
+        "description": "Bediening maakt een aan/uit-schakelaar en vlamhoogteregelaar beschikbaar. Schakel Spark alleen in als de optionele vonkengenerator aanwezig is. Niveau-instellingen werken alleen tijdens bedrijf zonder gemelde fout. Gebruik ontsteking alleen bewust terwijl iemand aanwezig is. Verloren opdrachten worden niet automatisch herhaald.",
         "data": {
           "enable_control": "Expliciete aan/uit-bediening inschakelen (experimenteel)",
-          "poll_interval": "Uitleesinterval (seconden)"
+          "poll_interval": "Uitleesinterval (seconden)",
+          "enable_spark": "Natural Spark Generator aanwezig"
         }
       }
     }
@@ -99,6 +100,14 @@
     "switch": {
       "fireplace": {
         "name": "Haard"
+      }
+    },
+    "number": {
+      "flame_height": {
+        "name": "Vlamhoogte"
+      },
+      "spark": {
+        "name": "Spark"
       }
     }
   }
