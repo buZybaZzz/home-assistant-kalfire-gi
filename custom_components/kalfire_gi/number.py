@@ -44,12 +44,12 @@ class GiLevel(GiEntity, NumberEntity):
             and data.state == 5
             and data.error_code == 0
             and getattr(data, self.key) is not None
-            and self.native_min_value <= getattr(data, self.key) <= 5
         )
 
     @property
     def native_value(self) -> float | None:
-        return getattr(self.coordinator.data, self.key)
+        value = getattr(self.coordinator.data, self.key)
+        return value if value is not None and self.native_min_value <= value <= 5 else None
 
     async def async_set_native_value(self, value: float) -> None:
         if isinstance(value, bool) or not self.native_min_value <= value <= 5 or value % 1:
