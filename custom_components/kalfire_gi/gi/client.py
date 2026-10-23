@@ -30,6 +30,8 @@ READ_FIELDS = frozenset(
         "modbus.1111",
         "sys.control.flame_height",
         "modbus.2007",
+        "modbus.2005",
+        "modbus.1113",
     }
 )
 STATE_NAMES = {
@@ -54,6 +56,8 @@ class Snapshot:
     status_bits: int
     flame_height: int
     spark: int | None = None
+    ember_level: int | None = None
+    ember_status: int | None = None
 
 
 def validate_token(token: str) -> str:
@@ -176,7 +180,9 @@ class GiClient:
                 raise ProtocolError("Invalid firmware string")
             return mac.lower(), firmware
 
-    async def snapshot(self, *, include_spark: bool = False) -> Snapshot:
+    async def snapshot(
+        self, *, include_spark: bool = False, include_ember: bool = False
+    ) -> Snapshot:
         async with self._lock:
             values = [
                 await self._read(field)
@@ -195,7 +201,22 @@ class GiClient:
             spark = await self._read("modbus.2007") if include_spark else None
             if include_spark and (type(spark) is not int or spark not in range(6)):
                 raise ProtocolError("Invalid Spark value")
-            return Snapshot(values[0] / 10, *values[1:], spark=spark)
+            ember_level = await self._read("modbus.2005") if include_ember else None
+            ember_status = await self._read("modbus.1113") if include_ember else None
+            if include_ember and (
+                type(ember_level) is not int
+                or ember_level not in range(7)
+                or type(ember_status) is not int
+                or ember_status not in range(7)
+            ):
+                raise ProtocolError("Invalid Ember Glow status")
+            return Snapshot(
+                values[0] / 10,
+                *values[1:],
+                spark=spark,
+                ember_level=ember_level,
+                ember_status=ember_status,
+            )
 
     async def set_level(self, key: str, value: int) -> None:
         """Set only tested normal levels, while running without a reported fault."""
@@ -214,6 +235,40 @@ class GiClient:
             if result != "success":
                 raise CommandUncertain(
                     "Setting was not confirmed; check before issuing another command"
+                )
+
+    async def set_ember(self, level: int) -> None:
+        """Normal app LED sequence; no syscmd, ignition or safety overrides."""
+        if type(level) is not int or not 0 <= level <= 6:
+            raise ValueError("Ember Glow requires level 0 through 6")
+        async with self._lock:
+            fault = await self._read("modbus.1107")
+            state = await self._read("modbus.1111")
+            if (
+                type(fault) is not int
+                or type(state) is not int
+                or fault != 0
+                or state not in (0, 5)
+            ):
+                raise KalfireError(
+                    "Ember Glow requires an idle or running fireplace without a fault"
+                )
+            if state == 0:
+                status = await self._read("modbus.1113")
+                if type(status) is not int or status not in range(7):
+                    raise ProtocolError("Unknown LED status; no command sent")
+                if bool(status) != bool(level):
+                    # This app-derived command toggles the LED-only standby mode.
+                    # It is never replayed or exposed as a generic register action.
+                    result = await self._exchange("rset", {"name": "modbus.2011", "value": 1})
+                    if result != "success":
+                        raise CommandUncertain(
+                            "LED switch outcome uncertain; check before another action"
+                        )
+            result = await self._exchange("rset", {"name": "modbus.2005", "value": level})
+            if result != "success":
+                raise CommandUncertain(
+                    "Ember Glow level outcome uncertain; check before another action"
                 )
 
     async def start(self) -> None:
