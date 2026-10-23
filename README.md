@@ -2,9 +2,12 @@
 
 An independent Home Assistant integration for Kalfire **Gi** gas fireplaces using the local encrypted CoAP/DTLS interface. No Kalfire cloud account, MQTT broker, relay wiring or custom firmware is required by this integration.
 
-**Early beta, validated on one Gi with communication-board firmware 0.7.11 and Home Assistant 2026.10.2.** It is not a Kalfire product and is not endorsed by Kalfire or iQontrol. Other Kalfire product families, including older iMatch fireplaces, are not supported.
+**First stable release: 0.1.0. Validated on one Gi with communication-board firmware 0.7.11 and Home Assistant 2026.10.2.** It is not a Kalfire product and is not endorsed by Kalfire or iQontrol. Other Kalfire product families, including older iMatch fireplaces, are not supported.
 
 ## Features
+
+The integration includes its own local Kalfire app icon in `brand/icon.png` (supported by HA 2026.3+).
+
 
 - Local temperature, operating state, error code and flame-height **setting** sensors.
 - Firmware version in device information; the read-only flame-height setting is under Diagnostics, alongside optional raw status bits.
@@ -17,7 +20,7 @@ An independent Home Assistant integration for Kalfire **Gi** gas fireplaces usin
 - Ember Glow shows the active LED level. The steady-level slider is unavailable during flicker. Turning flicker off returns to the last observed steady level (default 3 after a restart if none was observed). Setup and polling never toggle the LEDs.
 - Updating from beta 4 replaces the old percentage light entity with a number and switch. Update any dashboard cards or automations that referred to the old light.
 - Level controls are available only while running without a reported fault. They never ignite the fireplace. Readback can lag an accepted command until a later poll.
-- Address reconfiguration, reauthentication, redacted diagnostics and Dutch/English UI.
+- Address reconfiguration, reauthentication, redacted diagnostics and English, Dutch, German, French, Italian, Spanish, Portuguese, Polish, Czech, Danish and Swedish UI.
 
 The flame-height sensor reports a stored setting, **not** proof of a flame. The state follows the device's own state machine. No ignition, reset or other control command is sent by setup, pairing, polling, reloading or reconnecting.
 
@@ -27,7 +30,7 @@ The repository can be used as a **custom repository**; inclusion in HACS's defau
 
 1. In HACS, open **⋮ → Custom repositories**.
 2. Add `https://github.com/buZybaZzz/home-assistant-kalfire-gi`, category **Integration**.
-3. Download **Kalfire Gi Local**. Enable beta versions if installing a prerelease.
+3. Download **Kalfire Gi Local**. Choose the stable release 0.1.0.
 4. Restart Home Assistant once to load the custom integration.
 5. Add **Kalfire Gi Local** under Devices & services.
 
@@ -56,7 +59,7 @@ In integration options, **Enable explicit on/off controls** creates a normal HA 
 
 The on/off commands follow the normal Gi app interface (`syscmd mode=1` and `mode=0`). The fireplace executes its own startup sequence. Start is refused when an error is reported or the fireplace is not idle. Application commands are sent once; a missing response is reported as uncertain and is **never automatically retried**. A new poll after that only reads state.
 
-**Validation:** normal start and stop through the HA switch have both been physically confirmed by the owner. HA subsequently reported `running` and `no_request`, with error code 0. During startup one read timed out and recovered automatically. Immediate post-command reads can briefly show the previous state; see [validation](docs/validation.md). These beta limitations remain under investigation.
+**Validation:** normal start and stop through the HA switch have both been physically confirmed by the owner. HA subsequently reported `running` and `no_request`, with error code 0. During startup one read timed out and recovered automatically. Immediate post-command reads can briefly show the previous state; see [validation](docs/validation.md). The observed startup read timeout and delayed readback remain documented limitations.
 
 ## Transport security and limits
 
@@ -86,7 +89,7 @@ ruff format --check .
 pytest
 ```
 
-Tests use fake peers and Home Assistant fixtures; they never address a live fireplace. Hardware testing is a separate, explicit action. No APKs, decompiled application code, certificates, secrets or home-network captures are included in this repository.
+Tests use fake peers and Home Assistant fixtures; they never address a live fireplace. Hardware testing is a separate, explicit action. No APKs, decompiled application code, certificates, secrets or home-network captures are included. The sole vendor image is the app icon, shipped unmodified for product identification; see [asset notice](custom_components/kalfire_gi/brand/NOTICE.md).
 
 ## Roadmap
 
@@ -97,4 +100,4 @@ Tests use fake peers and Home Assistant fixtures; they never address a live fire
 
 ## License
 
-MIT for the original implementation in this repository. Product names identify interoperability targets; no vendor logos or application assets are redistributed.
+MIT for the original implementation in this repository. Product names identify interoperability targets. The bundled Kalfire app icon remains third-party artwork, outside the MIT licence; see its [notice](custom_components/kalfire_gi/brand/NOTICE.md).
