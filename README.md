@@ -11,7 +11,9 @@ An independent Home Assistant integration for Kalfire **Gi** gas fireplaces usin
 - Setup through **Settings → Devices & services → Add integration → Kalfire Gi Local**.
 - Physical pairing with the official remote; alternatively import an existing local device token.
 - Explicitly accepted SHA256 certificate pin, checked on every connection.
-- Optional normal on/off switch, enabled through integration options. Controls are off by default.
+- Optional normal on/off switch and flame-height slider (1–5), enabled through integration options. Controls are off by default.
+- Optional Natural Spark slider (0–5); enable only if the generator is installed.
+- Level controls are available only while running without a reported fault. They never ignite the fireplace. Readback can lag an accepted command until a later poll.
 - Address reconfiguration, reauthentication, redacted diagnostics and Dutch/English UI.
 
 The flame-height sensor reports a stored setting, **not** proof of a flame. The state follows the device's own state machine. No ignition, reset or other control command is sent by setup, pairing, polling, reloading or reconnecting.
