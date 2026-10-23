@@ -57,7 +57,7 @@ The on/off commands follow the normal Gi app interface (`syscmd mode=1` and `mod
 
 The tested device uses DTLS 1.2 and `ECDHE-ECDSA-AES256-GCM-SHA384`, with an X.509 certificate issued by a private iQontrol CA. This integration uses **explicit trust on first use and certificate pinning**, not public-CA or manufacturer-CA validation. A first connection on an untrusted network cannot establish the device's identity independently. A changed pin blocks application data; it is not silently accepted.
 
-The client communicates directly with the fireplace. It has been tested while the fireplace still had internet access; operation during internet loss has not been validated. Firmware and protocol differences may require changes. Discovery scans, direct gas-valve writes, firmware flashing and error-reset commands are not implemented.
+The client communicates directly with the fireplace. HA start/stop also worked under a temporary device-specific UniFi Internet-block rule. No independent WAN drop-counter/capture proof or cold-start/long-duration offline test was collected; see [validation](docs/validation.md). Firmware and protocol differences may require changes. Discovery scans, direct gas-valve writes, firmware flashing and error-reset commands are not implemented.
 
 ## Troubleshooting
 
@@ -86,8 +86,8 @@ Tests use fake peers and Home Assistant fixtures; they never address a live fire
 ## Roadmap
 
 - Improve post-command state feedback and investigate the observed startup read timeout. HACS installation, sensors and supervised HA start/stop have been confirmed on Home Assistant Green.
-- Validate more Gi models/firmwares and internet-loss behavior.
-- Extend normal controls (flame height, operating mode, lights, moods) only as their bounds and behavior are established.
+- Validate more Gi models/firmwares, independently verify WAN blocking and test cold-start/long-duration offline behavior.
+- Add HA controls for flame height (normal levels 1–5) and Spark (0–5), following the supervised setting probes documented in validation. These are not yet HA controls in this beta. Research mode, lights and moods separately.
 - Consider HACS default-directory inclusion after broader testing. Core inclusion would also benefit from publishing the independent protocol client as a separate Python package.
 
 ## License
