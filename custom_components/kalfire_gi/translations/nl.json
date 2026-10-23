@@ -60,9 +60,9 @@
     "step": {
       "init": {
         "title": "Kalfire Gi-opties",
-        "description": "Bediening maakt een aan/uit-schakelaar en vlamhoogteregelaar beschikbaar. Schakel Spark alleen in als de optionele vonkengenerator aanwezig is. Niveau-instellingen werken alleen tijdens bedrijf zonder gemelde fout. Gebruik ontsteking alleen bewust terwijl iemand aanwezig is. Verloren opdrachten worden niet automatisch herhaald.",
+        "description": "Schakel de aan/uit-bediening en standenregelaars alleen in voor bewust gebruik. Vlamhoogte en Sparks werken tijdens bedrijf zonder gemelde fout. Ember Glow werkt ook met de gasbrander uit. Schakel Sparks alleen in als de optionele generator aanwezig is. Ontsteek alleen terwijl iemand aanwezig is. Verloren opdrachten worden nooit automatisch herhaald.",
         "data": {
-          "enable_control": "Expliciete aan/uit-bediening inschakelen (experimenteel)",
+          "enable_control": "Aan/uit-bediening en standenregelaars inschakelen",
           "poll_interval": "Uitleesinterval (seconden)",
           "enable_spark": "Natural Spark Generator aanwezig",
           "enable_ember_glow": "Ember Glow-verlichting inschakelen"
@@ -76,7 +76,7 @@
         "name": "Temperatuur"
       },
       "state": {
-        "name": "Haardstatus",
+        "name": "Status",
         "state": {
           "no_request": "Geen aanvraag",
           "waiting": "Wachten",
