@@ -17,12 +17,17 @@ Hardware observations: 22 October 2026, one Kalfire Gi, communication-board firm
 
 ## Still needs validation
 
-- Physical normal stop. It was not tested because the owner asked to leave the fireplace on.
 - Other Gi models/firmwares, power-loss recovery and internet-loss behavior.
 - Pairing-token limits/revocation and device certificate rotation behavior.
 - Additional settings such as mode, lights and moods.
 
 Automated tests exercise the real Home Assistant package with mocked device communication. They do not prove gas-appliance behavior on other hardware. See GitHub Actions for code checks; release notes must not describe an unperformed hardware test as completed.
+
+## Supervised HA control test, 23 October 2026
+
+Controls were explicitly enabled for a supervised test. One HA start command produced visible flames, confirmed by the owner; the eventual state was `running`, error 0. One HA stop command extinguished the flames, confirmed by the owner; subsequent polling returned `no_request`, error 0. No command was automatically repeated. Reloading the integration afterwards restored sensors and the off switch state without igniting the fireplace.
+
+Two beta limitations were observed: the immediate post-command read can still return the previous state (making the switch briefly appear to revert), and one local request timed out during startup. The entities became unavailable, then recovered automatically on subsequent read-only polling and reported startup/running. The cause of the timeout is not established; this test does not prove continuous connection reliability. Diagnostics after stop reported successful polling, state 0, error 0 and flame-height setting 0. The exported integration data contained no device token, host, MAC, serial or certificate fingerprint.
 
 ## Local software validation
 
