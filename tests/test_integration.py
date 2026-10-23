@@ -148,3 +148,42 @@ async def test_unreachable_in_user_flow(hass):
         )
     assert result["errors"] == {"base": "cannot_connect"}
     probe.close.assert_called_once()
+
+
+async def test_optional_levels_readback_and_unavailability(hass, fake_client):
+    from custom_components.kalfire_gi.const import CONF_SPARK
+
+    fake_client.snapshot.return_value = Snapshot(20.7, 5, 0, 2415, 3, spark=0)
+    fake_client.set_level = AsyncMock()
+    entry = MockConfigEntry(
+        domain=DOMAIN, unique_id=MAC, data=DATA, options={CONF_CONTROL: True, CONF_SPARK: True}
+    )
+    entry.add_to_hass(hass)
+    with patch("custom_components.kalfire_gi.GiClient", return_value=fake_client):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+        levels = {
+            s.attributes["friendly_name"]: s
+            for s in hass.states.async_all()
+            if s.domain == "number"
+        }
+        assert len(levels) == 2
+        spark = next(s for s in levels.values() if s.attributes["min"] == 0)
+        fake_client.set_level.assert_not_awaited()
+        await hass.services.async_call(
+            "number", "set_value", {"entity_id": spark.entity_id, "value": 5}, blocking=True
+        )
+        fake_client.set_level.assert_awaited_once_with("spark", 5)
+        assert hass.states.get(spark.entity_id).state == "0"  # ACK is not readback.
+        fake_client.snapshot.return_value = Snapshot(20.7, 5, 0, 2415, 3, spark=5)
+        await entry.runtime_data.async_refresh()
+        assert hass.states.get(spark.entity_id).state == "5"
+        fake_client.snapshot.side_effect = CannotConnect("offline")
+        await entry.runtime_data.async_refresh()
+        assert hass.states.get(spark.entity_id).state == "unavailable"
+        fake_client.snapshot.side_effect = None
+        fake_client.snapshot.return_value = Snapshot(20.7, 0, 0, 2415, 3, spark=5)
+        await entry.runtime_data.async_refresh()
+        assert hass.states.get(spark.entity_id).state == "unavailable"
+        fake_client.set_level.assert_awaited_once()
+        await hass.config_entries.async_unload(entry.entry_id)
