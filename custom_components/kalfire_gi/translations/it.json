@@ -1,0 +1,121 @@
+{
+  "title": "Kalfire Gi Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connetti il tuo Kalfire Gi",
+        "description": "Inserisci l’indirizzo del camino sulla tua rete domestica affidabile. La configurazione legge soltanto i dati.",
+        "data": {
+          "host": "Indirizzo IP o nome host",
+          "port": "Porta"
+        }
+      },
+      "trust": {
+        "title": "Considerare attendibile questo certificato del camino?",
+        "description": "Il dispositivo all’indirizzo {host} ha presentato questa impronta del certificato SHA256:\n\n{fingerprint}\n\nVerifica che l’indirizzo appartenga al tuo camino. Accetta solo su una rete affidabile. È una verifica basata sulla fiducia al primo utilizzo, non sulla CA del produttore. L’impronta verrà controllata a ogni nuova connessione. Non è ancora stato inviato alcun token al dispositivo."
+      },
+      "auth_method": {
+        "title": "Abbinamento locale",
+        "menu_options": {
+          "pair": "Abbina con il telecomando",
+          "existing_token": "Usa un token locale esistente"
+        }
+      },
+      "pair": {
+        "title": "Apri la finestra di abbinamento",
+        "description": "Mantieni il telecomando ufficiale abbinato e nelle vicinanze. Tieni premuto per tre secondi il pulsante rotondo destro direttamente sopra M3, quindi seleziona subito Invia. La procedura segue quella dell’app Gi e non avvia il camino. L’app esistente ha continuato a funzionare sul dispositivo provato."
+      },
+      "existing_token": {
+        "title": "Token locale esistente del dispositivo",
+        "description": "Inserisci un token locale di 24 caratteri già abbinato. Non è la password del tuo account cloud. Il token resta in Home Assistant.",
+        "data": {
+          "token": "Token locale del dispositivo"
+        }
+      },
+      "reconfigure": {
+        "title": "Aggiorna l’indirizzo del dispositivo",
+        "description": "L’impronta del certificato salvata e l’identità del dispositivo devono ancora corrispondere. Un certificato modificato non viene accettato automaticamente.",
+        "data": {
+          "host": "Indirizzo IP o nome host",
+          "port": "Porta"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Inserisci un indirizzo IP o un nome host, senza schema URL né percorso.",
+      "cannot_connect": "Impossibile comunicare con il camino locale. Verifica l’indirizzo e la porta UDP 5684.",
+      "certificate_changed": "Certificato modificato. Verifica il dispositivo prima di rimuovere e aggiungere nuovamente l’integrazione per accettare esplicitamente il nuovo certificato.",
+      "pairing_failed": "Token rifiutato. Apri la finestra di abbinamento con il telecomando e seleziona nuovamente Invia.",
+      "invalid_auth": "Token locale rifiutato. Esegui l’abbinamento con il telecomando.",
+      "invalid_token": "Inserisci esattamente 24 caratteri esadecimali minuscoli."
+    },
+    "abort": {
+      "already_configured": "Questo camino è già configurato.",
+      "wrong_device": "L’indirizzo appartiene a un altro camino.",
+      "reauth_successful": "Abbinamento locale aggiornato.",
+      "reconfigure_successful": "Indirizzo aggiornato."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni Kalfire Gi",
+        "description": "Abilita i comandi di accensione/spegnimento e i livelli solo per un uso consapevole. Altezza della fiamma e scintille richiedono il camino in funzione senza errori segnalati. Ember Glow funziona anche con il bruciatore a gas spento. Abilita le scintille solo se è installato il generatore opzionale. Accendi il camino solo quando è presente qualcuno. I comandi senza conferma non vengono mai ripetuti automaticamente.",
+        "data": {
+          "enable_control": "Abilita accensione/spegnimento e livelli",
+          "poll_interval": "Intervallo di lettura (secondi)",
+          "enable_spark": "Natural Spark Generator installato",
+          "enable_ember_glow": "Abilita l’illuminazione Ember Glow"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "state": {
+        "name": "Stato",
+        "state": {
+          "no_request": "Nessuna richiesta",
+          "waiting": "In attesa",
+          "safety": "Controlli di sicurezza",
+          "purge": "Spurgo",
+          "startup": "Avvio",
+          "running": "In funzione",
+          "lockout": "Blocco di sicurezza",
+          "e_mode": "Modalità E"
+        }
+      },
+      "error_code": {
+        "name": "Codice errore"
+      },
+      "status_bits": {
+        "name": "Bit di stato grezzi"
+      },
+      "flame_height": {
+        "name": "Impostazione altezza fiamma"
+      }
+    },
+    "switch": {
+      "fireplace": {
+        "name": "Camino"
+      },
+      "ember_flicker": {
+        "name": "Sfarfallio"
+      }
+    },
+    "number": {
+      "flame_height": {
+        "name": "Altezza fiamma"
+      },
+      "spark": {
+        "name": "Scintille"
+      },
+      "ember_glow": {
+        "name": "Ember Glow"
+      }
+    }
+  }
+}
