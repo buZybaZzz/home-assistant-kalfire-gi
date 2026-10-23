@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0 — first stable release
+
+- Include the original Kalfire Connected app icon as a local HA brand image, with third-party provenance and licence notice.
+- Rename the Dutch Haardstatus sensor to Status without changing its identity or history.
+- Add complete German, French, Italian, Spanish, Portuguese, Polish, Czech, Danish and Swedish UI translations, alongside English and Dutch.
+- Clarify control options: flame height and Sparks require the burner to run; Ember Glow also works with the gas burner off.
+- Promote the physically validated beta feature set to the first stable release; no protocol or control changes. Startup read timeouts and delayed readback remain documented limitations on the tested firmware.
+
+
 ## 0.1.0b6 — clearer Dutch status label
 
 - Rename the Dutch operating-state sensor from Toestand to Haardstatus. Existing entity ID, history and behavior are retained.
