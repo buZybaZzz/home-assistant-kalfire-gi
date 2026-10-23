@@ -1,0 +1,121 @@
+{
+  "title": "Kalfire Gi Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Conectar tu Kalfire Gi",
+        "description": "Introduce la dirección de la chimenea en tu red doméstica de confianza. La configuración solo lee datos.",
+        "data": {
+          "host": "Dirección IP o nombre de host",
+          "port": "Puerto"
+        }
+      },
+      "trust": {
+        "title": "¿Confiar en este certificado de la chimenea?",
+        "description": "El dispositivo en {host} ha presentado esta huella de certificado SHA256:\n\n{fingerprint}\n\nComprueba que la dirección pertenece a tu chimenea. Acepta solo en una red de confianza. Se utiliza confianza en el primer uso, no validación mediante una autoridad de certificación del fabricante. La huella se comprobará en cada conexión nueva. Todavía no se ha enviado ningún token al dispositivo."
+      },
+      "auth_method": {
+        "title": "Vinculación local",
+        "menu_options": {
+          "pair": "Vincular con el mando a distancia",
+          "existing_token": "Usar un token local existente"
+        }
+      },
+      "pair": {
+        "title": "Abrir la ventana de vinculación",
+        "description": "Mantén el mando oficial vinculado y cerca. Mantén pulsado durante tres segundos el botón redondo derecho justo encima de M3 y selecciona inmediatamente Enviar. Este procedimiento sigue el de la aplicación Gi y no enciende la chimenea. La aplicación existente siguió funcionando en el dispositivo probado."
+      },
+      "existing_token": {
+        "title": "Token local existente del dispositivo",
+        "description": "Introduce un token local de 24 caracteres ya vinculado. No es la contraseña de tu cuenta en la nube. El token permanece en Home Assistant.",
+        "data": {
+          "token": "Token local del dispositivo"
+        }
+      },
+      "reconfigure": {
+        "title": "Actualizar la dirección del dispositivo",
+        "description": "La huella del certificado guardada y la identidad del dispositivo deben seguir coincidiendo. Un certificado modificado no se acepta automáticamente.",
+        "data": {
+          "host": "Dirección IP o nombre de host",
+          "port": "Puerto"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Introduce una dirección IP o un nombre de host, sin esquema de URL ni ruta.",
+      "cannot_connect": "No se puede comunicar con la chimenea local. Comprueba su dirección y el puerto UDP 5684.",
+      "certificate_changed": "El certificado ha cambiado. Comprueba el dispositivo antes de eliminar y volver a añadir la integración para aceptar expresamente el certificado nuevo.",
+      "pairing_failed": "Token rechazado. Abre la ventana de vinculación con el mando y selecciona Enviar de nuevo.",
+      "invalid_auth": "Token local rechazado. Vincula el dispositivo con el mando.",
+      "invalid_token": "Introduce exactamente 24 caracteres hexadecimales en minúsculas."
+    },
+    "abort": {
+      "already_configured": "Esta chimenea ya está configurada.",
+      "wrong_device": "La dirección pertenece a otra chimenea.",
+      "reauth_successful": "Vinculación local actualizada.",
+      "reconfigure_successful": "Dirección actualizada."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones de Kalfire Gi",
+        "description": "Activa los controles de encendido/apagado y nivel solo para un uso deliberado. La altura de la llama y las chispas requieren una chimenea en funcionamiento sin errores indicados. Ember Glow también funciona con el quemador de gas apagado. Activa las chispas solo si está instalado el generador opcional. Enciende la chimenea únicamente cuando haya alguien presente. Los comandos sin confirmación nunca se repiten automáticamente.",
+        "data": {
+          "enable_control": "Activar controles de encendido/apagado y nivel",
+          "poll_interval": "Intervalo de lectura (segundos)",
+          "enable_spark": "Natural Spark Generator instalado",
+          "enable_ember_glow": "Activar iluminación Ember Glow"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "state": {
+        "name": "Estado",
+        "state": {
+          "no_request": "Sin solicitud",
+          "waiting": "En espera",
+          "safety": "Comprobaciones de seguridad",
+          "purge": "Purga",
+          "startup": "Iniciando",
+          "running": "En funcionamiento",
+          "lockout": "Bloqueo de seguridad",
+          "e_mode": "Modo E"
+        }
+      },
+      "error_code": {
+        "name": "Código de error"
+      },
+      "status_bits": {
+        "name": "Bits de estado sin procesar"
+      },
+      "flame_height": {
+        "name": "Ajuste de altura de la llama"
+      }
+    },
+    "switch": {
+      "fireplace": {
+        "name": "Chimenea"
+      },
+      "ember_flicker": {
+        "name": "Parpadeo"
+      }
+    },
+    "number": {
+      "flame_height": {
+        "name": "Altura de la llama"
+      },
+      "spark": {
+        "name": "Chispas"
+      },
+      "ember_glow": {
+        "name": "Ember Glow"
+      }
+    }
+  }
+}
