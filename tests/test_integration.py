@@ -187,3 +187,38 @@ async def test_optional_levels_readback_and_unavailability(hass, fake_client):
         assert hass.states.get(spark.entity_id).state == "unavailable"
         fake_client.set_level.assert_awaited_once()
         await hass.config_entries.async_unload(entry.entry_id)
+
+
+async def test_ember_light_works_with_gas_off_without_ignition(hass, fake_client):
+    from custom_components.kalfire_gi.const import CONF_EMBER
+
+    fake_client.snapshot.return_value = Snapshot(20.7, 0, 0, 2400, 1, ember_level=1, ember_status=0)
+    fake_client.set_ember = AsyncMock()
+    entry = MockConfigEntry(
+        domain=DOMAIN, unique_id=MAC, data=DATA, options={CONF_CONTROL: True, CONF_EMBER: True}
+    )
+    entry.add_to_hass(hass)
+    with patch("custom_components.kalfire_gi.GiClient", return_value=fake_client):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+        light = next(s for s in hass.states.async_all() if s.domain == "light")
+        assert light.state == "off"
+        fake_client.set_ember.assert_not_awaited()
+        await hass.services.async_call(
+            "light", "turn_on", {"entity_id": light.entity_id, "brightness": 153}, blocking=True
+        )
+        fake_client.set_ember.assert_awaited_once_with(3)
+        assert hass.states.get(light.entity_id).state == "off"  # Never optimistic.
+        fake_client.snapshot.return_value = Snapshot(
+            20.7, 0, 0, 2400, 1, ember_level=6, ember_status=6
+        )
+        await entry.runtime_data.async_refresh()
+        assert hass.states.get(light.entity_id).state == "on"
+        assert hass.states.get(light.entity_id).attributes["effect"] == "Flicker"
+        await hass.services.async_call(
+            "light", "turn_off", {"entity_id": light.entity_id}, blocking=True
+        )
+        assert fake_client.set_ember.await_args.args == (0,)
+        fake_client.start.assert_not_awaited()
+        fake_client.stop.assert_not_awaited()
+        await hass.config_entries.async_unload(entry.entry_id)
