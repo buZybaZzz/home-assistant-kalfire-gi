@@ -7,3 +7,5 @@ CONF_CONTROL = "enable_control"
 CONF_POLL = "poll_interval"
 DEFAULT_PORT = 5684
 DEFAULT_POLL = 30
+
+CONF_SPARK = "enable_spark"
