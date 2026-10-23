@@ -76,7 +76,7 @@
         "name": "Temperatuur"
       },
       "state": {
-        "name": "Toestand",
+        "name": "Haardstatus",
         "state": {
           "no_request": "Geen aanvraag",
           "waiting": "Wachten",
