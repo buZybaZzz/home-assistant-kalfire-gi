@@ -60,10 +60,11 @@
     "step": {
       "init": {
         "title": "Kalfire Gi options",
-        "description": "Controls create an on/off switch that can ignite the gas fireplace. Enable only for deliberate use while someone is present. Do not use unattended ignition or automatic fault resets. A lost command response is never retried. Turning off uses the app-derived normal stop command; it has not yet been physically validated in the initial test.",
+        "description": "Controls enable the on/off switch and flame height setting. Enable Spark only if the optional generator is installed. Level settings require a running fireplace without a reported fault. Use ignition deliberately while someone is present. Lost commands are never automatically retried.",
         "data": {
           "enable_control": "Enable explicit on/off controls (experimental)",
-          "poll_interval": "Polling interval (seconds)"
+          "poll_interval": "Polling interval (seconds)",
+          "enable_spark": "Natural Spark Generator installed"
         }
       }
     }
@@ -99,6 +100,14 @@
     "switch": {
       "fireplace": {
         "name": "Fireplace"
+      }
+    },
+    "number": {
+      "flame_height": {
+        "name": "Flame height"
+      },
+      "spark": {
+        "name": "Spark"
       }
     }
   }
