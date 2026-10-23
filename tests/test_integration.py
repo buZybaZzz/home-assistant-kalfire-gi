@@ -189,36 +189,74 @@ async def test_optional_levels_readback_and_unavailability(hass, fake_client):
         await hass.config_entries.async_unload(entry.entry_id)
 
 
-async def test_ember_light_works_with_gas_off_without_ignition(hass, fake_client):
-    from custom_components.kalfire_gi.const import CONF_EMBER
+async def test_ember_discrete_controls_and_light_migration(hass, fake_client):
+    from homeassistant.helpers import entity_registry as er
 
-    fake_client.snapshot.return_value = Snapshot(20.7, 0, 0, 2400, 1, ember_level=1, ember_status=0)
+    from custom_components.kalfire_gi.const import CONF_EMBER, CONF_SPARK
+
+    fake_client.snapshot.return_value = Snapshot(
+        20.7, 0, 0, 2400, 1, spark=0, ember_level=1, ember_status=0
+    )
     fake_client.set_ember = AsyncMock()
     entry = MockConfigEntry(
-        domain=DOMAIN, unique_id=MAC, data=DATA, options={CONF_CONTROL: True, CONF_EMBER: True}
+        domain=DOMAIN,
+        unique_id=MAC,
+        data=DATA,
+        options={CONF_CONTROL: True, CONF_EMBER: True, CONF_SPARK: True},
     )
     entry.add_to_hass(hass)
+    registry = er.async_get(hass)
+    legacy = registry.async_get_or_create("light", DOMAIN, f"{MAC}_ember_glow", config_entry=entry)
+    unrelated = registry.async_get_or_create("light", DOMAIN, "unrelated", config_entry=entry)
     with patch("custom_components.kalfire_gi.GiClient", return_value=fake_client):
         assert await hass.config_entries.async_setup(entry.entry_id)
         await hass.async_block_till_done()
-        light = next(s for s in hass.states.async_all() if s.domain == "light")
-        assert light.state == "off"
+        assert registry.async_get(legacy.entity_id) is None
+        assert registry.async_get(unrelated.entity_id) is not None
+        assert not any(s.domain == "light" for s in hass.states.async_all())
+        ember = next(
+            s
+            for s in hass.states.async_all()
+            if s.domain == "number" and "Ember Glow" in s.attributes["friendly_name"]
+        )
+        flicker = next(
+            s
+            for s in hass.states.async_all()
+            if s.domain == "switch" and "Flicker" in s.attributes["friendly_name"]
+        )
+        assert ember.state == "0"
+        assert (
+            ember.attributes["min"] == 0
+            and ember.attributes["max"] == 5
+            and ember.attributes["step"] == 1
+        )
+        assert any(
+            "Sparks" in s.attributes.get("friendly_name", "") for s in hass.states.async_all()
+        )
         fake_client.set_ember.assert_not_awaited()
         await hass.services.async_call(
-            "light", "turn_on", {"entity_id": light.entity_id, "brightness": 153}, blocking=True
+            "number", "set_value", {"entity_id": ember.entity_id, "value": 2}, blocking=True
         )
-        fake_client.set_ember.assert_awaited_once_with(3)
-        assert hass.states.get(light.entity_id).state == "off"  # Never optimistic.
+        fake_client.set_ember.assert_awaited_once_with(2)
+        assert hass.states.get(ember.entity_id).state == "0"
+        fake_client.snapshot.return_value = Snapshot(
+            20.7, 0, 0, 2400, 1, ember_level=2, ember_status=2
+        )
+        await entry.runtime_data.async_refresh()
+        await hass.services.async_call(
+            "switch", "turn_on", {"entity_id": flicker.entity_id}, blocking=True
+        )
+        assert fake_client.set_ember.await_args.args == (6,)
         fake_client.snapshot.return_value = Snapshot(
             20.7, 0, 0, 2400, 1, ember_level=6, ember_status=6
         )
         await entry.runtime_data.async_refresh()
-        assert hass.states.get(light.entity_id).state == "on"
-        assert hass.states.get(light.entity_id).attributes["effect"] == "Flicker"
+        assert hass.states.get(flicker.entity_id).state == "on"
+        assert hass.states.get(ember.entity_id).state == "unavailable"
         await hass.services.async_call(
-            "light", "turn_off", {"entity_id": light.entity_id}, blocking=True
+            "switch", "turn_off", {"entity_id": flicker.entity_id}, blocking=True
         )
-        assert fake_client.set_ember.await_args.args == (0,)
+        assert fake_client.set_ember.await_args.args == (2,)
         fake_client.start.assert_not_awaited()
         fake_client.stop.assert_not_awaited()
         await hass.config_entries.async_unload(entry.entry_id)
