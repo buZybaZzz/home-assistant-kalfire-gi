@@ -85,7 +85,7 @@ Tests use fake peers and Home Assistant fixtures; they never address a live fire
 
 ## Roadmap
 
-- Complete supervised validation of stop and installation on Home Assistant Green.
+- Complete supervised validation of normal stop. HACS installation and read-only sensor operation on Home Assistant Green have been confirmed.
 - Validate more Gi models/firmwares and internet-loss behavior.
 - Extend normal controls (flame height, operating mode, lights, moods) only as their bounds and behavior are established.
 - Consider HACS default-directory inclusion after broader testing. Core inclusion would also benefit from publishing the independent protocol client as a separate Python package.
