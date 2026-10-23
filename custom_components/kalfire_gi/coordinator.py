@@ -28,6 +28,7 @@ class GiCoordinator(DataUpdateCoordinator[Snapshot]):
             config_entry=entry,
             update_interval=timedelta(seconds=entry.options.get(CONF_POLL, DEFAULT_POLL)),
         )
+        self.last_ember_steady = 3
         self.include_ember = entry.options.get(CONF_EMBER, False)
         self.include_spark = entry.options.get(CONF_SPARK, False)
         self.client = client
@@ -36,9 +37,12 @@ class GiCoordinator(DataUpdateCoordinator[Snapshot]):
 
     async def _async_update_data(self) -> Snapshot:
         try:
-            return await self.client.snapshot(
+            data = await self.client.snapshot(
                 include_spark=self.include_spark, include_ember=self.include_ember
             )
+            if data.ember_status in range(1, 6):
+                self.last_ember_steady = data.ember_status
+            return data
         except AuthenticationError as err:
             raise ConfigEntryAuthFailed("Local pairing is no longer valid") from err
         except KalfireError as err:
