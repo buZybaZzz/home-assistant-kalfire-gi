@@ -183,3 +183,61 @@ async def test_unauthorized_not_misreported_as_success(client):
     ):
         with pytest.raises(AuthenticationError):
             await client._exchange("rget", {})
+
+
+@pytest.mark.parametrize(
+    "key,value",
+    [
+        ("flame_height", 0),
+        ("flame_height", 6),
+        ("spark", -1),
+        ("spark", 6),
+        ("spark", True),
+        ("spark", 2.5),
+        ("gasValve1", 1),
+    ],
+)
+async def test_invalid_setting_never_touches_network(client, key, value):
+    client._read = AsyncMock()
+    client._exchange = AsyncMock()
+    with pytest.raises(ValueError):
+        await client.set_level(key, value)
+    client._read.assert_not_awaited()
+    client._exchange.assert_not_awaited()
+
+
+@pytest.mark.parametrize("state,fault", [(0, 0), (4, 0), (5, 1), (6, 0), (True, 0)])
+async def test_setting_requires_running_without_fault(client, state, fault):
+    client._read = AsyncMock(side_effect=[fault, state])
+    client._exchange = AsyncMock()
+    with pytest.raises(KalfireError):
+        await client.set_level("spark", 5)
+    client._exchange.assert_not_awaited()
+
+
+@pytest.mark.parametrize(
+    "key,value,field",
+    [
+        ("flame_height", 1, "sys.control.flame_height"),
+        ("flame_height", 5, "sys.control.flame_height"),
+        ("spark", 0, "modbus.2007"),
+        ("spark", 5, "modbus.2007"),
+    ],
+)
+async def test_level_sends_one_allowed_write(client, key, value, field):
+    client._read = AsyncMock(side_effect=[0, 5])
+    client._exchange = AsyncMock(return_value="success")
+    await client.set_level(key, value)
+    client._exchange.assert_awaited_once_with("rset", {"name": field, "value": value})
+
+
+async def test_rset_wire_type_and_uncertain_timeout(client):
+    transport = MagicMock(send=AsyncMock(), receive=AsyncMock(side_effect=TimeoutError))
+    client._connect = AsyncMock(return_value=transport)
+    client._transport = transport
+    with pytest.raises(CommandUncertain):
+        await client._exchange("rset", {"name": "modbus.2007", "value": 5})
+    transport.send.assert_awaited_once()
+    payload = json.loads(decode(transport.send.await_args.args[0]).payload)
+    assert payload["type"] == "integer"
+    transport.close.assert_called_once()
