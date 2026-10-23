@@ -64,7 +64,8 @@
         "data": {
           "enable_control": "Enable explicit on/off controls (experimental)",
           "poll_interval": "Polling interval (seconds)",
-          "enable_spark": "Natural Spark Generator installed"
+          "enable_spark": "Natural Spark Generator installed",
+          "enable_ember_glow": "Enable Ember Glow lighting"
         }
       }
     }
@@ -108,6 +109,11 @@
       },
       "spark": {
         "name": "Spark"
+      }
+    },
+    "light": {
+      "ember_glow": {
+        "name": "Ember Glow"
       }
     }
   }
