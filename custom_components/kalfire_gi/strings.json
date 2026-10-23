@@ -101,6 +101,9 @@
     "switch": {
       "fireplace": {
         "name": "Fireplace"
+      },
+      "ember_flicker": {
+        "name": "Flicker"
       }
     },
     "number": {
@@ -108,10 +111,8 @@
         "name": "Flame height"
       },
       "spark": {
-        "name": "Spark"
-      }
-    },
-    "light": {
+        "name": "Sparks"
+      },
       "ember_glow": {
         "name": "Ember Glow"
       }
