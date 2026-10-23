@@ -1,0 +1,121 @@
+{
+  "title": "Kalfire Gi Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Anslut till din Kalfire Gi",
+        "description": "Ange kaminens adress i ditt betrodda hemnätverk. Installationen läser bara data.",
+        "data": {
+          "host": "IP-adress eller värdnamn",
+          "port": "Port"
+        }
+      },
+      "trust": {
+        "title": "Lita på detta kamincertifikat?",
+        "description": "Enheten på {host} presenterade detta SHA256-certifikatavtryck:\n\n{fingerprint}\n\nKontrollera att adressen tillhör din kamin. Acceptera endast i ett betrott nätverk. Detta innebär tillit vid första användningen, inte validering via tillverkarens certifikatutfärdare. Avtrycket kontrolleras vid varje ny anslutning. Ingen enhetstoken har skickats ännu."
+      },
+      "auth_method": {
+        "title": "Lokal parkoppling",
+        "menu_options": {
+          "pair": "Parkoppla med fjärrkontrollen",
+          "existing_token": "Använd en befintlig lokal token"
+        }
+      },
+      "pair": {
+        "title": "Öppna parkopplingsfönstret",
+        "description": "Låt den officiella fjärrkontrollen vara parkopplad och i närheten. Håll den högra runda knappen direkt ovanför M3 intryckt i tre sekunder och välj genast Skicka. Detta följer parkopplingen i Gi-appen och startar inte kaminen. Den befintliga appen fungerade fortfarande på den testade enheten."
+      },
+      "existing_token": {
+        "title": "Befintlig lokal enhetstoken",
+        "description": "Ange en tidigare parkopplad lokal token med 24 tecken. Det är inte lösenordet till ditt molnkonto. Tokenen stannar i Home Assistant.",
+        "data": {
+          "token": "Lokal enhetstoken"
+        }
+      },
+      "reconfigure": {
+        "title": "Uppdatera enhetens adress",
+        "description": "Det sparade certifikatavtrycket och enhetens identitet måste fortfarande stämma överens. Ett ändrat certifikat accepteras inte automatiskt.",
+        "data": {
+          "host": "IP-adress eller värdnamn",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Ange en IP-adress eller ett värdnamn utan URL-schema eller sökväg.",
+      "cannot_connect": "Kunde inte kommunicera med den lokala kaminen. Kontrollera adressen och UDP-port 5684.",
+      "certificate_changed": "Certifikatet har ändrats. Kontrollera enheten innan du tar bort och lägger till integrationen igen för att uttryckligen lita på det nya certifikatet.",
+      "pairing_failed": "Tokenen avvisades. Öppna parkopplingsfönstret med fjärrkontrollen och välj Skicka igen.",
+      "invalid_auth": "Den lokala tokenen avvisades. Parkoppla med fjärrkontrollen.",
+      "invalid_token": "Ange exakt 24 hexadecimala tecken med små bokstäver."
+    },
+    "abort": {
+      "already_configured": "Denna kamin är redan konfigurerad.",
+      "wrong_device": "Adressen tillhör en annan kamin.",
+      "reauth_successful": "Lokal parkoppling uppdaterad.",
+      "reconfigure_successful": "Adress uppdaterad."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Kalfire Gi-alternativ",
+        "description": "Aktivera på/av och nivåreglering endast för avsiktlig användning. Flamhöjd och gnistor kräver en kamin i drift utan rapporterade fel. Ember Glow fungerar även med gasbrännaren avstängd. Aktivera gnistor endast om tillvalsgeneratorn är installerad. Tänd kaminen bara när någon är närvarande. Kommandon utan bekräftelse upprepas aldrig automatiskt.",
+        "data": {
+          "enable_control": "Aktivera på/av och nivåreglering",
+          "poll_interval": "Avläsningsintervall (sekunder)",
+          "enable_spark": "Natural Spark Generator installerad",
+          "enable_ember_glow": "Aktivera Ember Glow-belysning"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "state": {
+        "name": "Status",
+        "state": {
+          "no_request": "Ingen begäran",
+          "waiting": "Väntar",
+          "safety": "Säkerhetskontroller",
+          "purge": "Genomluftning",
+          "startup": "Startar",
+          "running": "I drift",
+          "lockout": "Säkerhetsspärr",
+          "e_mode": "E-läge"
+        }
+      },
+      "error_code": {
+        "name": "Felkod"
+      },
+      "status_bits": {
+        "name": "Råa statusbitar"
+      },
+      "flame_height": {
+        "name": "Inställd flamhöjd"
+      }
+    },
+    "switch": {
+      "fireplace": {
+        "name": "Kamin"
+      },
+      "ember_flicker": {
+        "name": "Flimmer"
+      }
+    },
+    "number": {
+      "flame_height": {
+        "name": "Flamhöjd"
+      },
+      "spark": {
+        "name": "Gnistor"
+      },
+      "ember_glow": {
+        "name": "Ember Glow"
+      }
+    }
+  }
+}
