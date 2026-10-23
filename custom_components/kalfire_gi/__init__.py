@@ -4,13 +4,14 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
+from homeassistant.helpers import entity_registry as er
 
-from .const import CONF_FINGERPRINT, CONF_TOKEN
+from .const import CONF_FINGERPRINT, CONF_TOKEN, DOMAIN
 from .coordinator import GiCoordinator
 from .gi import GiClient
 from .gi.errors import AuthenticationError, KalfireError
 
-PLATFORMS = [Platform.SENSOR, Platform.SWITCH, Platform.NUMBER, Platform.LIGHT]
+PLATFORMS = [Platform.SENSOR, Platform.SWITCH, Platform.NUMBER]
 type GiConfigEntry = ConfigEntry[GiCoordinator]
 
 
@@ -37,6 +38,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: GiConfigEntry) -> bool:
     except BaseException:
         client.close()
         raise
+    # Replace the former percentage light with discrete LED controls.
+    registry = er.async_get(hass)
+    for entity in er.async_entries_for_config_entry(registry, entry.entry_id):
+        if (
+            entity.domain == "light"
+            and entity.platform == DOMAIN
+            and entity.unique_id == f"{mac}_ember_glow"
+        ):
+            registry.async_remove(entity.entity_id)
     entry.runtime_data = coordinator
     entry.async_on_unload(client.close)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
