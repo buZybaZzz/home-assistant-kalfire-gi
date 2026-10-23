@@ -14,6 +14,7 @@ from .const import (
     CONF_CONTROL,
     CONF_FINGERPRINT,
     CONF_POLL,
+    CONF_SPARK,
     CONF_TOKEN,
     DEFAULT_POLL,
     DEFAULT_PORT,
@@ -201,6 +202,9 @@ class GiOptionsFlow(config_entries.OptionsFlow):
                 {
                     vol.Required(
                         CONF_CONTROL, default=self.config_entry.options.get(CONF_CONTROL, False)
+                    ): bool,
+                    vol.Required(
+                        CONF_SPARK, default=self.config_entry.options.get(CONF_SPARK, False)
                     ): bool,
                     vol.Required(
                         CONF_POLL, default=self.config_entry.options.get(CONF_POLL, DEFAULT_POLL)
