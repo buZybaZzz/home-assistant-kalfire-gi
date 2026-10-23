@@ -11,7 +11,7 @@ These notes document observed interoperability, not a supported vendor API contr
 - Temperature scale: value / 10 = degrees Celsius. The inspected Android app truncates to a whole number for display.
 - Unpaired token: CoAP 4.01. Paired read: CoAP 2.05.
 - Normal start: `{"id":123,"method":"syscmd","params":{"mode":1}}`.
-- Normal stop: same method with mode 0 (app-derived; not physically validated yet).
+- Normal stop: same method with mode 0; physically validated from Home Assistant.
 - Command acknowledgement: `{"id":123,"result":"success"}`. This does not prove a flame or completed startup; observe device state and physical outcome.
 
 | Read field | Meaning |
