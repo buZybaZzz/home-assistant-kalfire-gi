@@ -1,0 +1,121 @@
+{
+  "title": "Kalfire Gi Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Připojit ke krbu Kalfire Gi",
+        "description": "Zadejte adresu krbu ve své důvěryhodné domácí síti. Nastavení pouze čte data.",
+        "data": {
+          "host": "IP adresa nebo název hostitele",
+          "port": "Port"
+        }
+      },
+      "trust": {
+        "title": "Důvěřovat tomuto certifikátu krbu?",
+        "description": "Zařízení na adrese {host} předložilo tento otisk certifikátu SHA256:\n\n{fingerprint}\n\nOvěřte, že adresa patří vašemu krbu. Přijímejte pouze v důvěryhodné síti. Jde o důvěru při prvním použití, nikoli o ověření certifikační autoritou výrobce. Otisk se kontroluje při každém novém připojení. Zařízení dosud nebyl odeslán žádný token."
+      },
+      "auth_method": {
+        "title": "Místní párování",
+        "menu_options": {
+          "pair": "Spárovat pomocí dálkového ovladače",
+          "existing_token": "Použít existující místní token"
+        }
+      },
+      "pair": {
+        "title": "Otevřít párovací okno",
+        "description": "Oficiální dálkový ovladač ponechte spárovaný a poblíž. Podržte pravé kulaté tlačítko přímo nad M3 po dobu tří sekund a ihned zvolte Odeslat. Postup odpovídá párování v aplikaci Gi a nespouští krb. Stávající aplikace na testovaném zařízení fungovala i nadále."
+      },
+      "existing_token": {
+        "title": "Existující místní token zařízení",
+        "description": "Zadejte dříve spárovaný místní token o délce 24 znaků. Nejde o heslo k účtu v cloudu. Token zůstane v Home Assistant.",
+        "data": {
+          "token": "Místní token zařízení"
+        }
+      },
+      "reconfigure": {
+        "title": "Aktualizovat adresu zařízení",
+        "description": "Uložený otisk certifikátu a identita zařízení se musí stále shodovat. Změněný certifikát se nepřijímá automaticky.",
+        "data": {
+          "host": "IP adresa nebo název hostitele",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Zadejte IP adresu nebo název hostitele bez schématu URL a cesty.",
+      "cannot_connect": "S místním krbem nelze komunikovat. Ověřte adresu a port UDP 5684.",
+      "certificate_changed": "Certifikát se změnil. Před odebráním a opětovným přidáním integrace zařízení ověřte a nový certifikát výslovně přijměte.",
+      "pairing_failed": "Token byl odmítnut. Otevřete párovací okno ovladačem a znovu zvolte Odeslat.",
+      "invalid_auth": "Místní token byl odmítnut. Spárujte zařízení dálkovým ovladačem.",
+      "invalid_token": "Zadejte přesně 24 malých šestnáctkových znaků."
+    },
+    "abort": {
+      "already_configured": "Tento krb je již nastaven.",
+      "wrong_device": "Adresa patří jinému krbu.",
+      "reauth_successful": "Místní párování bylo aktualizováno.",
+      "reconfigure_successful": "Adresa byla aktualizována."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Možnosti Kalfire Gi",
+        "description": "Ovládání zapnutí/vypnutí a úrovní povolte pouze pro vědomé použití. Výška plamene a jiskry vyžadují krb v provozu bez hlášené chyby. Ember Glow funguje i s vypnutým plynovým hořákem. Jiskry povolte pouze s instalovaným volitelným generátorem. Krb zapalujte jen v přítomnosti osoby. Příkazy bez potvrzení se nikdy automaticky neopakují.",
+        "data": {
+          "enable_control": "Povolit ovládání zapnutí/vypnutí a úrovní",
+          "poll_interval": "Interval čtení (sekundy)",
+          "enable_spark": "Nainstalován Natural Spark Generator",
+          "enable_ember_glow": "Povolit osvětlení Ember Glow"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Teplota"
+      },
+      "state": {
+        "name": "Stav",
+        "state": {
+          "no_request": "Bez požadavku",
+          "waiting": "Čekání",
+          "safety": "Bezpečnostní kontroly",
+          "purge": "Proplach",
+          "startup": "Spouštění",
+          "running": "V provozu",
+          "lockout": "Bezpečnostní blokování",
+          "e_mode": "Režim E"
+        }
+      },
+      "error_code": {
+        "name": "Kód chyby"
+      },
+      "status_bits": {
+        "name": "Nezpracované stavové bity"
+      },
+      "flame_height": {
+        "name": "Nastavení výšky plamene"
+      }
+    },
+    "switch": {
+      "fireplace": {
+        "name": "Krb"
+      },
+      "ember_flicker": {
+        "name": "Mihotání"
+      }
+    },
+    "number": {
+      "flame_height": {
+        "name": "Výška plamene"
+      },
+      "spark": {
+        "name": "Jiskry"
+      },
+      "ember_glow": {
+        "name": "Ember Glow"
+      }
+    }
+  }
+}
