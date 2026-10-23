@@ -1,0 +1,121 @@
+{
+  "title": "Kalfire Gi Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Połącz z kominkiem Kalfire Gi",
+        "description": "Wprowadź adres kominka w zaufanej sieci domowej. Konfiguracja tylko odczytuje dane.",
+        "data": {
+          "host": "Adres IP lub nazwa hosta",
+          "port": "Port"
+        }
+      },
+      "trust": {
+        "title": "Zaufać temu certyfikatowi kominka?",
+        "description": "Urządzenie pod adresem {host} przedstawiło ten odcisk certyfikatu SHA256:\n\n{fingerprint}\n\nSprawdź, czy adres należy do Twojego kominka. Akceptuj tylko w zaufanej sieci. Jest to zaufanie przy pierwszym użyciu, a nie weryfikacja przez urząd certyfikacji producenta. Odcisk będzie sprawdzany przy każdym nowym połączeniu. Nie wysłano jeszcze tokenu do urządzenia."
+      },
+      "auth_method": {
+        "title": "Parowanie lokalne",
+        "menu_options": {
+          "pair": "Sparuj za pomocą pilota",
+          "existing_token": "Użyj istniejącego tokenu lokalnego"
+        }
+      },
+      "pair": {
+        "title": "Otwórz okno parowania",
+        "description": "Pozostaw oficjalnego pilota sparowanego i w pobliżu. Przytrzymaj przez trzy sekundy prawy okrągły przycisk bezpośrednio nad M3, a następnie od razu wybierz Wyślij. To procedura parowania z aplikacji Gi, która nie uruchamia kominka. Na przetestowanym urządzeniu dotychczasowa aplikacja nadal działała."
+      },
+      "existing_token": {
+        "title": "Istniejący lokalny token urządzenia",
+        "description": "Wprowadź wcześniej sparowany token lokalny złożony z 24 znaków. To nie jest hasło do konta w chmurze. Token pozostaje w Home Assistant.",
+        "data": {
+          "token": "Lokalny token urządzenia"
+        }
+      },
+      "reconfigure": {
+        "title": "Zaktualizuj adres urządzenia",
+        "description": "Zapisany odcisk certyfikatu i tożsamość urządzenia muszą nadal się zgadzać. Zmieniony certyfikat nie jest akceptowany automatycznie.",
+        "data": {
+          "host": "Adres IP lub nazwa hosta",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "invalid_host": "Wprowadź adres IP lub nazwę hosta bez schematu URL i ścieżki.",
+      "cannot_connect": "Nie można połączyć się z lokalnym kominkiem. Sprawdź adres i port UDP 5684.",
+      "certificate_changed": "Certyfikat się zmienił. Sprawdź urządzenie przed usunięciem i ponownym dodaniem integracji w celu świadomego zaakceptowania nowego certyfikatu.",
+      "pairing_failed": "Token odrzucony. Otwórz okno parowania pilotem i ponownie wybierz Wyślij.",
+      "invalid_auth": "Token lokalny odrzucony. Sparuj urządzenie za pomocą pilota.",
+      "invalid_token": "Wprowadź dokładnie 24 małe znaki szesnastkowe."
+    },
+    "abort": {
+      "already_configured": "Ten kominek jest już skonfigurowany.",
+      "wrong_device": "Adres należy do innego kominka.",
+      "reauth_successful": "Zaktualizowano parowanie lokalne.",
+      "reconfigure_successful": "Zaktualizowano adres."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje Kalfire Gi",
+        "description": "Włącz sterowanie zasilaniem i poziomami tylko do świadomego użycia. Wysokość płomienia i iskry wymagają działającego kominka bez zgłoszonego błędu. Ember Glow działa również przy wyłączonym palniku gazowym. Włącz iskry tylko wtedy, gdy zamontowano opcjonalny generator. Zapalaj kominek wyłącznie w obecności osoby. Polecenia bez potwierdzenia nigdy nie są ponawiane automatycznie.",
+        "data": {
+          "enable_control": "Włącz sterowanie zasilaniem i poziomami",
+          "poll_interval": "Interwał odczytu (sekundy)",
+          "enable_spark": "Zamontowany Natural Spark Generator",
+          "enable_ember_glow": "Włącz oświetlenie Ember Glow"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "state": {
+        "name": "Stan",
+        "state": {
+          "no_request": "Brak żądania",
+          "waiting": "Oczekiwanie",
+          "safety": "Kontrole bezpieczeństwa",
+          "purge": "Przedmuchiwanie",
+          "startup": "Uruchamianie",
+          "running": "Praca",
+          "lockout": "Blokada bezpieczeństwa",
+          "e_mode": "Tryb E"
+        }
+      },
+      "error_code": {
+        "name": "Kod błędu"
+      },
+      "status_bits": {
+        "name": "Surowe bity stanu"
+      },
+      "flame_height": {
+        "name": "Ustawienie wysokości płomienia"
+      }
+    },
+    "switch": {
+      "fireplace": {
+        "name": "Kominek"
+      },
+      "ember_flicker": {
+        "name": "Migotanie"
+      }
+    },
+    "number": {
+      "flame_height": {
+        "name": "Wysokość płomienia"
+      },
+      "spark": {
+        "name": "Iskry"
+      },
+      "ember_glow": {
+        "name": "Ember Glow"
+      }
+    }
+  }
+}
