@@ -57,6 +57,7 @@ SENSORS = (
         key="flame_height",
         translation_key="flame_height",
         icon="mdi:fire",
+        entity_category=EntityCategory.DIAGNOSTIC,
         value=lambda data: data.flame_height,
     ),
 )
