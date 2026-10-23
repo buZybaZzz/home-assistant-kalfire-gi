@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0b6 — clearer Dutch status label
+
+- Rename the Dutch operating-state sensor from Toestand to Haardstatus. Existing entity ID, history and behavior are retained.
+
+
 ## 0.1.0b5 — discrete Ember Glow controls
 
 - Replace the percentage light with a 0–5 slider and separate Flicker switch. The slider is unavailable during flicker; switching flicker off returns to the last observed steady level (fallback 3).
