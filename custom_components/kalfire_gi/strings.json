@@ -60,12 +60,11 @@
     "step": {
       "init": {
         "title": "Kalfire Gi options",
-        "description": "Enable the on/off switch and level controls only for deliberate use. Flame height and Sparks require a running fireplace without a reported fault. Ember Glow also works with the gas burner off. Enable Sparks only if the optional generator is installed. Ignite only while someone is present. Lost commands are never automatically retried.",
+        "description": "Enable the on/off switch and level controls only for deliberate use. Flame height and Sparks require a running fireplace without a reported fault. Ember Glow is always available independently of this option, including with the gas burner off. Enable Sparks only if the optional generator is installed. Ignite only while someone is present. Lost commands are never automatically retried.",
         "data": {
-          "enable_control": "Enable on/off and level controls",
+          "enable_control": "Enable on/off, flame-height and Sparks controls",
           "poll_interval": "Polling interval (seconds)",
-          "enable_spark": "Natural Spark Generator installed",
-          "enable_ember_glow": "Enable Ember Glow lighting"
+          "enable_spark": "Natural Spark Generator installed"
         }
       }
     }

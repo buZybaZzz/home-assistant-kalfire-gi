@@ -12,7 +12,6 @@ from homeassistant.helpers import selector
 
 from .const import (
     CONF_CONTROL,
-    CONF_EMBER,
     CONF_FINGERPRINT,
     CONF_POLL,
     CONF_SPARK,
@@ -203,9 +202,6 @@ class GiOptionsFlow(config_entries.OptionsFlow):
                 {
                     vol.Required(
                         CONF_CONTROL, default=self.config_entry.options.get(CONF_CONTROL, False)
-                    ): bool,
-                    vol.Required(
-                        CONF_EMBER, default=self.config_entry.options.get(CONF_EMBER, False)
                     ): bool,
                     vol.Required(
                         CONF_SPARK, default=self.config_entry.options.get(CONF_SPARK, False)

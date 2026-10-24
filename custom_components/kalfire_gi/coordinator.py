@@ -8,7 +8,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import CONF_EMBER, CONF_POLL, CONF_SPARK, DEFAULT_POLL, DOMAIN
+from .const import CONF_POLL, CONF_SPARK, DEFAULT_POLL, DOMAIN
 from .gi import GiClient, Snapshot
 from .gi.errors import AuthenticationError, KalfireError
 
@@ -29,7 +29,7 @@ class GiCoordinator(DataUpdateCoordinator[Snapshot]):
             update_interval=timedelta(seconds=entry.options.get(CONF_POLL, DEFAULT_POLL)),
         )
         self.last_ember_steady = 3
-        self.include_ember = entry.options.get(CONF_EMBER, False)
+        self.include_ember = True
         self.include_spark = entry.options.get(CONF_SPARK, False)
         self.client = client
         self.mac = mac

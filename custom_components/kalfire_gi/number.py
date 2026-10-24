@@ -6,7 +6,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import GiConfigEntry
-from .const import CONF_CONTROL, CONF_EMBER, CONF_SPARK
+from .const import CONF_CONTROL, CONF_SPARK
 from .entity import GiEntity
 from .gi.errors import KalfireError
 
@@ -14,13 +14,12 @@ from .gi.errors import KalfireError
 async def async_setup_entry(
     hass: HomeAssistant, entry: GiConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
+    entities = [GiEmberLevel(entry.runtime_data)]
     if entry.options.get(CONF_CONTROL, False):
-        entities = [GiLevel(entry.runtime_data, "flame_height")]
+        entities.append(GiLevel(entry.runtime_data, "flame_height"))
         if entry.options.get(CONF_SPARK, False):
             entities.append(GiLevel(entry.runtime_data, "spark"))
-        if entry.options.get(CONF_EMBER, False):
-            entities.append(GiEmberLevel(entry.runtime_data))
-        async_add_entities(entities)
+    async_add_entities(entities)
 
 
 class GiLevel(GiEntity, NumberEntity):

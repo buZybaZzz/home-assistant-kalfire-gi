@@ -9,5 +9,3 @@ DEFAULT_PORT = 5684
 DEFAULT_POLL = 30
 
 CONF_SPARK = "enable_spark"
-
-CONF_EMBER = "enable_ember_glow"
