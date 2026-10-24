@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 — independent Ember Glow controls
+
+- Always expose and poll Ember Glow brightness and Flicker, independently of burner controls. Remove the Ember Glow option; existing disabled settings no longer hide LED controls.
+
 ## 0.1.0 — first stable release
 
 - Include the original Kalfire Connected app icon as a local HA brand image, with third-party provenance and licence notice.

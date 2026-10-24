@@ -14,12 +14,12 @@ The integration includes its own local Kalfire app icon in `brand/icon.png` (sup
 - Setup through **Settings → Devices & services → Add integration → Kalfire Gi Local**.
 - Physical pairing with the official remote; alternatively import an existing local device token.
 - Explicitly accepted SHA256 certificate pin, checked on every connection.
-- Optional normal on/off switch and flame-height slider (1–5), enabled through integration options. Controls are off by default.
+- Optional normal on/off switch and flame-height slider (1–5), enabled through integration options. Burner controls are off by default; Ember Glow is always available.
 - Optional Sparks slider (0–5); enable only if the generator is installed.
-- Optional Ember Glow slider with discrete levels 0–5, plus a separate Flicker switch (native level 6). Works while the gas fireplace is off. Enable Ember Glow in integration options.
+- Ember Glow slider with discrete levels 0–5, plus a separate Flicker switch (native level 6). Works while the gas fireplace is off. Available independently of the on/off control option.
 - Ember Glow shows the active LED level. The steady-level slider is unavailable during flicker. Turning flicker off returns to the last observed steady level (default 3 after a restart if none was observed). Setup and polling never toggle the LEDs.
 - Updating from beta 4 replaces the old percentage light entity with a number and switch. Update any dashboard cards or automations that referred to the old light.
-- Level controls are available only while running without a reported fault. They never ignite the fireplace. Readback can lag an accepted command until a later poll.
+- Flame-height and Sparks controls are available only while running without a reported fault. They never ignite the fireplace. Readback can lag an accepted command until a later poll.
 - Address reconfiguration, reauthentication, redacted diagnostics and English, Dutch, German, French, Italian, Spanish, Portuguese, Polish, Czech, Danish and Swedish UI.
 
 The flame-height sensor reports a stored setting, **not** proof of a flame. The state follows the device's own state machine. No ignition, reset or other control command is sent by setup, pairing, polling, reloading or reconnecting.
