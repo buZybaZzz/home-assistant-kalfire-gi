@@ -40,7 +40,7 @@ async def test_setup_sensors_no_commands_and_reload(hass, fake_client):
         states = list(hass.states.async_all())
         assert any(s.state == "20.7" for s in states)
         assert any(s.state == "running" for s in states)
-        assert not any(s.domain == "switch" for s in states)
+        assert not any(s.entity_id.endswith("_fireplace") for s in states)
         assert await hass.config_entries.async_reload(entry.entry_id)
         await hass.async_block_till_done()
         fake_client.start.assert_not_awaited()
@@ -56,7 +56,11 @@ async def test_controls_only_on_explicit_service_call(hass, fake_client):
     with patch("custom_components.kalfire_gi.GiClient", return_value=fake_client):
         assert await hass.config_entries.async_setup(entry.entry_id)
         await hass.async_block_till_done()
-        switch = next(s for s in hass.states.async_all() if s.domain == "switch")
+        switch = next(
+            s
+            for s in hass.states.async_all()
+            if s.domain == "switch" and s.entity_id.endswith("_fireplace")
+        )
         fake_client.start.assert_not_awaited()
         fake_client.stop.assert_not_awaited()
         await hass.services.async_call(
@@ -167,8 +171,8 @@ async def test_optional_levels_readback_and_unavailability(hass, fake_client):
             for s in hass.states.async_all()
             if s.domain == "number"
         }
-        assert len(levels) == 2
-        spark = next(s for s in levels.values() if s.attributes["min"] == 0)
+        assert len(levels) == 3
+        spark = next(s for s in levels.values() if "Sparks" in s.attributes["friendly_name"])
         fake_client.set_level.assert_not_awaited()
         await hass.services.async_call(
             "number", "set_value", {"entity_id": spark.entity_id, "value": 5}, blocking=True
@@ -189,10 +193,18 @@ async def test_optional_levels_readback_and_unavailability(hass, fake_client):
         await hass.config_entries.async_unload(entry.entry_id)
 
 
-async def test_ember_discrete_controls_and_light_migration(hass, fake_client):
+@pytest.mark.parametrize(
+    "options",
+    [
+        {},
+        {CONF_CONTROL: False, "enable_ember_glow": False},
+        {CONF_CONTROL: True, "enable_ember_glow": True},
+    ],
+)
+async def test_ember_discrete_controls_and_light_migration(hass, fake_client, options):
     from homeassistant.helpers import entity_registry as er
 
-    from custom_components.kalfire_gi.const import CONF_EMBER, CONF_SPARK
+    from custom_components.kalfire_gi.const import CONF_SPARK
 
     fake_client.snapshot.return_value = Snapshot(
         20.7, 0, 0, 2400, 1, spark=0, ember_level=1, ember_status=0
@@ -202,7 +214,7 @@ async def test_ember_discrete_controls_and_light_migration(hass, fake_client):
         domain=DOMAIN,
         unique_id=MAC,
         data=DATA,
-        options={CONF_CONTROL: True, CONF_EMBER: True, CONF_SPARK: True},
+        options={**options, CONF_SPARK: True},
     )
     entry.add_to_hass(hass)
     registry = er.async_get(hass)
@@ -232,7 +244,8 @@ async def test_ember_discrete_controls_and_light_migration(hass, fake_client):
         )
         assert any(
             "Sparks" in s.attributes.get("friendly_name", "") for s in hass.states.async_all()
-        )
+        ) == options.get(CONF_CONTROL, False)
+        fake_client.snapshot.assert_awaited_with(include_spark=True, include_ember=True)
         fake_client.set_ember.assert_not_awaited()
         await hass.services.async_call(
             "number", "set_value", {"entity_id": ember.entity_id, "value": 2}, blocking=True
@@ -260,3 +273,22 @@ async def test_ember_discrete_controls_and_light_migration(hass, fake_client):
         fake_client.start.assert_not_awaited()
         fake_client.stop.assert_not_awaited()
         await hass.config_entries.async_unload(entry.entry_id)
+
+
+async def test_options_no_longer_offer_ember_toggle(hass):
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        unique_id=MAC,
+        data=DATA,
+        options={CONF_CONTROL: False, "enable_ember_glow": False},
+    )
+    entry.add_to_hass(hass)
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    assert "enable_ember_glow" not in {key.schema for key in result["data_schema"].schema}
+    with patch("custom_components.kalfire_gi._async_options_updated", return_value=None):
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"],
+            {CONF_CONTROL: False, "enable_spark": False, "poll_interval": 30},
+        )
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert "enable_ember_glow" not in entry.options
