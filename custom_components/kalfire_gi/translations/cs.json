@@ -64,8 +64,7 @@
         "data": {
           "enable_control": "Povolit ovládání zapnutí/vypnutí a úrovní",
           "poll_interval": "Interval čtení (sekundy)",
-          "enable_spark": "Nainstalován Natural Spark Generator",
-          "enable_ember_glow": "Povolit osvětlení Ember Glow"
+          "enable_spark": "Nainstalován Natural Spark Generator"
         }
       }
     }

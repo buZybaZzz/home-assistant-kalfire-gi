@@ -64,8 +64,7 @@
         "data": {
           "enable_control": "Activar controles de encendido/apagado y nivel",
           "poll_interval": "Intervalo de lectura (segundos)",
-          "enable_spark": "Natural Spark Generator instalado",
-          "enable_ember_glow": "Activar iluminación Ember Glow"
+          "enable_spark": "Natural Spark Generator instalado"
         }
       }
     }

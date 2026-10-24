@@ -64,8 +64,7 @@
         "data": {
           "enable_control": "Aktivér tænd/sluk og niveauregulering",
           "poll_interval": "Aflæsningsinterval (sekunder)",
-          "enable_spark": "Natural Spark Generator installeret",
-          "enable_ember_glow": "Aktivér Ember Glow-belysning"
+          "enable_spark": "Natural Spark Generator installeret"
         }
       }
     }

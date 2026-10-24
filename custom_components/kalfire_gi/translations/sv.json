@@ -64,8 +64,7 @@
         "data": {
           "enable_control": "Aktivera på/av och nivåreglering",
           "poll_interval": "Avläsningsintervall (sekunder)",
-          "enable_spark": "Natural Spark Generator installerad",
-          "enable_ember_glow": "Aktivera Ember Glow-belysning"
+          "enable_spark": "Natural Spark Generator installerad"
         }
       }
     }

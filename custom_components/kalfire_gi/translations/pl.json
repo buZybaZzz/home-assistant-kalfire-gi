@@ -64,8 +64,7 @@
         "data": {
           "enable_control": "Włącz sterowanie zasilaniem i poziomami",
           "poll_interval": "Interwał odczytu (sekundy)",
-          "enable_spark": "Zamontowany Natural Spark Generator",
-          "enable_ember_glow": "Włącz oświetlenie Ember Glow"
+          "enable_spark": "Zamontowany Natural Spark Generator"
         }
       }
     }

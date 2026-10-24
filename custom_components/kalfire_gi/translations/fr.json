@@ -64,8 +64,7 @@
         "data": {
           "enable_control": "Activer les commandes marche/arrêt et de niveau",
           "poll_interval": "Intervalle de lecture (secondes)",
-          "enable_spark": "Natural Spark Generator installé",
-          "enable_ember_glow": "Activer l’éclairage Ember Glow"
+          "enable_spark": "Natural Spark Generator installé"
         }
       }
     }

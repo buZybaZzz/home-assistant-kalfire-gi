@@ -64,8 +64,7 @@
         "data": {
           "enable_control": "Ein/Aus und Stufenregler aktivieren",
           "poll_interval": "Abfrageintervall (Sekunden)",
-          "enable_spark": "Natural Spark Generator vorhanden",
-          "enable_ember_glow": "Ember Glow-Beleuchtung aktivieren"
+          "enable_spark": "Natural Spark Generator vorhanden"
         }
       }
     }
