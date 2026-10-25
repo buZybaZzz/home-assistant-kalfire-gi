@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 — HACS default submission preparation
+
+- Run HACS validation without ignored checks, including local brand assets.
+- Clarify installation instructions to use the latest stable release. No device control or protocol changes.
+
 ## 0.1.1 — independent Ember Glow controls
 
 - Always expose and poll Ember Glow brightness and Flicker, independently of burner controls. Remove the Ember Glow option; existing disabled settings no longer hide LED controls.

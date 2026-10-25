@@ -2,7 +2,7 @@
 
 An independent Home Assistant integration for Kalfire **Gi** gas fireplaces using the local encrypted CoAP/DTLS interface. No Kalfire cloud account, MQTT broker, relay wiring or custom firmware is required by this integration.
 
-**First stable release: 0.1.0. Validated on one Gi with communication-board firmware 0.7.11 and Home Assistant 2026.10.2.** It is not a Kalfire product and is not endorsed by Kalfire or iQontrol. Other Kalfire product families, including older iMatch fireplaces, are not supported.
+**Validated on one Gi with communication-board firmware 0.7.11 and Home Assistant 2026.10.2.** It is not a Kalfire product and is not endorsed by Kalfire or iQontrol. Other Kalfire product families, including older iMatch fireplaces, are not supported.
 
 ## Features
 
@@ -30,7 +30,7 @@ The repository can be used as a **custom repository**; inclusion in HACS's defau
 
 1. In HACS, open **⋮ → Custom repositories**.
 2. Add `https://github.com/buZybaZzz/home-assistant-kalfire-gi`, category **Integration**.
-3. Download **Kalfire Gi Local**. Choose the stable release 0.1.0.
+3. Download **Kalfire Gi Local**. Choose the latest stable release.
 4. Restart Home Assistant once to load the custom integration.
 5. Add **Kalfire Gi Local** under Devices & services.
 
