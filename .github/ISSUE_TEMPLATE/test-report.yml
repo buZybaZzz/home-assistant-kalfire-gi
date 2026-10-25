@@ -1,0 +1,80 @@
+name: Gi compatibility / test report
+description: Report a successful test, partial result or problem on your Kalfire Gi.
+title: "[Test report] Gi model - firmware"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing Kalfire Gi Local. Successful results are useful too.
+        This integration targets the Gi family with Kalfire ConnectedApp, not older iMatch models.
+        Start with pairing, sensors and Ember Glow. Burner tests are optional: keep someone at the fireplace and the official remote available. Do not test unattended ignition or fault resets.
+        Never include pairing tokens, certificates, serial numbers, IP addresses, complete backups or packet captures. Redact logs before posting; reports are public.
+  - type: input
+    id: model
+    attributes:
+      label: Exact Gi model
+      placeholder: Gi85/55S
+    validations:
+      required: true
+  - type: input
+    id: firmware
+    attributes:
+      label: Communication-board firmware
+      description: Copy the firmware from the integration device information, or enter unknown.
+      placeholder: 0.7.11
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Home Assistant, integration and HACS versions
+      placeholder: HA 2026.10.2; Kalfire Gi Local 0.1.2; HACS ...
+    validations:
+      required: true
+  - type: dropdown
+    id: sparks
+    attributes:
+      label: Natural Spark Generator fitted?
+      options:
+        - "No"
+        - "Yes"
+        - "Unknown"
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Overall result
+      options:
+        - "Works for the functions tested"
+        - "Partly works"
+        - "Cannot pair or load the integration"
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Test results
+      description: Use works / fails / not tested for each item. Please report actual fireplace behavior, not just the HA indication.
+      value: |
+        Pairing with the remote:
+        Existing official app and remote still work:
+        Temperature, state and fault sensors:
+        Ember Glow levels 0-5 with burner off:
+        Flicker on/off with burner off:
+        Ember Glow with HA burner controls disabled:
+        HA restart / integration reload (no unsolicited commands):
+        OPTIONAL supervised burner start/stop:
+        OPTIONAL flame height and Sparks while running:
+    validations:
+      required: true
+  - type: textarea
+    id: network
+    attributes:
+      label: Connection and stability
+      description: Same subnet or separate VLANs? Any timeouts, disconnects or delayed readback? How long have you used it? No addresses needed.
+  - type: textarea
+    id: details
+    attributes:
+      label: Problem details or other observations
+      description: For a failure, include steps, expected and actual behavior, and an optional short redacted log excerpt. Leave empty for a successful test if there is nothing to add.
