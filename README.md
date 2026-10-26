@@ -42,9 +42,9 @@ Manual alternative: copy `custom_components/kalfire_gi/` into `/config/custom_co
 Keep the fireplace's official remote paired and in its normal location near the fireplace. The remote and the fireplace's existing safety functions remain necessary.
 
 1. Put Home Assistant and the fireplace on the same trusted LAN/subnet for the initial setup. Allow unicast UDP 5684. Cross-subnet support has not been established; no broad firewall opening or port forwarding is needed.
-2. Find the fireplace IP address in your router. A DHCP reservation is useful but optional.
-3. Enter that address in the integration setup. The default port is 5684.
-4. Check the device address and explicitly accept the displayed certificate fingerprint on your trusted network. Initial discovery sends only a DTLS handshake, no device token.
+2. Start adding the integration. It searches the local network for about five seconds and prefills a discovered address. If several fireplaces are found, choose an address from the list.
+3. Confirm the address or enter an IP address or hostname manually if discovery finds nothing (for example, across VLANs). You can find the IP address in your router. The default port is 5684; a DHCP reservation is optional.
+4. Check the device address and explicitly accept the displayed certificate fingerprint on your trusted network. Network discovery sends a local multicast query; checking the selected address sends only a DTLS handshake, no device token.
 5. Choose **Pair using the remote control**.
 6. Hold the **right round button directly above M3 for 3 seconds**, as illustrated by the official Gi app. Immediately submit the pairing form.
 7. The integration registers a new random local token by following the app's initial read sequence. It does not ignite the fireplace.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4-beta.1 — initial setup discovery
+
+- Search for local Gi fireplaces during initial setup, prefill a discovered address, offer a choice when several respond, and retain manual address entry. Certificate trust and physical pairing remain required.
+
 ## 0.1.3 — automatic IP address recovery
 
 - Recover an already paired Gi at a new address during startup or polling, using bounded, shared local multicast discovery and checking both the existing certificate pin and device MAC.
