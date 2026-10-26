@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Connetti il tuo Kalfire Gi",
-        "description": "Inserisci l’indirizzo del camino sulla tua rete domestica affidabile. La configurazione legge soltanto i dati.",
+        "description": "È stata eseguita una ricerca dei camini sulla rete locale. Un indirizzo trovato è già compilato; se sono stati trovati più camini, scegline uno. Puoi anche inserire manualmente un indirizzo IP o un nome host, anche se non è stato trovato alcun camino. La configurazione legge solo i dati.",
         "data": {
           "host": "Indirizzo IP o nome host",
           "port": "Porta"

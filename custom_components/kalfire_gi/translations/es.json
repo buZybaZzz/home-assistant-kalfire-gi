@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Conectar tu Kalfire Gi",
-        "description": "Introduce la dirección de la chimenea en tu red doméstica de confianza. La configuración solo lee datos.",
+        "description": "Se han buscado chimeneas en la red local. Una dirección encontrada aparece rellenada; si hay varias chimeneas, elige una. También puedes introducir una dirección IP o un nombre de host manualmente, incluso si no se ha encontrado ninguna. La configuración solo lee datos.",
         "data": {
           "host": "Dirección IP o nombre de host",
           "port": "Puerto"

@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Verbind met je Kalfire Gi",
-        "description": "Vul het adres van de haard op je vertrouwde thuisnetwerk in. Configureren leest alleen gegevens uit.",
+        "description": "We hebben op het lokale netwerk naar haarden gezocht. Een gevonden adres is alvast ingevuld; bij meerdere haarden kun je kiezen. Je kunt ook zelf een IP-adres of hostnaam invullen, bijvoorbeeld als er niets gevonden is. Configureren leest alleen gegevens uit.",
         "data": {
           "host": "IP-adres of hostnaam",
           "port": "Poort"

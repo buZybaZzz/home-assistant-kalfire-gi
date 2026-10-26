@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Ligar ao seu Kalfire Gi",
-        "description": "Introduza o endereço da lareira na sua rede doméstica de confiança. A configuração apenas lê dados.",
+        "description": "Foi efetuada uma pesquisa de lareiras na rede local. Um endereço encontrado já está preenchido; se foram encontradas várias lareiras, escolha uma. Também pode introduzir manualmente um endereço IP ou nome de anfitrião, mesmo que nenhuma tenha sido encontrada. A configuração apenas lê dados.",
         "data": {
           "host": "Endereço IP ou nome do anfitrião",
           "port": "Porta"

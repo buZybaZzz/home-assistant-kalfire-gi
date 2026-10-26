@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Připojit ke krbu Kalfire Gi",
-        "description": "Zadejte adresu krbu ve své důvěryhodné domácí síti. Nastavení pouze čte data.",
+        "description": "V místní síti jsme vyhledali krby. Nalezená adresa je předvyplněna; pokud bylo nalezeno více krbů, vyberte jeden. IP adresu nebo název hostitele můžete zadat také ručně, i když nebyl nalezen žádný krb. Nastavení pouze čte údaje.",
         "data": {
           "host": "IP adresa nebo název hostitele",
           "port": "Port"

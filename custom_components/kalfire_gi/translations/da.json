@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Forbind til din Kalfire Gi",
-        "description": "Indtast pejsens adresse på dit betroede hjemmenetværk. Opsætningen læser kun data.",
+        "description": "Vi har søgt efter pejse på det lokale netværk. En fundet adresse er udfyldt; vælg en, hvis der blev fundet flere pejse. Du kan også indtaste en IP-adresse eller et værtsnavn manuelt, også hvis ingen blev fundet. Opsætningen læser kun data.",
         "data": {
           "host": "IP-adresse eller værtsnavn",
           "port": "Port"

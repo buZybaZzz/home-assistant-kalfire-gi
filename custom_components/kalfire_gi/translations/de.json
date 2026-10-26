@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Mit Ihrem Kalfire Gi verbinden",
-        "description": "Geben Sie die Adresse des Kamins in Ihrem vertrauenswürdigen Heimnetz ein. Bei der Einrichtung werden nur Daten gelesen.",
+        "description": "Im lokalen Netzwerk wurde nach Kaminen gesucht. Eine gefundene Adresse ist vorausgefüllt; bei mehreren Kaminen kannst du eine auswählen. Du kannst auch eine IP-Adresse oder einen Hostnamen manuell eingeben, falls nichts gefunden wurde. Die Einrichtung liest nur Daten.",
         "data": {
           "host": "IP-Adresse oder Hostname",
           "port": "Port"

@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Anslut till din Kalfire Gi",
-        "description": "Ange kaminens adress i ditt betrodda hemnätverk. Installationen läser bara data.",
+        "description": "Vi har sökt efter eldstäder i det lokala nätverket. En hittad adress är förifylld; om flera eldstäder hittades kan du välja en. Du kan också ange en IP-adress eller ett värdnamn manuellt, även om ingen hittades. Konfigurationen läser bara data.",
         "data": {
           "host": "IP-adress eller värdnamn",
           "port": "Port"

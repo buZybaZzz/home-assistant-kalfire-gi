@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Połącz z kominkiem Kalfire Gi",
-        "description": "Wprowadź adres kominka w zaufanej sieci domowej. Konfiguracja tylko odczytuje dane.",
+        "description": "Wyszukano kominki w sieci lokalnej. Znaleziony adres jest wstępnie wpisany; jeśli znaleziono kilka kominków, wybierz jeden. Możesz też ręcznie wpisać adres IP lub nazwę hosta, również gdy nic nie znaleziono. Konfiguracja tylko odczytuje dane.",
         "data": {
           "host": "Adres IP lub nazwa hosta",
           "port": "Port"

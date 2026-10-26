@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Connecter votre Kalfire Gi",
-        "description": "Saisissez l’adresse du foyer sur votre réseau domestique de confiance. La configuration ne fait que lire des données.",
+        "description": "Une recherche de cheminées a été effectuée sur le réseau local. Une adresse trouvée est préremplie ; si plusieurs cheminées sont détectées, choisissez-en une. Vous pouvez aussi saisir une adresse IP ou un nom d’hôte manuellement, même si aucune cheminée n’a été trouvée. La configuration lit uniquement les données.",
         "data": {
           "host": "Adresse IP ou nom d’hôte",
           "port": "Port"
