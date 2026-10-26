@@ -22,7 +22,7 @@ from .const import (
     DEFAULT_PORT,
     DOMAIN,
 )
-from .discovery import async_connect_candidate
+from .discovery import async_connect_candidate, async_get_discovery
 from .gi import GiClient
 from .gi.client import validate_token
 from .gi.errors import AuthenticationError, CertificateChanged, KalfireError
@@ -37,6 +37,7 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         self._connection: dict[str, Any] = {}
         self._new_token = secrets.token_hex(12)
+        self._discovered_hosts: tuple[str, ...] | None = None
 
     @staticmethod
     @callback
@@ -71,6 +72,8 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None):
         errors = {}
+        if user_input is None and self._discovered_hosts is None:
+            self._discovered_hosts = await async_get_discovery(self.hass).async_candidates()
         if user_input is not None:
             host = user_input[CONF_HOST].strip()
             if not host or "://" in host or "/" in host:
@@ -86,14 +89,32 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     probe.close()
                 if not errors:
                     return await self.async_step_trust()
+        hosts = self._discovered_hosts or ()
+        host_field = vol.Required(CONF_HOST)
+        if user_input is not None:
+            host_field = vol.Required(CONF_HOST, default=user_input[CONF_HOST])
+        elif hosts:
+            host_field = vol.Required(CONF_HOST, default=hosts[0])
+        host_selector = (
+            selector.SelectSelector(
+                selector.SelectSelectorConfig(
+                    options=list(hosts),
+                    custom_value=True,
+                    mode=selector.SelectSelectorMode.DROPDOWN,
+                )
+            )
+            if len(hosts) > 1
+            else str
+        )
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_HOST): str,
-                    vol.Required(CONF_PORT, default=DEFAULT_PORT): vol.All(
-                        vol.Coerce(int), vol.Range(min=1, max=65535)
-                    ),
+                    host_field: host_selector,
+                    vol.Required(
+                        CONF_PORT,
+                        default=user_input[CONF_PORT] if user_input is not None else DEFAULT_PORT,
+                    ): vol.All(vol.Coerce(int), vol.Range(min=1, max=65535)),
                 }
             ),
             errors=errors,

@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Connect to your Kalfire Gi",
-        "description": "Enter the fireplace address on your trusted home network. Setup only reads data.",
+        "description": "We searched the local network for fireplaces. A discovered address is prefilled; if several were found, choose one. You can also enter an IP address or hostname manually, including when none were found. Setup only reads data.",
         "data": {
           "host": "IP address or hostname",
           "port": "Port"
