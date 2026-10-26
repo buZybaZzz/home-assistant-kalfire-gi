@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.4 — automatic discovery and simpler setup
+
+- Promote the owner-tested beta 2 to stable without functional changes. Initial setup discovers local fireplaces, prefills an address or offers a choice, and retains manual entry.
+- Warn before connecting when an entered IPv4 address falls outside HA’s enabled subnets; add same-subnet guidance to connection errors.
+- Remember the initial certificate automatically while retaining certificate pin checks on subsequent connections. Simplify pairing instructions in all 11 languages and allow empty token entry to return to the pairing choices.
+- The owner confirmed that beta 2 appears to work correctly. All 122 offline tests and GitHub checks passed for the tested beta.
+
 ## 0.1.4-beta.2 — subnet guidance
 
 - Remember the initial certificate automatically and proceed directly to pairing choices; keep certificate pin checks on every subsequent connection. Simplify pairing instructions in all languages and allow returning from token entry by submitting an empty field.
