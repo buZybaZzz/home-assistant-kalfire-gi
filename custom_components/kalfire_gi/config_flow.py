@@ -22,7 +22,7 @@ from .const import (
     DEFAULT_PORT,
     DOMAIN,
 )
-from .discovery import async_connect_candidate, async_get_discovery
+from .discovery import async_connect_candidate, async_get_discovery, async_same_subnet
 from .gi import GiClient
 from .gi.client import validate_token
 from .gi.errors import AuthenticationError, CertificateChanged, KalfireError
@@ -80,15 +80,14 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors[CONF_HOST] = "invalid_host"
             else:
                 self._connection = {CONF_HOST: host, CONF_PORT: user_input[CONF_PORT]}
-                probe = DtlsTransport(host, user_input[CONF_PORT])
-                try:
-                    self._connection[CONF_FINGERPRINT] = await probe.connect()
-                except KalfireError:
-                    errors["base"] = "cannot_connect"
-                finally:
-                    probe.close()
-                if not errors:
-                    return await self.async_step_trust()
+                if await async_same_subnet(self.hass, host) is False:
+                    return await self.async_step_subnet()
+                return await self.async_step_connect()
+        return self._show_user_form(errors, user_input)
+
+    def _show_user_form(self, errors, user_input=None):
+        """Keep the selected address when returning from a subnet warning or failure."""
+        user_input = user_input or self._connection or None
         hosts = self._discovered_hosts or ()
         host_field = vol.Required(CONF_HOST)
         if user_input is not None:
@@ -119,6 +118,24 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             ),
             errors=errors,
         )
+
+    async def async_step_subnet(self, user_input=None):
+        return self.async_show_menu(
+            step_id="subnet",
+            menu_options=["user", "connect"],
+            description_placeholders={"host": self._connection[CONF_HOST]},
+        )
+
+    async def async_step_connect(self, user_input=None):
+        """Probe only after address checks and any subnet warning were acknowledged."""
+        probe = DtlsTransport(self._connection[CONF_HOST], self._connection[CONF_PORT])
+        try:
+            self._connection[CONF_FINGERPRINT] = await probe.connect()
+        except KalfireError:
+            return self._show_user_form({"base": "cannot_connect"})
+        finally:
+            probe.close()
+        return await self.async_step_trust()
 
     async def async_step_trust(self, user_input: dict[str, Any] | None = None):
         if user_input is not None:
