@@ -1,8 +1,8 @@
 """Async UDP/DTLS with pyOpenSSL's public memory-BIO interface.
 
-We use a user-accepted SHA256 leaf-certificate pin because the device uses a
+We use a saved SHA256 leaf-certificate pin because the device uses a
 private iQontrol CA. No token or application data is sent before pin validation.
-Initial fingerprint discovery performs only a handshake. This is explicit trust
+Initial fingerprint discovery performs only a handshake. This is automatic trust
 on first use, not verification of the manufacturer's CA or hostname.
 """
 
@@ -51,7 +51,7 @@ class DtlsTransport:
                 context.set_min_proto_version(DTLS_1_2)
                 context.set_max_proto_version(DTLS_1_2)
                 context.set_cipher_list(b"ECDHE-ECDSA-AES256-GCM-SHA384")
-                # CA verification is replaced by an explicitly accepted leaf pin.
+                # CA verification is replaced by an saved leaf pin.
                 context.set_verify(SSL.VERIFY_NONE, lambda *_: True)
                 self._ssl = SSL.Connection(context, None)
                 self._ssl.set_connect_state()

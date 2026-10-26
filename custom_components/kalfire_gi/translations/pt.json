@@ -10,10 +10,6 @@
           "port": "Porta"
         }
       },
-      "trust": {
-        "title": "Confiar neste certificado da lareira?",
-        "description": "O dispositivo em {host} apresentou esta impressão digital do certificado SHA256:\n\n{fingerprint}\n\nVerifique se o endereço pertence à sua lareira. Aceite apenas numa rede de confiança. Trata-se de confiança na primeira utilização, não de validação pela autoridade de certificação do fabricante. A impressão digital será verificada em cada nova ligação. Ainda não foi enviado nenhum token ao dispositivo."
-      },
       "auth_method": {
         "title": "Emparelhamento local",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Abrir a janela de emparelhamento",
-        "description": "Mantenha o comando oficial emparelhado e por perto. Prima durante três segundos o botão redondo direito diretamente acima de M3 e selecione imediatamente Enviar. Este procedimento segue o da aplicação Gi e não acende a lareira. A aplicação existente continuou a funcionar no dispositivo testado."
+        "description": "Mantenha o comando oficial emparelhado com a lareira perto da lareira. Prima durante 3 segundos o botão redondo direito situado diretamente acima do botão M3 e, em seguida, selecione o botão Enviar abaixo."
       },
       "existing_token": {
         "title": "Token local existente do dispositivo",
-        "description": "Introduza um token local de 24 caracteres já emparelhado. Não é a palavra-passe da sua conta na nuvem. O token permanece no Home Assistant.",
+        "description": "Introduza um token local de 24 caracteres emparelhado anteriormente. Esta não é a palavra-passe da sua conta na nuvem. O token permanece no Home Assistant. Não tem um token? Deixe o campo vazio e selecione Enviar para voltar às opções de emparelhamento.",
         "data": {
           "token": "Token local do dispositivo"
         }

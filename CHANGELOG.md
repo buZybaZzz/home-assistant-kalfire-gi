@@ -2,6 +2,8 @@
 
 ## 0.1.4-beta.2 — subnet guidance
 
+- Remember the initial certificate automatically and proceed directly to pairing choices; keep certificate pin checks on every subsequent connection. Simplify pairing instructions in all languages and allow returning from token entry by submitting an empty field.
+
 - Add same-subnet guidance to connection errors and the initial setup screen in all supported languages.
 - Compare entered IPv4 addresses with the actual prefixes of enabled HA interfaces before connecting; offer address correction or an explicit attempt across subnets. Hostnames and unavailable adapter data remain unchecked.
 - Initial discovery on the same subnet was confirmed by the owner with beta 1. The owner also reported failed discovery and pairing across subnets; this does not establish a universal routing limitation.

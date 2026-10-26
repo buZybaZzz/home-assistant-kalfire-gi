@@ -10,10 +10,6 @@
           "port": "Port"
         }
       },
-      "trust": {
-        "title": "Zaufać temu certyfikatowi kominka?",
-        "description": "Urządzenie pod adresem {host} przedstawiło ten odcisk certyfikatu SHA256:\n\n{fingerprint}\n\nSprawdź, czy adres należy do Twojego kominka. Akceptuj tylko w zaufanej sieci. Jest to zaufanie przy pierwszym użyciu, a nie weryfikacja przez urząd certyfikacji producenta. Odcisk będzie sprawdzany przy każdym nowym połączeniu. Nie wysłano jeszcze tokenu do urządzenia."
-      },
       "auth_method": {
         "title": "Parowanie lokalne",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Otwórz okno parowania",
-        "description": "Pozostaw oficjalnego pilota sparowanego i w pobliżu. Przytrzymaj przez trzy sekundy prawy okrągły przycisk bezpośrednio nad M3, a następnie od razu wybierz Wyślij. To procedura parowania z aplikacji Gi, która nie uruchamia kominka. Na przetestowanym urządzeniu dotychczasowa aplikacja nadal działała."
+        "description": "Trzymaj oficjalnego pilota sparowanego z kominkiem w pobliżu kominka. Przytrzymaj przez 3 sekundy prawy okrągły przycisk znajdujący się bezpośrednio nad przyciskiem M3, a następnie wybierz przycisk Wyślij poniżej."
       },
       "existing_token": {
         "title": "Istniejący lokalny token urządzenia",
-        "description": "Wprowadź wcześniej sparowany token lokalny złożony z 24 znaków. To nie jest hasło do konta w chmurze. Token pozostaje w Home Assistant.",
+        "description": "Wpisz wcześniej sparowany lokalny token składający się z 24 znaków. To nie jest hasło do konta w chmurze. Token pozostaje w Home Assistant. Nie masz tokena? Pozostaw pole puste i wybierz Wyślij, aby wrócić do wyboru metody parowania.",
         "data": {
           "token": "Lokalny token urządzenia"
         }

@@ -10,10 +10,6 @@
           "port": "Port"
         }
       },
-      "trust": {
-        "title": "Lita på detta kamincertifikat?",
-        "description": "Enheten på {host} presenterade detta SHA256-certifikatavtryck:\n\n{fingerprint}\n\nKontrollera att adressen tillhör din kamin. Acceptera endast i ett betrott nätverk. Detta innebär tillit vid första användningen, inte validering via tillverkarens certifikatutfärdare. Avtrycket kontrolleras vid varje ny anslutning. Ingen enhetstoken har skickats ännu."
-      },
       "auth_method": {
         "title": "Lokal parkoppling",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Öppna parkopplingsfönstret",
-        "description": "Låt den officiella fjärrkontrollen vara parkopplad och i närheten. Håll den högra runda knappen direkt ovanför M3 intryckt i tre sekunder och välj genast Skicka. Detta följer parkopplingen i Gi-appen och startar inte kaminen. Den befintliga appen fungerade fortfarande på den testade enheten."
+        "description": "Håll den officiella fjärrkontrollen som är parkopplad med eldstaden i närheten av eldstaden. Håll den högra runda knappen direkt ovanför M3-knappen intryckt i 3 sekunder och välj sedan knappen Skicka nedan."
       },
       "existing_token": {
         "title": "Befintlig lokal enhetstoken",
-        "description": "Ange en tidigare parkopplad lokal token med 24 tecken. Det är inte lösenordet till ditt molnkonto. Tokenen stannar i Home Assistant.",
+        "description": "Ange en tidigare parkopplad lokal token med 24 tecken. Detta är inte lösenordet till ditt molnkonto. Tokenen stannar i Home Assistant. Har du ingen token? Lämna fältet tomt och välj Skicka för att gå tillbaka till valet av parkopplingsmetod.",
         "data": {
           "token": "Lokal enhetstoken"
         }

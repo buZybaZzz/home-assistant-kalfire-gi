@@ -10,10 +10,6 @@
           "port": "Port"
         }
       },
-      "trust": {
-        "title": "Trust this fireplace certificate?",
-        "description": "The device at {host} presented this SHA256 certificate fingerprint:\n\n{fingerprint}\n\nCheck that the address belongs to your fireplace. Accept only on a trusted network. This is trust on first use, not manufacturer CA validation. The pin will be checked on every new connection. No device token has been sent yet."
-      },
       "auth_method": {
         "title": "Local pairing",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Open the pairing window",
-        "description": "Keep the official remote paired and nearby. Hold the right round button directly above M3 for 3 seconds, then immediately select Submit. This follows the Gi app pairing sequence and does not start the fireplace. Existing app operation was retained on the tested device."
+        "description": "Keep the official remote control that is paired with the fireplace near the fireplace. Hold the right round button directly above the M3 button for 3 seconds, then select the Submit button below."
       },
       "existing_token": {
         "title": "Existing local device token",
-        "description": "Enter a previously paired 24-character local token. This is not your cloud account password. The token stays in Home Assistant.",
+        "description": "Enter a previously paired 24-character local token. This is not your cloud account password. The token stays in Home Assistant. No token? Leave the field empty and select Submit to return to the pairing choices.",
         "data": {
           "token": "Local device token"
         }

@@ -10,10 +10,6 @@
           "port": "Port"
         }
       },
-      "trust": {
-        "title": "Faire confiance à ce certificat du foyer ?",
-        "description": "L’appareil à l’adresse {host} a présenté cette empreinte de certificat SHA256 :\n\n{fingerprint}\n\nVérifiez que l’adresse correspond à votre foyer. Acceptez uniquement sur un réseau de confiance. Il s’agit d’une confiance à la première utilisation, sans validation par une autorité de certification du fabricant. L’empreinte sera vérifiée à chaque nouvelle connexion. Aucun jeton n’a encore été envoyé à l’appareil."
-      },
       "auth_method": {
         "title": "Association locale",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Ouvrir la fenêtre d’association",
-        "description": "Gardez la télécommande officielle associée et à proximité. Maintenez le bouton rond droit juste au-dessus de M3 pendant trois secondes, puis sélectionnez immédiatement Envoyer. Cette procédure suit celle de l’application Gi et ne démarre pas le foyer. L’application existante est restée fonctionnelle sur l’appareil testé."
+        "description": "Gardez la télécommande officielle associée au foyer à proximité du foyer. Maintenez le bouton rond droit situé directement au-dessus du bouton M3 enfoncé pendant 3 secondes, puis sélectionnez le bouton Envoyer ci-dessous."
       },
       "existing_token": {
         "title": "Jeton local existant de l’appareil",
-        "description": "Saisissez un jeton local de 24 caractères déjà associé. Ce n’est pas le mot de passe de votre compte cloud. Le jeton reste dans Home Assistant.",
+        "description": "Saisissez un jeton local de 24 caractères précédemment associé. Il ne s’agit pas de votre mot de passe cloud. Le jeton reste dans Home Assistant. Vous n’avez pas de jeton ? Laissez le champ vide et sélectionnez Envoyer pour revenir au choix de la méthode d’association.",
         "data": {
           "token": "Jeton local de l’appareil"
         }

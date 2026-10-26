@@ -10,10 +10,6 @@
           "port": "Port"
         }
       },
-      "trust": {
-        "title": "Vil du stole på dette pejsecertifikat?",
-        "description": "Enheden på {host} viste dette SHA256-certifikatfingeraftryk:\n\n{fingerprint}\n\nKontrollér, at adressen tilhører din pejs. Acceptér kun på et betroet netværk. Dette er tillid ved første brug, ikke validering via producentens certifikatmyndighed. Fingeraftrykket kontrolleres ved hver ny forbindelse. Der er endnu ikke sendt et enhedstoken."
-      },
       "auth_method": {
         "title": "Lokal parring",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Åbn parringsvinduet",
-        "description": "Lad den officielle fjernbetjening forblive parret og i nærheden. Hold den højre runde knap lige over M3 nede i tre sekunder, og vælg straks Send. Dette følger parringen i Gi-appen og starter ikke pejsen. Den eksisterende app fungerede fortsat på den testede enhed."
+        "description": "Hold den officielle fjernbetjening, der er parret med pejsen, i nærheden af pejsen. Hold den højre runde knap, som sidder lige over M3-knappen, nede i 3 sekunder, og vælg derefter knappen Send nedenfor."
       },
       "existing_token": {
         "title": "Eksisterende lokalt enhedstoken",
-        "description": "Indtast et tidligere parret lokalt token på 24 tegn. Det er ikke adgangskoden til din cloudkonto. Tokenet bliver i Home Assistant.",
+        "description": "Indtast et tidligere parret lokalt token på 24 tegn. Dette er ikke adgangskoden til din cloudkonto. Tokenet bliver i Home Assistant. Har du ikke et token? Lad feltet være tomt, og vælg Send for at gå tilbage til valg af parringsmetode.",
         "data": {
           "token": "Lokalt enhedstoken"
         }

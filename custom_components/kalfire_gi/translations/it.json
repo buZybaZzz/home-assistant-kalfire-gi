@@ -10,10 +10,6 @@
           "port": "Porta"
         }
       },
-      "trust": {
-        "title": "Considerare attendibile questo certificato del camino?",
-        "description": "Il dispositivo all’indirizzo {host} ha presentato questa impronta del certificato SHA256:\n\n{fingerprint}\n\nVerifica che l’indirizzo appartenga al tuo camino. Accetta solo su una rete affidabile. È una verifica basata sulla fiducia al primo utilizzo, non sulla CA del produttore. L’impronta verrà controllata a ogni nuova connessione. Non è ancora stato inviato alcun token al dispositivo."
-      },
       "auth_method": {
         "title": "Abbinamento locale",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Apri la finestra di abbinamento",
-        "description": "Mantieni il telecomando ufficiale abbinato e nelle vicinanze. Tieni premuto per tre secondi il pulsante rotondo destro direttamente sopra M3, quindi seleziona subito Invia. La procedura segue quella dell’app Gi e non avvia il camino. L’app esistente ha continuato a funzionare sul dispositivo provato."
+        "description": "Tieni il telecomando ufficiale abbinato al camino vicino al camino. Tieni premuto per 3 secondi il pulsante rotondo destro situato direttamente sopra il pulsante M3, quindi seleziona il pulsante Invia qui sotto."
       },
       "existing_token": {
         "title": "Token locale esistente del dispositivo",
-        "description": "Inserisci un token locale di 24 caratteri già abbinato. Non è la password del tuo account cloud. Il token resta in Home Assistant.",
+        "description": "Inserisci un token locale di 24 caratteri abbinato in precedenza. Non è la password del tuo account cloud. Il token rimane in Home Assistant. Non hai un token? Lascia il campo vuoto e seleziona Invia per tornare alla scelta del metodo di abbinamento.",
         "data": {
           "token": "Token locale del dispositivo"
         }

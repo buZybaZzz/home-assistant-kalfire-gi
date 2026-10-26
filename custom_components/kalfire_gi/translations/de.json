@@ -10,10 +10,6 @@
           "port": "Port"
         }
       },
-      "trust": {
-        "title": "Diesem Kaminzertifikat vertrauen?",
-        "description": "Das Gerät unter {host} hat diesen SHA256-Zertifikatfingerabdruck vorgelegt:\n\n{fingerprint}\n\nPrüfen Sie, ob die Adresse zu Ihrem Kamin gehört. Akzeptieren Sie nur in einem vertrauenswürdigen Netzwerk. Dies ist Vertrauen beim ersten Gebrauch, keine Prüfung durch eine Hersteller-Zertifizierungsstelle. Der Fingerabdruck wird bei jeder neuen Verbindung geprüft. Es wurde noch kein Gerätetoken gesendet."
-      },
       "auth_method": {
         "title": "Lokale Kopplung",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Kopplungsfenster öffnen",
-        "description": "Lassen Sie die offizielle Fernbedienung gekoppelt und in der Nähe. Halten Sie die rechte runde Taste direkt über M3 drei Sekunden lang gedrückt und wählen Sie sofort Senden. Dies entspricht der Kopplung in der Gi-App und startet den Kamin nicht. Die bestehende App funktionierte auf dem getesteten Gerät weiterhin."
+        "description": "Halten Sie die offizielle Fernbedienung, die mit dem Kamin gekoppelt ist, in der Nähe des Kamins. Halten Sie die rechte runde Taste direkt über der M3-Taste 3 Sekunden lang gedrückt und wählen Sie anschließend unten die Schaltfläche Senden."
       },
       "existing_token": {
         "title": "Vorhandenes lokales Gerätetoken",
-        "description": "Geben Sie ein bereits gekoppeltes lokales Token mit 24 Zeichen ein. Dies ist nicht Ihr Cloud-Passwort. Das Token bleibt in Home Assistant.",
+        "description": "Geben Sie ein zuvor gekoppeltes lokales Token mit 24 Zeichen ein. Dies ist nicht Ihr Cloud-Passwort. Das Token bleibt in Home Assistant. Kein Token? Lassen Sie das Feld leer und wählen Sie Senden, um zur Auswahl der Kopplungsmethode zurückzukehren.",
         "data": {
           "token": "Lokales Gerätetoken"
         }

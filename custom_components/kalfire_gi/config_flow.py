@@ -1,4 +1,4 @@
-"""User-confirmed certificate trust and physical local pairing."""
+"""Automatic certificate pinning on first use and physical local pairing."""
 
 import secrets
 from collections.abc import Mapping
@@ -135,19 +135,7 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return self._show_user_form({"base": "cannot_connect"})
         finally:
             probe.close()
-        return await self.async_step_trust()
-
-    async def async_step_trust(self, user_input: dict[str, Any] | None = None):
-        if user_input is not None:
-            return await self.async_step_auth_method()
-        return self.async_show_form(
-            step_id="trust",
-            data_schema=vol.Schema({}),
-            description_placeholders={
-                "host": self._connection[CONF_HOST],
-                "fingerprint": self._connection[CONF_FINGERPRINT],
-            },
-        )
+        return await self.async_step_auth_method()
 
     async def async_step_auth_method(self, user_input=None):
         return self.async_show_menu(step_id="auth_method", menu_options=["pair", "existing_token"])
@@ -191,8 +179,11 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_existing_token(self, user_input: dict[str, Any] | None = None):
         errors = {}
         if user_input is not None:
+            token = user_input.get(CONF_TOKEN, "").strip()
+            if not token:
+                return await self.async_step_auth_method()
             try:
-                token = validate_token(user_input[CONF_TOKEN].strip())
+                token = validate_token(token)
                 return await self._complete(token)
             except ValueError:
                 errors[CONF_TOKEN] = "invalid_token"
@@ -206,7 +197,7 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="existing_token",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_TOKEN): selector.TextSelector(
+                    vol.Optional(CONF_TOKEN): selector.TextSelector(
                         selector.TextSelectorConfig(type=selector.TextSelectorType.PASSWORD)
                     )
                 }

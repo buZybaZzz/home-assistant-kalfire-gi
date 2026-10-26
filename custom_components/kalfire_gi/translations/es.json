@@ -10,10 +10,6 @@
           "port": "Puerto"
         }
       },
-      "trust": {
-        "title": "¿Confiar en este certificado de la chimenea?",
-        "description": "El dispositivo en {host} ha presentado esta huella de certificado SHA256:\n\n{fingerprint}\n\nComprueba que la dirección pertenece a tu chimenea. Acepta solo en una red de confianza. Se utiliza confianza en el primer uso, no validación mediante una autoridad de certificación del fabricante. La huella se comprobará en cada conexión nueva. Todavía no se ha enviado ningún token al dispositivo."
-      },
       "auth_method": {
         "title": "Vinculación local",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Abrir la ventana de vinculación",
-        "description": "Mantén el mando oficial vinculado y cerca. Mantén pulsado durante tres segundos el botón redondo derecho justo encima de M3 y selecciona inmediatamente Enviar. Este procedimiento sigue el de la aplicación Gi y no enciende la chimenea. La aplicación existente siguió funcionando en el dispositivo probado."
+        "description": "Mantén el mando a distancia oficial vinculado a la chimenea cerca de la chimenea. Mantén pulsado durante 3 segundos el botón redondo derecho situado justo encima del botón M3 y después selecciona el botón Enviar que aparece abajo."
       },
       "existing_token": {
         "title": "Token local existente del dispositivo",
-        "description": "Introduce un token local de 24 caracteres ya vinculado. No es la contraseña de tu cuenta en la nube. El token permanece en Home Assistant.",
+        "description": "Introduce un token local de 24 caracteres vinculado previamente. No es la contraseña de tu cuenta en la nube. El token permanece en Home Assistant. ¿No tienes un token? Deja el campo vacío y selecciona Enviar para volver a las opciones de vinculación.",
         "data": {
           "token": "Token local del dispositivo"
         }

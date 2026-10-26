@@ -94,8 +94,7 @@ async def _begin_flow(hass):
         result = await hass.config_entries.flow.async_configure(
             result["flow_id"], {CONF_HOST: DATA[CONF_HOST], CONF_PORT: 5684}
         )
-    assert result["step_id"] == "trust"
-    result = await hass.config_entries.flow.async_configure(result["flow_id"], {})
+    assert result["step_id"] == "auth_method"
     assert result["type"] is FlowResultType.MENU
     return result
 
@@ -317,13 +316,12 @@ async def test_initial_discovery_prefills_and_keeps_manual_entry(hass, hosts):
         result = await hass.config_entries.flow.async_configure(
             result["flow_id"], {CONF_HOST: "manual.invalid", CONF_PORT: 1234}
         )
-    assert result["step_id"] == "trust"
-    assert result["description_placeholders"]["host"] == "manual.invalid"
+    assert result["step_id"] == "auth_method"
     probe.connect.assert_awaited_once()
     probe.close.assert_called_once()
 
 
-async def test_discovered_address_requires_trust_and_preserves_failed_input(hass):
+async def test_discovered_address_probes_certificate_and_preserves_failed_input(hass):
     from custom_components.kalfire_gi.discovery import GiDiscovery
 
     with patch.object(GiDiscovery, "async_candidates", return_value=("192.0.2.22",)) as scan:
@@ -343,11 +341,7 @@ async def test_discovered_address_requires_trust_and_preserves_failed_input(hass
                 result["flow_id"], {CONF_HOST: "192.0.2.22", CONF_PORT: 1234}
             )
         scan.assert_awaited_once()
-    assert result["step_id"] == "trust"
-    assert result["description_placeholders"] == {
-        "host": "192.0.2.22",
-        "fingerprint": DATA["fingerprint"],
-    }
+    assert result["step_id"] == "auth_method"
 
 
 async def test_other_subnet_warns_before_probe_and_allows_explicit_connection(hass):
@@ -379,8 +373,7 @@ async def test_other_subnet_warns_before_probe_and_allows_explicit_connection(ha
         result = await hass.config_entries.flow.async_configure(
             result["flow_id"], {"next_step_id": "connect"}
         )
-        assert result["step_id"] == "trust"
-        assert result["description_placeholders"]["host"] == "192.0.2.23"
+        assert result["step_id"] == "auth_method"
         probe.connect.assert_awaited_once()
 
 
@@ -402,3 +395,25 @@ async def test_other_subnet_failed_explicit_connection_preserves_address(hass):
     assert result["step_id"] == "user"
     assert result["errors"] == {"base": "cannot_connect"}
     assert result["data_schema"]({}) == {CONF_HOST: "192.0.2.23", CONF_PORT: 1234}
+
+
+@pytest.mark.parametrize("token_input", [{}, {"token": ""}, {"token": "   "}])
+async def test_empty_token_returns_to_pairing_choices_without_reconnecting(hass, token_input):
+    result = await _begin_flow(hass)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {"next_step_id": "existing_token"}
+    )
+    assert result["data_schema"]({}) == {}
+    with (
+        patch("custom_components.kalfire_gi.config_flow.GiClient") as client,
+        patch("custom_components.kalfire_gi.config_flow.DtlsTransport") as probe,
+    ):
+        result = await hass.config_entries.flow.async_configure(result["flow_id"], token_input)
+        assert result["type"] is FlowResultType.MENU
+        assert result["step_id"] == "auth_method"
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {"next_step_id": "pair"}
+        )
+        assert result["step_id"] == "pair"
+        client.assert_not_called()
+        probe.assert_not_called()

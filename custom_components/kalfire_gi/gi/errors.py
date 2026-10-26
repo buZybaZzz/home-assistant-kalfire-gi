@@ -14,7 +14,7 @@ class AuthenticationError(KalfireError):
 
 
 class CertificateChanged(KalfireError):
-    """Peer certificate differs from the explicitly accepted pin."""
+    """Peer certificate differs from the saved pin."""
 
 
 class ProtocolError(KalfireError):

@@ -10,10 +10,6 @@
           "port": "Poort"
         }
       },
-      "trust": {
-        "title": "Dit haardcertificaat vertrouwen?",
-        "description": "Het apparaat op {host} presenteert deze SHA256-certificaatvingerafdruk:\n\n{fingerprint}\n\nControleer of dit adres bij jouw haard hoort. Accepteer alleen op een vertrouwd netwerk. Dit is vertrouwen bij het eerste gebruik, geen controle van de fabrikant-CA. Elke nieuwe verbinding controleert deze vingerafdruk. Er is nog geen apparaattoken verstuurd."
-      },
       "auth_method": {
         "title": "Lokaal koppelen",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Open het koppelvenster",
-        "description": "Houd de officiële afstandsbediening gekoppeld en bij de haard. Houd de rechter ronde knop direct boven M3 3 seconden ingedrukt en kies meteen Verzenden. Dit volgt de Gi-app en start de haard niet. Op het geteste apparaat bleef de bestaande app werken."
+        "description": "Houd de officiële afstandsbediening die aan de haard gekoppeld is in de buurt van de haard. Houd de rechter ronde knop welke zich direct boven M3-knop bevindt 3 seconden ingedrukt en kies daarna de knop Verzend hieronder."
       },
       "existing_token": {
         "title": "Bestaand lokaal apparaattoken",
-        "description": "Vul een eerder gekoppeld lokaal token van 24 tekens in. Dit is niet je cloudwachtwoord. Het token blijft in Home Assistant.",
+        "description": "Vul een eerder gekoppeld lokaal token van 24 tekens in. Dit is niet je cloudwachtwoord. Het token blijft in Home Assistant. Geen token? Laat het veld leeg en kies Verzend om terug te gaan naar de koppelkeuze.",
         "data": {
           "token": "Lokaal apparaattoken"
         }

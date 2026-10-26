@@ -10,10 +10,6 @@
           "port": "Port"
         }
       },
-      "trust": {
-        "title": "Důvěřovat tomuto certifikátu krbu?",
-        "description": "Zařízení na adrese {host} předložilo tento otisk certifikátu SHA256:\n\n{fingerprint}\n\nOvěřte, že adresa patří vašemu krbu. Přijímejte pouze v důvěryhodné síti. Jde o důvěru při prvním použití, nikoli o ověření certifikační autoritou výrobce. Otisk se kontroluje při každém novém připojení. Zařízení dosud nebyl odeslán žádný token."
-      },
       "auth_method": {
         "title": "Místní párování",
         "menu_options": {
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Otevřít párovací okno",
-        "description": "Oficiální dálkový ovladač ponechte spárovaný a poblíž. Podržte pravé kulaté tlačítko přímo nad M3 po dobu tří sekund a ihned zvolte Odeslat. Postup odpovídá párování v aplikaci Gi a nespouští krb. Stávající aplikace na testovaném zařízení fungovala i nadále."
+        "description": "Oficiální dálkový ovladač spárovaný s krbem mějte v blízkosti krbu. Podržte pravé kulaté tlačítko umístěné přímo nad tlačítkem M3 po dobu 3 sekund a poté zvolte tlačítko Odeslat níže."
       },
       "existing_token": {
         "title": "Existující místní token zařízení",
-        "description": "Zadejte dříve spárovaný místní token o délce 24 znaků. Nejde o heslo k účtu v cloudu. Token zůstane v Home Assistant.",
+        "description": "Zadejte dříve spárovaný místní token o délce 24 znaků. Nejedná se o heslo ke cloudovému účtu. Token zůstává v Home Assistant. Nemáte token? Nechte pole prázdné a zvolte Odeslat pro návrat k výběru způsobu párování.",
         "data": {
           "token": "Místní token zařízení"
         }
