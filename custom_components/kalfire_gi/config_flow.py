@@ -9,6 +9,8 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.core import callback
 from homeassistant.helpers import selector
+from homeassistant.helpers.device_registry import format_mac
+from homeassistant.helpers.service_info.dhcp import DhcpServiceInfo
 
 from .const import (
     CONF_CONTROL,
@@ -20,6 +22,7 @@ from .const import (
     DEFAULT_PORT,
     DOMAIN,
 )
+from .discovery import async_connect_candidate
 from .gi import GiClient
 from .gi.client import validate_token
 from .gi.errors import AuthenticationError, CertificateChanged, KalfireError
@@ -39,6 +42,32 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(config_entry):
         return GiOptionsFlow()
+
+    async def async_step_dhcp(self, discovery_info: DhcpServiceInfo):
+        """Update a known fireplace only after pin and device identity checks."""
+        mac = format_mac(discovery_info.macaddress)
+        await self.async_set_unique_id(mac)
+        entry = next(
+            (item for item in self._async_current_entries() if item.unique_id == mac), None
+        )
+        if entry is None or entry.disabled_by is not None:
+            return self.async_abort(reason="already_configured")
+        if entry.data[CONF_HOST] == discovery_info.ip:
+            return self.async_abort(reason="already_configured")
+        original_data = dict(entry.data)
+        connection = await async_connect_candidate(entry, discovery_info.ip)
+        if connection is not None:
+            connection.client.close()
+            if dict(entry.data) == original_data:
+                self.hass.config_entries.async_update_entry(
+                    entry, data={**entry.data, CONF_HOST: discovery_info.ip}
+                )
+                if entry.state in (
+                    config_entries.ConfigEntryState.LOADED,
+                    config_entries.ConfigEntryState.SETUP_RETRY,
+                ):
+                    self.hass.config_entries.async_schedule_reload(entry.entry_id)
+        return self.async_abort(reason="already_configured")
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None):
         errors = {}

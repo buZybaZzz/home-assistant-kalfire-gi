@@ -1,12 +1,25 @@
 {
   "domain": "kalfire_gi",
   "name": "Kalfire Gi Local",
-  "codeowners": ["@buZybaZzz"],
+  "after_dependencies": [
+    "dhcp"
+  ],
+  "codeowners": [
+    "@buZybaZzz"
+  ],
   "config_flow": true,
+  "dependencies": [
+    "network"
+  ],
+  "dhcp": [
+    {
+      "registered_devices": true
+    }
+  ],
   "documentation": "https://github.com/buZybaZzz/home-assistant-kalfire-gi",
   "integration_type": "device",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/buZybaZzz/home-assistant-kalfire-gi/issues",
   "requirements": [],
-  "version": "0.1.2"
+  "version": "0.1.3"
 }
