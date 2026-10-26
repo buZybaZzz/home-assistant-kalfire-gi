@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Połącz z kominkiem Kalfire Gi",
-        "description": "Wyszukano kominki w sieci lokalnej. Znaleziony adres jest wstępnie wpisany; jeśli znaleziono kilka kominków, wybierz jeden. Możesz też ręcznie wpisać adres IP lub nazwę hosta, również gdy nic nie znaleziono. Konfiguracja tylko odczytuje dane.",
+        "description": "Wyszukano kominki w sieci lokalnej. Znaleziony adres jest wstępnie wpisany; jeśli znaleziono kilka kominków, wybierz jeden. Możesz też ręcznie wpisać adres IP lub nazwę hosta, również gdy nic nie znaleziono. Konfiguracja tylko odczytuje dane. Upewnij się, że kominek znajduje się w tej samej podsieci co Home Assistant.",
         "data": {
           "host": "Adres IP lub nazwa hosta",
           "port": "Port"
@@ -39,11 +39,19 @@
           "host": "Adres IP lub nazwa hosta",
           "port": "Port"
         }
+      },
+      "subnet": {
+        "title": "Sprawdź sieć",
+        "description": "Adres {host} znajduje się poza podsieciami włączonych interfejsów sieciowych Home Assistant. Upewnij się, że kominek znajduje się w tej samej podsieci co Home Assistant. Zmień adres lub spróbuj połączyć się mimo to, jeśli sieć przekazuje ruch między podsieciami. Nazw hostów nie można sprawdzić w ten sposób.",
+        "menu_options": {
+          "user": "Zmień adres",
+          "connect": "Spróbuj połączyć mimo to"
+        }
       }
     },
     "error": {
       "invalid_host": "Wprowadź adres IP lub nazwę hosta bez schematu URL i ścieżki.",
-      "cannot_connect": "Nie można połączyć się z lokalnym kominkiem. Sprawdź adres i port UDP 5684.",
+      "cannot_connect": "Nie można połączyć się z lokalnym kominkiem. Sprawdź adres i port UDP 5684. Upewnij się, że kominek znajduje się w tej samej podsieci co Home Assistant.",
       "certificate_changed": "Certyfikat się zmienił. Sprawdź urządzenie przed usunięciem i ponownym dodaniem integracji w celu świadomego zaakceptowania nowego certyfikatu.",
       "pairing_failed": "Token odrzucony. Otwórz okno parowania pilotem i ponownie wybierz Wyślij.",
       "invalid_auth": "Token lokalny odrzucony. Sparuj urządzenie za pomocą pilota.",

@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Mit Ihrem Kalfire Gi verbinden",
-        "description": "Im lokalen Netzwerk wurde nach Kaminen gesucht. Eine gefundene Adresse ist vorausgefüllt; bei mehreren Kaminen kannst du eine auswählen. Du kannst auch eine IP-Adresse oder einen Hostnamen manuell eingeben, falls nichts gefunden wurde. Die Einrichtung liest nur Daten.",
+        "description": "Im lokalen Netzwerk wurde nach Kaminen gesucht. Eine gefundene Adresse ist vorausgefüllt; bei mehreren Kaminen kannst du eine auswählen. Du kannst auch eine IP-Adresse oder einen Hostnamen manuell eingeben, falls nichts gefunden wurde. Die Einrichtung liest nur Daten. Stelle sicher, dass sich der Kamin im selben Subnetz wie Home Assistant befindet.",
         "data": {
           "host": "IP-Adresse oder Hostname",
           "port": "Port"
@@ -39,11 +39,19 @@
           "host": "IP-Adresse oder Hostname",
           "port": "Port"
         }
+      },
+      "subnet": {
+        "title": "Netzwerk prüfen",
+        "description": "Die Adresse {host} liegt außerhalb der Subnetze der aktivierten Netzwerkschnittstellen von Home Assistant. Stelle sicher, dass sich der Kamin im selben Subnetz wie Home Assistant befindet. Du kannst die Adresse ändern oder die Verbindung trotzdem versuchen, wenn dein Netzwerk zwischen Subnetzen routet. Hostnamen können so nicht geprüft werden.",
+        "menu_options": {
+          "user": "Adresse ändern",
+          "connect": "Verbindung trotzdem versuchen"
+        }
       }
     },
     "error": {
       "invalid_host": "Geben Sie eine IP-Adresse oder einen Hostnamen ohne URL-Schema oder Pfad ein.",
-      "cannot_connect": "Keine Verbindung zum lokalen Kamin. Prüfen Sie die Adresse und UDP-Port 5684.",
+      "cannot_connect": "Keine Verbindung zum lokalen Kamin. Prüfen Sie die Adresse und UDP-Port 5684. Stelle sicher, dass sich der Kamin im selben Subnetz wie Home Assistant befindet.",
       "certificate_changed": "Zertifikat geändert. Prüfen Sie das Gerät, bevor Sie die Integration entfernen und erneut hinzufügen, um dem neuen Zertifikat ausdrücklich zu vertrauen.",
       "pairing_failed": "Token abgelehnt. Öffnen Sie mit der Fernbedienung das Kopplungsfenster und wählen Sie erneut Senden.",
       "invalid_auth": "Lokales Token abgelehnt. Koppeln Sie mit der Fernbedienung.",

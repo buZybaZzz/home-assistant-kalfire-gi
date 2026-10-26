@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Connect to your Kalfire Gi",
-        "description": "We searched the local network for fireplaces. A discovered address is prefilled; if several were found, choose one. You can also enter an IP address or hostname manually, including when none were found. Setup only reads data.",
+        "description": "We searched the local network for fireplaces. A discovered address is prefilled; if several were found, choose one. You can also enter an IP address or hostname manually, including when none were found. Setup only reads data. Make sure the fireplace is on the same subnet as Home Assistant.",
         "data": {
           "host": "IP address or hostname",
           "port": "Port"
@@ -39,11 +39,19 @@
           "host": "IP address or hostname",
           "port": "Port"
         }
+      },
+      "subnet": {
+        "title": "Check the network",
+        "description": "The address {host} is outside the subnets of Home Assistant’s enabled network interfaces. Make sure the fireplace is on the same subnet as Home Assistant. You can change the address or try connecting anyway if your network routes traffic between subnets. Hostnames cannot be checked this way.",
+        "menu_options": {
+          "user": "Change address",
+          "connect": "Try connecting anyway"
+        }
       }
     },
     "error": {
       "invalid_host": "Enter an IP address or hostname, without a URL scheme or path.",
-      "cannot_connect": "Could not communicate with the local fireplace. Check its address and UDP port 5684.",
+      "cannot_connect": "Could not communicate with the local fireplace. Check its address and UDP port 5684. Make sure the fireplace is on the same subnet as Home Assistant.",
       "certificate_changed": "Certificate changed. Check the device before removing and adding this integration to explicitly trust the new certificate.",
       "pairing_failed": "The token was rejected. Open the physical pairing window with the remote and try Submit again.",
       "invalid_auth": "The local token was rejected. Pair using the remote control.",

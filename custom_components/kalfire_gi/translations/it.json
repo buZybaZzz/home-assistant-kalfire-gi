@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Connetti il tuo Kalfire Gi",
-        "description": "È stata eseguita una ricerca dei camini sulla rete locale. Un indirizzo trovato è già compilato; se sono stati trovati più camini, scegline uno. Puoi anche inserire manualmente un indirizzo IP o un nome host, anche se non è stato trovato alcun camino. La configurazione legge solo i dati.",
+        "description": "È stata eseguita una ricerca dei camini sulla rete locale. Un indirizzo trovato è già compilato; se sono stati trovati più camini, scegline uno. Puoi anche inserire manualmente un indirizzo IP o un nome host, anche se non è stato trovato alcun camino. La configurazione legge solo i dati. Assicurati che il camino si trovi nella stessa sottorete di Home Assistant.",
         "data": {
           "host": "Indirizzo IP o nome host",
           "port": "Porta"
@@ -39,11 +39,19 @@
           "host": "Indirizzo IP o nome host",
           "port": "Porta"
         }
+      },
+      "subnet": {
+        "title": "Controlla la rete",
+        "description": "L’indirizzo {host} è esterno alle sottoreti delle interfacce di rete abilitate di Home Assistant. Assicurati che il camino si trovi nella stessa sottorete di Home Assistant. Modifica l’indirizzo o prova comunque se la rete instrada il traffico tra sottoreti. I nomi host non possono essere verificati in questo modo.",
+        "menu_options": {
+          "user": "Modifica indirizzo",
+          "connect": "Prova comunque"
+        }
       }
     },
     "error": {
       "invalid_host": "Inserisci un indirizzo IP o un nome host, senza schema URL né percorso.",
-      "cannot_connect": "Impossibile comunicare con il camino locale. Verifica l’indirizzo e la porta UDP 5684.",
+      "cannot_connect": "Impossibile comunicare con il camino locale. Verifica l’indirizzo e la porta UDP 5684. Assicurati che il camino si trovi nella stessa sottorete di Home Assistant.",
       "certificate_changed": "Certificato modificato. Verifica il dispositivo prima di rimuovere e aggiungere nuovamente l’integrazione per accettare esplicitamente il nuovo certificato.",
       "pairing_failed": "Token rifiutato. Apri la finestra di abbinamento con il telecomando e seleziona nuovamente Invia.",
       "invalid_auth": "Token locale rifiutato. Esegui l’abbinamento con il telecomando.",

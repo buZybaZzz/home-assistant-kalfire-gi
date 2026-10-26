@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Verbind met je Kalfire Gi",
-        "description": "We hebben op het lokale netwerk naar haarden gezocht. Een gevonden adres is alvast ingevuld; bij meerdere haarden kun je kiezen. Je kunt ook zelf een IP-adres of hostnaam invullen, bijvoorbeeld als er niets gevonden is. Configureren leest alleen gegevens uit.",
+        "description": "We hebben op het lokale netwerk naar haarden gezocht. Een gevonden adres is alvast ingevuld; bij meerdere haarden kun je kiezen. Je kunt ook zelf een IP-adres of hostnaam invullen, bijvoorbeeld als er niets gevonden is. Configureren leest alleen gegevens uit. Zorg ervoor dat de haard zich in hetzelfde subnet bevindt als Home Assistant.",
         "data": {
           "host": "IP-adres of hostnaam",
           "port": "Poort"
@@ -39,11 +39,19 @@
           "host": "IP-adres of hostnaam",
           "port": "Poort"
         }
+      },
+      "subnet": {
+        "title": "Controleer het netwerk",
+        "description": "Het adres {host} valt buiten de subnetten van de ingeschakelde netwerkinterfaces van Home Assistant. Zorg ervoor dat de haard zich in hetzelfde subnet bevindt als Home Assistant. Je kunt het adres wijzigen of toch proberen te verbinden als je netwerk verkeer tussen subnetten doorstuurt. Hostnamen kunnen niet op deze manier worden gecontroleerd.",
+        "menu_options": {
+          "user": "Adres wijzigen",
+          "connect": "Toch proberen te verbinden"
+        }
       }
     },
     "error": {
       "invalid_host": "Vul een IP-adres of hostnaam in zonder URL-schema of pad.",
-      "cannot_connect": "Geen communicatie met de lokale haard. Controleer het adres en UDP-poort 5684.",
+      "cannot_connect": "Geen communicatie met de lokale haard. Controleer het adres en UDP-poort 5684. Zorg ervoor dat de haard zich in hetzelfde subnet bevindt als Home Assistant.",
       "certificate_changed": "Certificaat gewijzigd. Controleer het apparaat voordat je de integratie verwijdert en opnieuw toevoegt om het nieuwe certificaat te vertrouwen.",
       "pairing_failed": "Token geweigerd. Open het koppelvenster met de afstandsbediening en kies opnieuw Verzenden.",
       "invalid_auth": "Lokaal token geweigerd. Koppel opnieuw met de afstandsbediening.",

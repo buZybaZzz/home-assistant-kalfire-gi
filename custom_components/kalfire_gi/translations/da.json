@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Forbind til din Kalfire Gi",
-        "description": "Vi har søgt efter pejse på det lokale netværk. En fundet adresse er udfyldt; vælg en, hvis der blev fundet flere pejse. Du kan også indtaste en IP-adresse eller et værtsnavn manuelt, også hvis ingen blev fundet. Opsætningen læser kun data.",
+        "description": "Vi har søgt efter pejse på det lokale netværk. En fundet adresse er udfyldt; vælg en, hvis der blev fundet flere pejse. Du kan også indtaste en IP-adresse eller et værtsnavn manuelt, også hvis ingen blev fundet. Opsætningen læser kun data. Sørg for, at pejsen er på samme undernet som Home Assistant.",
         "data": {
           "host": "IP-adresse eller værtsnavn",
           "port": "Port"
@@ -39,11 +39,19 @@
           "host": "IP-adresse eller værtsnavn",
           "port": "Port"
         }
+      },
+      "subnet": {
+        "title": "Kontrollér netværket",
+        "description": "Adressen {host} er uden for undernettene på Home Assistants aktiverede netværksgrænseflader. Sørg for, at pejsen er på samme undernet som Home Assistant. Ret adressen, eller prøv alligevel, hvis dit netværk videresender trafik mellem undernet. Værtsnavne kan ikke kontrolleres på denne måde.",
+        "menu_options": {
+          "user": "Ret adressen",
+          "connect": "Prøv alligevel"
+        }
       }
     },
     "error": {
       "invalid_host": "Indtast en IP-adresse eller et værtsnavn uden URL-skema eller sti.",
-      "cannot_connect": "Kunne ikke kommunikere med den lokale pejs. Kontrollér adressen og UDP-port 5684.",
+      "cannot_connect": "Kunne ikke kommunikere med den lokale pejs. Kontrollér adressen og UDP-port 5684. Sørg for, at pejsen er på samme undernet som Home Assistant.",
       "certificate_changed": "Certifikatet er ændret. Kontrollér enheden, før du fjerner og tilføjer integrationen igen for udtrykkeligt at stole på det nye certifikat.",
       "pairing_failed": "Tokenet blev afvist. Åbn parringsvinduet med fjernbetjeningen, og vælg Send igen.",
       "invalid_auth": "Det lokale token blev afvist. Par med fjernbetjeningen.",

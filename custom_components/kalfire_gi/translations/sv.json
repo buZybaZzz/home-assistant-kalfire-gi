@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Anslut till din Kalfire Gi",
-        "description": "Vi har sökt efter eldstäder i det lokala nätverket. En hittad adress är förifylld; om flera eldstäder hittades kan du välja en. Du kan också ange en IP-adress eller ett värdnamn manuellt, även om ingen hittades. Konfigurationen läser bara data.",
+        "description": "Vi har sökt efter eldstäder i det lokala nätverket. En hittad adress är förifylld; om flera eldstäder hittades kan du välja en. Du kan också ange en IP-adress eller ett värdnamn manuellt, även om ingen hittades. Konfigurationen läser bara data. Se till att eldstaden finns i samma subnät som Home Assistant.",
         "data": {
           "host": "IP-adress eller värdnamn",
           "port": "Port"
@@ -39,11 +39,19 @@
           "host": "IP-adress eller värdnamn",
           "port": "Port"
         }
+      },
+      "subnet": {
+        "title": "Kontrollera nätverket",
+        "description": "Adressen {host} ligger utanför subnäten för Home Assistants aktiverade nätverksgränssnitt. Se till att eldstaden finns i samma subnät som Home Assistant. Ändra adressen eller försök ändå om nätverket dirigerar trafik mellan subnät. Värdnamn kan inte kontrolleras på detta sätt.",
+        "menu_options": {
+          "user": "Ändra adress",
+          "connect": "Försök ändå"
+        }
       }
     },
     "error": {
       "invalid_host": "Ange en IP-adress eller ett värdnamn utan URL-schema eller sökväg.",
-      "cannot_connect": "Kunde inte kommunicera med den lokala kaminen. Kontrollera adressen och UDP-port 5684.",
+      "cannot_connect": "Kunde inte kommunicera med den lokala kaminen. Kontrollera adressen och UDP-port 5684. Se till att eldstaden finns i samma subnät som Home Assistant.",
       "certificate_changed": "Certifikatet har ändrats. Kontrollera enheten innan du tar bort och lägger till integrationen igen för att uttryckligen lita på det nya certifikatet.",
       "pairing_failed": "Tokenen avvisades. Öppna parkopplingsfönstret med fjärrkontrollen och välj Skicka igen.",
       "invalid_auth": "Den lokala tokenen avvisades. Parkoppla med fjärrkontrollen.",

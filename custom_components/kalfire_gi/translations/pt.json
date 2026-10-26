@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Ligar ao seu Kalfire Gi",
-        "description": "Foi efetuada uma pesquisa de lareiras na rede local. Um endereço encontrado já está preenchido; se foram encontradas várias lareiras, escolha uma. Também pode introduzir manualmente um endereço IP ou nome de anfitrião, mesmo que nenhuma tenha sido encontrada. A configuração apenas lê dados.",
+        "description": "Foi efetuada uma pesquisa de lareiras na rede local. Um endereço encontrado já está preenchido; se foram encontradas várias lareiras, escolha uma. Também pode introduzir manualmente um endereço IP ou nome de anfitrião, mesmo que nenhuma tenha sido encontrada. A configuração apenas lê dados. Certifique-se de que a lareira está na mesma sub-rede que o Home Assistant.",
         "data": {
           "host": "Endereço IP ou nome do anfitrião",
           "port": "Porta"
@@ -39,11 +39,19 @@
           "host": "Endereço IP ou nome do anfitrião",
           "port": "Porta"
         }
+      },
+      "subnet": {
+        "title": "Verificar a rede",
+        "description": "O endereço {host} está fora das sub-redes das interfaces de rede ativas do Home Assistant. Certifique-se de que a lareira está na mesma sub-rede que o Home Assistant. Altere o endereço ou tente ligar mesmo assim se a sua rede encaminhar tráfego entre sub-redes. Os nomes de anfitrião não podem ser verificados desta forma.",
+        "menu_options": {
+          "user": "Alterar endereço",
+          "connect": "Tentar ligar mesmo assim"
+        }
       }
     },
     "error": {
       "invalid_host": "Introduza um endereço IP ou nome do anfitrião, sem esquema de URL nem caminho.",
-      "cannot_connect": "Não foi possível comunicar com a lareira local. Verifique o endereço e a porta UDP 5684.",
+      "cannot_connect": "Não foi possível comunicar com a lareira local. Verifique o endereço e a porta UDP 5684. Certifique-se de que a lareira está na mesma sub-rede que o Home Assistant.",
       "certificate_changed": "O certificado foi alterado. Verifique o dispositivo antes de remover e voltar a adicionar a integração para aceitar explicitamente o novo certificado.",
       "pairing_failed": "Token rejeitado. Abra a janela de emparelhamento com o comando e selecione Enviar novamente.",
       "invalid_auth": "Token local rejeitado. Emparelhe o dispositivo com o comando.",

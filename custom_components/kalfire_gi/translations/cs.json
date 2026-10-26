@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Připojit ke krbu Kalfire Gi",
-        "description": "V místní síti jsme vyhledali krby. Nalezená adresa je předvyplněna; pokud bylo nalezeno více krbů, vyberte jeden. IP adresu nebo název hostitele můžete zadat také ručně, i když nebyl nalezen žádný krb. Nastavení pouze čte údaje.",
+        "description": "V místní síti jsme vyhledali krby. Nalezená adresa je předvyplněna; pokud bylo nalezeno více krbů, vyberte jeden. IP adresu nebo název hostitele můžete zadat také ručně, i když nebyl nalezen žádný krb. Nastavení pouze čte údaje. Ujistěte se, že je krb ve stejné podsíti jako Home Assistant.",
         "data": {
           "host": "IP adresa nebo název hostitele",
           "port": "Port"
@@ -39,11 +39,19 @@
           "host": "IP adresa nebo název hostitele",
           "port": "Port"
         }
+      },
+      "subnet": {
+        "title": "Zkontrolujte síť",
+        "description": "Adresa {host} je mimo podsítě povolených síťových rozhraní Home Assistant. Ujistěte se, že je krb ve stejné podsíti jako Home Assistant. Změňte adresu nebo přesto zkuste připojení, pokud síť směruje provoz mezi podsítěmi. Názvy hostitelů nelze tímto způsobem ověřit.",
+        "menu_options": {
+          "user": "Změnit adresu",
+          "connect": "Přesto zkusit připojení"
+        }
       }
     },
     "error": {
       "invalid_host": "Zadejte IP adresu nebo název hostitele bez schématu URL a cesty.",
-      "cannot_connect": "S místním krbem nelze komunikovat. Ověřte adresu a port UDP 5684.",
+      "cannot_connect": "S místním krbem nelze komunikovat. Ověřte adresu a port UDP 5684. Ujistěte se, že je krb ve stejné podsíti jako Home Assistant.",
       "certificate_changed": "Certifikát se změnil. Před odebráním a opětovným přidáním integrace zařízení ověřte a nový certifikát výslovně přijměte.",
       "pairing_failed": "Token byl odmítnut. Otevřete párovací okno ovladačem a znovu zvolte Odeslat.",
       "invalid_auth": "Místní token byl odmítnut. Spárujte zařízení dálkovým ovladačem.",

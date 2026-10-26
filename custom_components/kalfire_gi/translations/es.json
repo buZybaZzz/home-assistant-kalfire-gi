@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Conectar tu Kalfire Gi",
-        "description": "Se han buscado chimeneas en la red local. Una dirección encontrada aparece rellenada; si hay varias chimeneas, elige una. También puedes introducir una dirección IP o un nombre de host manualmente, incluso si no se ha encontrado ninguna. La configuración solo lee datos.",
+        "description": "Se han buscado chimeneas en la red local. Una dirección encontrada aparece rellenada; si hay varias chimeneas, elige una. También puedes introducir una dirección IP o un nombre de host manualmente, incluso si no se ha encontrado ninguna. La configuración solo lee datos. Asegúrate de que la chimenea esté en la misma subred que Home Assistant.",
         "data": {
           "host": "Dirección IP o nombre de host",
           "port": "Puerto"
@@ -39,11 +39,19 @@
           "host": "Dirección IP o nombre de host",
           "port": "Puerto"
         }
+      },
+      "subnet": {
+        "title": "Comprueba la red",
+        "description": "La dirección {host} está fuera de las subredes de las interfaces de red habilitadas de Home Assistant. Asegúrate de que la chimenea esté en la misma subred que Home Assistant. Cambia la dirección o intenta conectar de todos modos si tu red permite el tráfico entre subredes. Los nombres de host no se pueden comprobar así.",
+        "menu_options": {
+          "user": "Cambiar dirección",
+          "connect": "Intentar conectar de todos modos"
+        }
       }
     },
     "error": {
       "invalid_host": "Introduce una dirección IP o un nombre de host, sin esquema de URL ni ruta.",
-      "cannot_connect": "No se puede comunicar con la chimenea local. Comprueba su dirección y el puerto UDP 5684.",
+      "cannot_connect": "No se puede comunicar con la chimenea local. Comprueba su dirección y el puerto UDP 5684. Asegúrate de que la chimenea esté en la misma subred que Home Assistant.",
       "certificate_changed": "El certificado ha cambiado. Comprueba el dispositivo antes de eliminar y volver a añadir la integración para aceptar expresamente el certificado nuevo.",
       "pairing_failed": "Token rechazado. Abre la ventana de vinculación con el mando y selecciona Enviar de nuevo.",
       "invalid_auth": "Token local rechazado. Vincula el dispositivo con el mando.",

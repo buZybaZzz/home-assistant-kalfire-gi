@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "Connecter votre Kalfire Gi",
-        "description": "Une recherche de cheminées a été effectuée sur le réseau local. Une adresse trouvée est préremplie ; si plusieurs cheminées sont détectées, choisissez-en une. Vous pouvez aussi saisir une adresse IP ou un nom d’hôte manuellement, même si aucune cheminée n’a été trouvée. La configuration lit uniquement les données.",
+        "description": "Une recherche de cheminées a été effectuée sur le réseau local. Une adresse trouvée est préremplie ; si plusieurs cheminées sont détectées, choisissez-en une. Vous pouvez aussi saisir une adresse IP ou un nom d’hôte manuellement, même si aucune cheminée n’a été trouvée. La configuration lit uniquement les données. Assurez-vous que la cheminée se trouve sur le même sous-réseau que Home Assistant.",
         "data": {
           "host": "Adresse IP ou nom d’hôte",
           "port": "Port"
@@ -39,11 +39,19 @@
           "host": "Adresse IP ou nom d’hôte",
           "port": "Port"
         }
+      },
+      "subnet": {
+        "title": "Vérifier le réseau",
+        "description": "L’adresse {host} est en dehors des sous-réseaux des interfaces réseau activées de Home Assistant. Assurez-vous que la cheminée se trouve sur le même sous-réseau que Home Assistant. Modifiez l’adresse ou essayez quand même si votre réseau route le trafic entre sous-réseaux. Les noms d’hôte ne peuvent pas être vérifiés ainsi.",
+        "menu_options": {
+          "user": "Modifier l’adresse",
+          "connect": "Essayer quand même"
+        }
       }
     },
     "error": {
       "invalid_host": "Saisissez une adresse IP ou un nom d’hôte, sans schéma d’URL ni chemin.",
-      "cannot_connect": "Impossible de communiquer avec le foyer local. Vérifiez son adresse et le port UDP 5684.",
+      "cannot_connect": "Impossible de communiquer avec le foyer local. Vérifiez son adresse et le port UDP 5684. Assurez-vous que la cheminée se trouve sur le même sous-réseau que Home Assistant.",
       "certificate_changed": "Certificat modifié. Vérifiez l’appareil avant de supprimer puis de rajouter l’intégration pour accepter explicitement le nouveau certificat.",
       "pairing_failed": "Jeton refusé. Ouvrez la fenêtre d’association avec la télécommande et sélectionnez à nouveau Envoyer.",
       "invalid_auth": "Jeton local refusé. Associez l’appareil avec la télécommande.",
