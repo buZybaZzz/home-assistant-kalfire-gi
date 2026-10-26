@@ -348,3 +348,57 @@ async def test_discovered_address_requires_trust_and_preserves_failed_input(hass
         "host": "192.0.2.22",
         "fingerprint": DATA["fingerprint"],
     }
+
+
+async def test_other_subnet_warns_before_probe_and_allows_explicit_connection(hass):
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": config_entries.SOURCE_USER}
+    )
+    probe = MagicMock(connect=AsyncMock(return_value=DATA["fingerprint"]))
+    with (
+        patch("custom_components.kalfire_gi.config_flow.async_same_subnet", return_value=False),
+        patch(
+            "custom_components.kalfire_gi.config_flow.DtlsTransport", return_value=probe
+        ) as factory,
+    ):
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_HOST: "192.0.2.22", CONF_PORT: 5684}
+        )
+        assert result["step_id"] == "subnet"
+        assert result["description_placeholders"] == {"host": "192.0.2.22"}
+        factory.assert_not_called()
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {"next_step_id": "user"}
+        )
+        assert result["step_id"] == "user"
+        assert result["data_schema"]({})[CONF_HOST] == "192.0.2.22"
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_HOST: "192.0.2.23", CONF_PORT: 5684}
+        )
+        assert result["step_id"] == "subnet"
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {"next_step_id": "connect"}
+        )
+        assert result["step_id"] == "trust"
+        assert result["description_placeholders"]["host"] == "192.0.2.23"
+        probe.connect.assert_awaited_once()
+
+
+async def test_other_subnet_failed_explicit_connection_preserves_address(hass):
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": config_entries.SOURCE_USER}
+    )
+    with (
+        patch("custom_components.kalfire_gi.config_flow.async_same_subnet", return_value=False),
+        patch("custom_components.kalfire_gi.config_flow.DtlsTransport") as factory,
+    ):
+        factory.return_value.connect = AsyncMock(side_effect=CannotConnect("offline"))
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_HOST: "192.0.2.23", CONF_PORT: 1234}
+        )
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {"next_step_id": "connect"}
+        )
+    assert result["step_id"] == "user"
+    assert result["errors"] == {"base": "cannot_connect"}
+    assert result["data_schema"]({}) == {CONF_HOST: "192.0.2.23", CONF_PORT: 1234}
