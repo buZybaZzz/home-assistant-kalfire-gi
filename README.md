@@ -2,7 +2,7 @@
 
 An independent Home Assistant integration for Kalfire **Gi** gas fireplaces using the local encrypted CoAP/DTLS interface. No Kalfire cloud account, MQTT broker, relay wiring or custom firmware is required by this integration.
 
-**Validated on one Gi with communication-board firmware 0.7.11 and Home Assistant 2026.10.2.** It is not a Kalfire product and is not endorsed by Kalfire or iQontrol. Other Kalfire product families, including older iMatch fireplaces, are not supported.
+**Validated on one Gi with communication-board firmware 0.7.11 and Home Assistant 2026.10.2–2026.10.4.** It is not a Kalfire product and is not endorsed by Kalfire or iQontrol. Other Kalfire product families, including older iMatch fireplaces, are not supported.
 
 ## Features
 
@@ -14,6 +14,7 @@ The integration includes its own local Kalfire app icon in `brand/icon.png` (sup
 - Setup through **Settings → Devices & services → Add integration → Kalfire Gi Local**.
 - Physical pairing with the official remote; alternatively import an existing local device token.
 - Explicitly accepted SHA256 certificate pin, checked on every connection.
+- Automatic IP address recovery through Home Assistant DHCP discovery and the Gi's local discovery protocol. The stored certificate and device MAC are checked before accepting a new address.
 - Optional normal on/off switch and flame-height slider (1–5), enabled through integration options. Burner controls are off by default; Ember Glow is always available.
 - Optional Sparks slider (0–5); enable only if the generator is installed.
 - Ember Glow slider with discrete levels 0–5, plus a separate Flicker switch (native level 6). Works while the gas fireplace is off. Available independently of the on/off control option.
@@ -65,7 +66,15 @@ The on/off commands follow the normal Gi app interface (`syscmd mode=1` and `mod
 
 The tested device uses DTLS 1.2 and `ECDHE-ECDSA-AES256-GCM-SHA384`, with an X.509 certificate issued by a private iQontrol CA. This integration uses **explicit trust on first use and certificate pinning**, not public-CA or manufacturer-CA validation. A first connection on an untrusted network cannot establish the device's identity independently. A changed pin blocks application data; it is not silently accepted.
 
-The client communicates directly with the fireplace. HA start/stop also worked under a temporary device-specific UniFi Internet-block rule. No independent WAN drop-counter/capture proof or cold-start/long-duration offline test was collected; see [validation](docs/validation.md). Firmware and protocol differences may require changes. Discovery scans, direct gas-valve writes, firmware flashing and error-reset commands are not implemented.
+The client communicates directly with the fireplace. HA start/stop also worked under a temporary device-specific UniFi Internet-block rule. No independent WAN drop-counter/capture proof or cold-start/long-duration offline test was collected; see [validation](docs/validation.md). Firmware and protocol differences may require changes. Direct gas-valve writes, firmware flashing and error-reset commands are not implemented.
+
+### Changing IP addresses
+
+Home Assistant can update an already paired fireplace's address from DHCP discovery. If the configured address cannot be reached during startup or polling, the integration also sends `WHEREIS lanboard` to multicast group `239.10.11.13`, UDP port 3333, on HA's enabled IPv4 interfaces. It accepts only candidates that pass the existing certificate pin and return the paired device's MAC. Token, pairing, device and entity identities remain unchanged. Recovery only reads; it never replays a control command.
+
+Fallback searches are shared between fireplaces, run only after a connection failure and are limited to once per minute per entry. Each interface listens for at most five seconds, with a bounded number of replies and identity checks. If discovery fails, the entities remain unavailable and later polls retry. A DHCP reservation remains optional.
+
+Multicast discovery was confirmed from a Mac to one Gi with firmware 0.7.11. Automatic address recovery in both directions was also confirmed on HA Green after a real temporary DHCP address change, retaining the existing entry, device and ten entity IDs. The return was delayed during a weak Wi-Fi association; see [validation](docs/validation.md). Local discovery normally requires the same subnet and multicast access. An mDNS reflector alone does not forward this separate protocol. DHCP discovery can also receive address information through supported router device trackers, but visibility across VLANs depends on the network setup. If neither method finds the fireplace, use **Reconfigure** to enter its new address manually. A certificate or authentication error at the configured address does not trigger discovery or automatic pairing.
 
 ## Troubleshooting
 

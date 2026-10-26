@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3 — automatic IP address recovery
+
+- Recover an already paired Gi at a new address during startup or polling, using bounded, shared local multicast discovery and checking both the existing certificate pin and device MAC.
+- Accept verified address updates from HA DHCP discovery for registered devices; preserve pairing, device and entity identities and never replay commands during recovery.
+- Document multicast/VLAN limitations. Live discovery, pinned identity reads and automatic recovery after a real DHCP address change in both directions succeeded on one Gi with HA Green. The return was delayed during a weak Wi-Fi association; discovery mechanisms were not isolated.
+
 ## 0.1.2 — HACS default submission preparation
 
 - Run HACS validation without ignored checks, including local brand assets.
