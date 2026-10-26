@@ -43,7 +43,7 @@ Keep the fireplace's official remote paired and in its normal location near the 
 
 1. Put Home Assistant and the fireplace on the same trusted LAN/subnet for the initial setup. Allow unicast UDP 5684. Cross-subnet support has not been established; no broad firewall opening or port forwarding is needed.
 2. Start adding the integration. It searches the local network for about five seconds and prefills a discovered address. If several fireplaces are found, choose an address from the list.
-3. Confirm the address or enter an IP address or hostname manually if discovery finds nothing (for example, across VLANs). You can find the IP address in your router. The default port is 5684; a DHCP reservation is optional.
+3. Confirm the address or enter an IP address or hostname manually if discovery finds nothing (for example, across VLANs). You can find the IP address in your router. The default port is 5684; a DHCP reservation is optional. Setup compares literal IPv4 addresses with the subnets of HA’s enabled interfaces and warns before connecting if none match. You can change the address or explicitly try anyway for routed/container networks. Hostnames and unavailable interface data cannot be checked this way.
 4. Check the device address and explicitly accept the displayed certificate fingerprint on your trusted network. Network discovery sends a local multicast query; checking the selected address sends only a DTLS handshake, no device token.
 5. Choose **Pair using the remote control**.
 6. Hold the **right round button directly above M3 for 3 seconds**, as illustrated by the official Gi app. Immediately submit the pairing form.

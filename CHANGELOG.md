@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4-beta.2 — subnet guidance
+
+- Add same-subnet guidance to connection errors and the initial setup screen in all supported languages.
+- Compare entered IPv4 addresses with the actual prefixes of enabled HA interfaces before connecting; offer address correction or an explicit attempt across subnets. Hostnames and unavailable adapter data remain unchecked.
+- Initial discovery on the same subnet was confirmed by the owner with beta 1. The owner also reported failed discovery and pairing across subnets; this does not establish a universal routing limitation.
+
 ## 0.1.4-beta.1 — initial setup discovery
 
 - Search for local Gi fireplaces during initial setup, prefill a discovered address, offer a choice when several respond, and retain manual address entry. Certificate trust and physical pairing remain required.
