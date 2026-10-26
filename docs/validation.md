@@ -1,5 +1,11 @@
 # Validation record
 
+## Automatic address recovery, 26 October 2026
+
+The new recovery implementation was exercised from a Mac using HA's network interface detection, an intentionally obsolete address in a temporary test configuration, and the existing device pin and token. It discovered the paired Gi at its actual address, verified its certificate and MAC, and read firmware 0.7.11, state 0 and error code 0. Only discovery and reads were sent; the production HA and network configuration were not changed.
+
+104 offline tests pass, including startup/polling recovery, unchanged device/entity registry IDs, verified DHCP updates and reloads, rejected candidates, bounded retries/timeouts, cancellation and client cleanup. Ruff and hassfest pass. The implementation was subsequently installed on HA Green with Core 2026.10.4. A real, temporary UniFi DHCP reservation and targeted Wi-Fi reconnect moved the Gi to a different address; an independent discovery reply confirmed that address and HA updated its saved host automatically. The existing entry, device and all ten entity IDs were retained. The return to the original address was delayed while the fireplace associated with a weak access point (-83 to -84 dBm). It later returned to the original AP (-60 dBm), and HA automatically saved the original host and resumed reads (idle/no_request, error 0). The temporary DHCP reservation was removed; no AP lock was applied and no appliance controls were sent. DHCP and multicast were not isolated in these hardware tests, including the return during a normal Core restart. Cross-VLAN recovery and every firmware's discovery reply format remain unverified.
+
 Hardware observations: 22 October 2026, one Kalfire Gi, communication-board firmware 0.7.11. Exact Gi size/model was not established. Home Assistant Green: Core 2026.10.2, OS 18.3.
 
 ## Confirmed on the live fireplace
