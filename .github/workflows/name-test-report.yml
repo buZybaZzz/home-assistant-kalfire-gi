@@ -1,0 +1,17 @@
+name: Name Gi test reports
+on:
+  issues:
+    types: [opened]
+permissions:
+  contents: read
+  issues: write
+jobs:
+  name-report:
+    if: github.event.issue.title == '[Test report] Gi model - firmware'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set title from submitted report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/name_test_report.py
