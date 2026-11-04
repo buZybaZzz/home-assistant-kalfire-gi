@@ -31,6 +31,7 @@ body:
       description: Select the installed integration version, not the latest available version. For a custom build, select Other and provide details below.
       options:
         # BEGIN RELEASE VERSIONS
+        - "v0.1.5"
         - "v0.1.4"
         - "v0.1.4-beta.2"
         - "v0.1.4-beta.1"
