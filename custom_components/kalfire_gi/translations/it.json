@@ -4,15 +4,11 @@
     "step": {
       "user": {
         "title": "Connetti il tuo Kalfire Gi",
-        "description": "Inserisci l’indirizzo del camino sulla tua rete domestica affidabile. La configurazione legge soltanto i dati.",
+        "description": "È stata eseguita una ricerca dei camini sulla rete locale. Un indirizzo trovato è già compilato; se sono stati trovati più camini, scegline uno. Puoi anche inserire manualmente un indirizzo IP o un nome host, anche se non è stato trovato alcun camino. La configurazione legge solo i dati. Assicurati che il camino si trovi nella stessa sottorete di Home Assistant.",
         "data": {
           "host": "Indirizzo IP o nome host",
           "port": "Porta"
         }
-      },
-      "trust": {
-        "title": "Considerare attendibile questo certificato del camino?",
-        "description": "Il dispositivo all’indirizzo {host} ha presentato questa impronta del certificato SHA256:\n\n{fingerprint}\n\nVerifica che l’indirizzo appartenga al tuo camino. Accetta solo su una rete affidabile. È una verifica basata sulla fiducia al primo utilizzo, non sulla CA del produttore. L’impronta verrà controllata a ogni nuova connessione. Non è ancora stato inviato alcun token al dispositivo."
       },
       "auth_method": {
         "title": "Abbinamento locale",
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Apri la finestra di abbinamento",
-        "description": "Mantieni il telecomando ufficiale abbinato e nelle vicinanze. Tieni premuto per tre secondi il pulsante rotondo destro direttamente sopra M3, quindi seleziona subito Invia. La procedura segue quella dell’app Gi e non avvia il camino. L’app esistente ha continuato a funzionare sul dispositivo provato."
+        "description": "Tieni il telecomando ufficiale abbinato al camino vicino al camino. Tieni premuto per 3 secondi il pulsante rotondo destro situato direttamente sopra il pulsante M3, quindi seleziona il pulsante Invia qui sotto."
       },
       "existing_token": {
         "title": "Token locale esistente del dispositivo",
-        "description": "Inserisci un token locale di 24 caratteri già abbinato. Non è la password del tuo account cloud. Il token resta in Home Assistant.",
+        "description": "Inserisci un token locale di 24 caratteri abbinato in precedenza. Non è la password del tuo account cloud. Il token rimane in Home Assistant. Non hai un token? Lascia il campo vuoto e seleziona Invia per tornare alla scelta del metodo di abbinamento.",
         "data": {
           "token": "Token locale del dispositivo"
         }
@@ -39,11 +35,19 @@
           "host": "Indirizzo IP o nome host",
           "port": "Porta"
         }
+      },
+      "subnet": {
+        "title": "Controlla la rete",
+        "description": "L’indirizzo {host} è esterno alle sottoreti delle interfacce di rete abilitate di Home Assistant. Assicurati che il camino si trovi nella stessa sottorete di Home Assistant. Modifica l’indirizzo o prova comunque se la rete instrada il traffico tra sottoreti. I nomi host non possono essere verificati in questo modo.",
+        "menu_options": {
+          "user": "Modifica indirizzo",
+          "connect": "Prova comunque"
+        }
       }
     },
     "error": {
       "invalid_host": "Inserisci un indirizzo IP o un nome host, senza schema URL né percorso.",
-      "cannot_connect": "Impossibile comunicare con il camino locale. Verifica l’indirizzo e la porta UDP 5684.",
+      "cannot_connect": "Impossibile comunicare con il camino locale. Verifica l’indirizzo e la porta UDP 5684. Assicurati che il camino si trovi nella stessa sottorete di Home Assistant.",
       "certificate_changed": "Certificato modificato. Verifica il dispositivo prima di rimuovere e aggiungere nuovamente l’integrazione per accettare esplicitamente il nuovo certificato.",
       "pairing_failed": "Token rifiutato. Apri la finestra di abbinamento con il telecomando e seleziona nuovamente Invia.",
       "invalid_auth": "Token locale rifiutato. Esegui l’abbinamento con il telecomando.",

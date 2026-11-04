@@ -94,8 +94,7 @@ async def _begin_flow(hass):
         result = await hass.config_entries.flow.async_configure(
             result["flow_id"], {CONF_HOST: DATA[CONF_HOST], CONF_PORT: 5684}
         )
-    assert result["step_id"] == "trust"
-    result = await hass.config_entries.flow.async_configure(result["flow_id"], {})
+    assert result["step_id"] == "auth_method"
     assert result["type"] is FlowResultType.MENU
     return result
 
@@ -292,3 +291,129 @@ async def test_options_no_longer_offer_ember_toggle(hass):
         )
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert "enable_ember_glow" not in entry.options
+
+
+@pytest.mark.parametrize("hosts", [(), ("192.0.2.22",), ("192.0.2.22", "192.0.2.23")])
+async def test_initial_discovery_prefills_and_keeps_manual_entry(hass, hosts):
+    from custom_components.kalfire_gi.discovery import GiDiscovery
+
+    with patch.object(GiDiscovery, "async_candidates", return_value=hosts) as scan:
+        result = await hass.config_entries.flow.async_init(
+            DOMAIN, context={"source": config_entries.SOURCE_USER}
+        )
+    scan.assert_awaited_once()
+    assert result["step_id"] == "user"
+    schema = result["data_schema"]
+    if hosts:
+        assert schema({CONF_PORT: 5684})[CONF_HOST] == hosts[0]
+    if len(hosts) > 1:
+        host_selector = next(value for key, value in schema.schema.items() if key == CONF_HOST)
+        assert host_selector.config["options"] == list(hosts)
+        assert host_selector.config["custom_value"] is True
+        assert schema({CONF_HOST: hosts[1], CONF_PORT: 5684})[CONF_HOST] == hosts[1]
+    probe = MagicMock(connect=AsyncMock(return_value=DATA["fingerprint"]))
+    with patch("custom_components.kalfire_gi.config_flow.DtlsTransport", return_value=probe):
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_HOST: "manual.invalid", CONF_PORT: 1234}
+        )
+    assert result["step_id"] == "auth_method"
+    probe.connect.assert_awaited_once()
+    probe.close.assert_called_once()
+
+
+async def test_discovered_address_probes_certificate_and_preserves_failed_input(hass):
+    from custom_components.kalfire_gi.discovery import GiDiscovery
+
+    with patch.object(GiDiscovery, "async_candidates", return_value=("192.0.2.22",)) as scan:
+        result = await hass.config_entries.flow.async_init(
+            DOMAIN, context={"source": config_entries.SOURCE_USER}
+        )
+        probe = MagicMock(connect=AsyncMock(side_effect=CannotConnect("offline")))
+        with patch("custom_components.kalfire_gi.config_flow.DtlsTransport", return_value=probe):
+            result = await hass.config_entries.flow.async_configure(
+                result["flow_id"], {CONF_HOST: "192.0.2.22", CONF_PORT: 1234}
+            )
+            assert result["errors"] == {"base": "cannot_connect"}
+            assert result["data_schema"]({}) == {CONF_HOST: "192.0.2.22", CONF_PORT: 1234}
+            probe.connect.side_effect = None
+            probe.connect.return_value = DATA["fingerprint"]
+            result = await hass.config_entries.flow.async_configure(
+                result["flow_id"], {CONF_HOST: "192.0.2.22", CONF_PORT: 1234}
+            )
+        scan.assert_awaited_once()
+    assert result["step_id"] == "auth_method"
+
+
+async def test_other_subnet_warns_before_probe_and_allows_explicit_connection(hass):
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": config_entries.SOURCE_USER}
+    )
+    probe = MagicMock(connect=AsyncMock(return_value=DATA["fingerprint"]))
+    with (
+        patch("custom_components.kalfire_gi.config_flow.async_same_subnet", return_value=False),
+        patch(
+            "custom_components.kalfire_gi.config_flow.DtlsTransport", return_value=probe
+        ) as factory,
+    ):
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_HOST: "192.0.2.22", CONF_PORT: 5684}
+        )
+        assert result["step_id"] == "subnet"
+        assert result["description_placeholders"] == {"host": "192.0.2.22"}
+        factory.assert_not_called()
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {"next_step_id": "user"}
+        )
+        assert result["step_id"] == "user"
+        assert result["data_schema"]({})[CONF_HOST] == "192.0.2.22"
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_HOST: "192.0.2.23", CONF_PORT: 5684}
+        )
+        assert result["step_id"] == "subnet"
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {"next_step_id": "connect"}
+        )
+        assert result["step_id"] == "auth_method"
+        probe.connect.assert_awaited_once()
+
+
+async def test_other_subnet_failed_explicit_connection_preserves_address(hass):
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": config_entries.SOURCE_USER}
+    )
+    with (
+        patch("custom_components.kalfire_gi.config_flow.async_same_subnet", return_value=False),
+        patch("custom_components.kalfire_gi.config_flow.DtlsTransport") as factory,
+    ):
+        factory.return_value.connect = AsyncMock(side_effect=CannotConnect("offline"))
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_HOST: "192.0.2.23", CONF_PORT: 1234}
+        )
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {"next_step_id": "connect"}
+        )
+    assert result["step_id"] == "user"
+    assert result["errors"] == {"base": "cannot_connect"}
+    assert result["data_schema"]({}) == {CONF_HOST: "192.0.2.23", CONF_PORT: 1234}
+
+
+@pytest.mark.parametrize("token_input", [{}, {"token": ""}, {"token": "   "}])
+async def test_empty_token_returns_to_pairing_choices_without_reconnecting(hass, token_input):
+    result = await _begin_flow(hass)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {"next_step_id": "existing_token"}
+    )
+    assert result["data_schema"]({}) == {}
+    with (
+        patch("custom_components.kalfire_gi.config_flow.GiClient") as client,
+        patch("custom_components.kalfire_gi.config_flow.DtlsTransport") as probe,
+    ):
+        result = await hass.config_entries.flow.async_configure(result["flow_id"], token_input)
+        assert result["type"] is FlowResultType.MENU
+        assert result["step_id"] == "auth_method"
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {"next_step_id": "pair"}
+        )
+        assert result["step_id"] == "pair"
+        client.assert_not_called()
+        probe.assert_not_called()

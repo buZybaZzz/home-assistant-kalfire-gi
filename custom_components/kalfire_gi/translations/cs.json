@@ -4,15 +4,11 @@
     "step": {
       "user": {
         "title": "Připojit ke krbu Kalfire Gi",
-        "description": "Zadejte adresu krbu ve své důvěryhodné domácí síti. Nastavení pouze čte data.",
+        "description": "V místní síti jsme vyhledali krby. Nalezená adresa je předvyplněna; pokud bylo nalezeno více krbů, vyberte jeden. IP adresu nebo název hostitele můžete zadat také ručně, i když nebyl nalezen žádný krb. Nastavení pouze čte údaje. Ujistěte se, že je krb ve stejné podsíti jako Home Assistant.",
         "data": {
           "host": "IP adresa nebo název hostitele",
           "port": "Port"
         }
-      },
-      "trust": {
-        "title": "Důvěřovat tomuto certifikátu krbu?",
-        "description": "Zařízení na adrese {host} předložilo tento otisk certifikátu SHA256:\n\n{fingerprint}\n\nOvěřte, že adresa patří vašemu krbu. Přijímejte pouze v důvěryhodné síti. Jde o důvěru při prvním použití, nikoli o ověření certifikační autoritou výrobce. Otisk se kontroluje při každém novém připojení. Zařízení dosud nebyl odeslán žádný token."
       },
       "auth_method": {
         "title": "Místní párování",
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Otevřít párovací okno",
-        "description": "Oficiální dálkový ovladač ponechte spárovaný a poblíž. Podržte pravé kulaté tlačítko přímo nad M3 po dobu tří sekund a ihned zvolte Odeslat. Postup odpovídá párování v aplikaci Gi a nespouští krb. Stávající aplikace na testovaném zařízení fungovala i nadále."
+        "description": "Oficiální dálkový ovladač spárovaný s krbem mějte v blízkosti krbu. Podržte pravé kulaté tlačítko umístěné přímo nad tlačítkem M3 po dobu 3 sekund a poté zvolte tlačítko Odeslat níže."
       },
       "existing_token": {
         "title": "Existující místní token zařízení",
-        "description": "Zadejte dříve spárovaný místní token o délce 24 znaků. Nejde o heslo k účtu v cloudu. Token zůstane v Home Assistant.",
+        "description": "Zadejte dříve spárovaný místní token o délce 24 znaků. Nejedná se o heslo ke cloudovému účtu. Token zůstává v Home Assistant. Nemáte token? Nechte pole prázdné a zvolte Odeslat pro návrat k výběru způsobu párování.",
         "data": {
           "token": "Místní token zařízení"
         }
@@ -39,11 +35,19 @@
           "host": "IP adresa nebo název hostitele",
           "port": "Port"
         }
+      },
+      "subnet": {
+        "title": "Zkontrolujte síť",
+        "description": "Adresa {host} je mimo podsítě povolených síťových rozhraní Home Assistant. Ujistěte se, že je krb ve stejné podsíti jako Home Assistant. Změňte adresu nebo přesto zkuste připojení, pokud síť směruje provoz mezi podsítěmi. Názvy hostitelů nelze tímto způsobem ověřit.",
+        "menu_options": {
+          "user": "Změnit adresu",
+          "connect": "Přesto zkusit připojení"
+        }
       }
     },
     "error": {
       "invalid_host": "Zadejte IP adresu nebo název hostitele bez schématu URL a cesty.",
-      "cannot_connect": "S místním krbem nelze komunikovat. Ověřte adresu a port UDP 5684.",
+      "cannot_connect": "S místním krbem nelze komunikovat. Ověřte adresu a port UDP 5684. Ujistěte se, že je krb ve stejné podsíti jako Home Assistant.",
       "certificate_changed": "Certifikát se změnil. Před odebráním a opětovným přidáním integrace zařízení ověřte a nový certifikát výslovně přijměte.",
       "pairing_failed": "Token byl odmítnut. Otevřete párovací okno ovladačem a znovu zvolte Odeslat.",
       "invalid_auth": "Místní token byl odmítnut. Spárujte zařízení dálkovým ovladačem.",

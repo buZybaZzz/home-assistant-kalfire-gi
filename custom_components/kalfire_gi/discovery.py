@@ -29,6 +29,32 @@ MAX_CANDIDATES = 8
 MAX_DATAGRAMS = 64
 
 
+async def async_same_subnet(hass: HomeAssistant, host: str) -> bool | None:
+    """Compare a literal IPv4 address with HA's enabled networks; unknown is not false."""
+    try:
+        address = ipaddress.IPv4Address(host)
+    except ipaddress.AddressValueError:
+        return None
+    networks = []
+    try:
+        adapters = await network.async_get_adapters(hass)
+    except OSError:
+        return None
+    for adapter in adapters:
+        if not adapter["enabled"]:
+            continue
+        for ip in adapter["ipv4"]:
+            if not _is_address(ip["address"]) or "network_prefix" not in ip:
+                continue
+            try:
+                networks.append(
+                    ipaddress.IPv4Network((ip["address"], ip["network_prefix"]), strict=False)
+                )
+            except ValueError:
+                continue
+    return any(address in subnet for subnet in networks) if networks else None
+
+
 def _is_address(host: str) -> bool:
     try:
         address = ipaddress.IPv4Address(host)

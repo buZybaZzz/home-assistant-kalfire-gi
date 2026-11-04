@@ -1,5 +1,7 @@
-# Kalfire application icon
+# Project fireplace icon
 
-`icon.png` is the unmodified `res/mipmap-xxxhdpi-v4/ic_launcher.png` asset extracted from the Kalfire Connected Android application (`com.iqontrol.GPXApp`, version 1.0.42), in its native 192×192 size for identifying the interoperable product in Home Assistant. SHA256: `4d839084f465597bc0ed0b024b2120702d3b07ad2a63048466e3c4e691e0c2f5`.
+`icon.png` is original fireplace artwork created for Kalfire Gi Local with OpenAI image generation and selected by the maintainer. It depicts a simplified three-sided fireplace with an orange flame. It is distributed under this repository’s MIT licence.
 
-The Kalfire name, mark and app artwork belong to their respective rights holders. This third-party image is not covered by this repository's MIT licence; no ownership or endorsement is claimed. This is an independent integration. The APK, other vendor application assets and decompiled code are not distributed here.
+This replaces the Kalfire Connected application icon bundled in earlier releases. The current image is not extracted from the vendor application and does not use the Kalfire logo.
+
+Kalfire and iQontrol names and marks belong to their respective owners. Product names identify interoperability targets only; this independent project is not endorsed by either company.

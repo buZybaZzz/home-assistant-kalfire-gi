@@ -6,14 +6,11 @@ An independent Home Assistant integration for Kalfire **Gi** gas fireplaces usin
 
 ## Features
 
-The integration includes its own local Kalfire app icon in `brand/icon.png` (supported by HA 2026.3+).
-
-
 - Local temperature, operating state, error code and flame-height **setting** sensors.
 - Firmware version in device information; the read-only flame-height setting is under Diagnostics, alongside optional raw status bits.
 - Setup through **Settings → Devices & services → Add integration → Kalfire Gi Local**.
 - Physical pairing with the official remote; alternatively import an existing local device token.
-- Explicitly accepted SHA256 certificate pin, checked on every connection.
+- Automatically remembered SHA256 certificate pin on first connection, checked on every subsequent connection.
 - Automatic IP address recovery through Home Assistant DHCP discovery and the Gi's local discovery protocol. The stored certificate and device MAC are checked before accepting a new address.
 - Optional normal on/off switch and flame-height slider (1–5), enabled through integration options. Burner controls are off by default; Ember Glow is always available.
 - Optional Sparks slider (0–5); enable only if the generator is installed.
@@ -25,30 +22,43 @@ The integration includes its own local Kalfire app icon in `brand/icon.png` (sup
 
 The flame-height sensor reports a stored setting, **not** proof of a flame. The state follows the device's own state machine. No ignition, reset or other control command is sent by setup, pairing, polling, reloading or reconnecting.
 
-## Install with HACS
+## Installation
 
-The repository can be used as a **custom repository**; inclusion in HACS's default directory is a separate future review.
+Kalfire Gi Local is included in the [default community catalog](https://github.com/hacs/default/pull/12646). You can search for it directly; adding a custom repository is not required.
 
-1. In HACS, open **⋮ → Custom repositories**.
-2. Add `https://github.com/buZybaZzz/home-assistant-kalfire-gi`, category **Integration**.
-3. Download **Kalfire Gi Local**. Choose the latest stable release.
-4. Restart Home Assistant once to load the custom integration.
-5. Add **Kalfire Gi Local** under Devices & services.
+### Home Assistant 2026.11 and newer: Marketplace
 
-Manual alternative: copy `custom_components/kalfire_gi/` into `/config/custom_components/kalfire_gi/` and restart Home Assistant. All runtime files are in that one directory. A separate compiled executable is not needed.
+Starting with Home Assistant 2026.11, **Marketplace** is built in and replaces HACS. See the [official Marketplace documentation](https://contributors.home-assistant.io/marketplace/how-it-works/).
+
+1. Open **Settings → Marketplace** and search for **Kalfire Gi Local**.
+2. Open the repository and download the latest stable release.
+3. Restart Home Assistant to load the custom integration.
+4. Open **Settings → Devices & services → Add integration**, search for **Kalfire Gi Local** and follow the pairing instructions below.
+
+If you previously installed this integration using HACS, Marketplace takes over the installed repository and its updates automatically. You do not need to reinstall or pair the fireplace again solely because of this transition.
+
+### Home Assistant 2026.10 and older: HACS
+
+1. Open **HACS** and search for **Kalfire Gi Local**. If HACS is not installed, follow the [HACS installation instructions](https://www.hacs.xyz/docs/use/download/download/).
+2. Open the repository and download the latest stable release.
+3. Restart Home Assistant.
+4. Add **Kalfire Gi Local** under **Settings → Devices & services → Add integration**.
+
+### Manual installation
+
+Copy `custom_components/kalfire_gi/` into `/config/custom_components/kalfire_gi/` and restart Home Assistant, then add **Kalfire Gi Local** under **Settings → Devices & services**. All runtime files are in that one directory. A separate compiled executable is not needed.
 
 ## Pair your fireplace
 
 Keep the fireplace's official remote paired and in its normal location near the fireplace. The remote and the fireplace's existing safety functions remain necessary.
 
-1. Put Home Assistant and the fireplace on the same trusted LAN/subnet for the initial setup. Allow unicast UDP 5684. Cross-subnet support has not been established; no broad firewall opening or port forwarding is needed.
-2. Find the fireplace IP address in your router. A DHCP reservation is useful but optional.
-3. Enter that address in the integration setup. The default port is 5684.
-4. Check the device address and explicitly accept the displayed certificate fingerprint on your trusted network. Initial discovery sends only a DTLS handshake, no device token.
+1. Keep Home Assistant and the fireplace on the same trusted LAN/subnet.
+2. Start adding the integration. It searches the local network for about five seconds and prefills a discovered address. If several fireplaces are found, choose an address from the list.
+3. Confirm the discovered address, or enter the fireplace’s IP address or hostname manually if discovery finds nothing. Keep Home Assistant and the fireplace on the same LAN/subnet; discovery and pairing across different subnets failed in our testing. You can find the IP address in your router. The default port is 5684; a DHCP reservation is optional. Setup compares literal IPv4 addresses with the subnets of HA’s enabled interfaces and warns before connecting if none match. You can change the address or explicitly try anyway for routed/container networks. Hostnames and unavailable interface data cannot be checked this way.
+4. Home Assistant automatically remembers the certificate from the selected address and continues to the pairing choices. Network discovery sends a local multicast query; checking the selected address sends only a DTLS handshake, no device token.
 5. Choose **Pair using the remote control**.
 6. Hold the **right round button directly above M3 for 3 seconds**, as illustrated by the official Gi app. Immediately submit the pairing form.
 7. The integration registers a new random local token by following the app's initial read sequence. It does not ignite the fireplace.
-8. Check that the official Kalfire app still works. Existing app access remained functional on the tested unit.
 
 If pairing times out, reopen the physical pairing window and submit again. Do not unpair the official remote, reset the fireplace, change gas parameters or bridge safety contacts.
 
@@ -64,7 +74,7 @@ The on/off commands follow the normal Gi app interface (`syscmd mode=1` and `mod
 
 ## Transport security and limits
 
-The tested device uses DTLS 1.2 and `ECDHE-ECDSA-AES256-GCM-SHA384`, with an X.509 certificate issued by a private iQontrol CA. This integration uses **explicit trust on first use and certificate pinning**, not public-CA or manufacturer-CA validation. A first connection on an untrusted network cannot establish the device's identity independently. A changed pin blocks application data; it is not silently accepted.
+The tested device uses DTLS 1.2 and `ECDHE-ECDSA-AES256-GCM-SHA384`, with an X.509 certificate issued by a private iQontrol CA. This integration uses **automatic trust on first use and certificate pinning**, not public-CA or manufacturer-CA validation. A first connection on an untrusted network cannot establish the device's identity independently. A changed pin blocks application data; it is not silently accepted.
 
 The client communicates directly with the fireplace. HA start/stop also worked under a temporary device-specific UniFi Internet-block rule. No independent WAN drop-counter/capture proof or cold-start/long-duration offline test was collected; see [validation](docs/validation.md). Firmware and protocol differences may require changes. Direct gas-valve writes, firmware flashing and error-reset commands are not implemented.
 
@@ -83,7 +93,7 @@ Multicast discovery was confirmed from a Mac to one Gi with firmware 0.7.11. Aut
 - **Certificate changed:** verify the device before removing/re-adding the integration to accept a new pin. Do not bypass the check.
 - **Command outcome uncertain:** look at the fireplace and read its state before deciding on another action; do not automatically retry.
 - **Entities unavailable:** no control or reconnect loop will restart the fireplace. The integration will retry read-only polling.
-- **Need to remove:** delete the integration entry and uninstall through HACS. No network, firmware or safety configuration needs restoring. Token revocation on the fireplace has not been documented; deleting an HA entry removes the locally stored token, not necessarily the device-side registration.
+- **Need to remove:** delete the integration entry and uninstall through Marketplace (or HACS on HA 2026.10 and older). No network, firmware or safety configuration needs restoring. Token revocation on the fireplace has not been documented; deleting an HA entry removes the locally stored token, not necessarily the device-side registration.
 
 ## Development and reporting
 
@@ -98,15 +108,15 @@ ruff format --check .
 pytest
 ```
 
-Tests use fake peers and Home Assistant fixtures; they never address a live fireplace. Hardware testing is a separate, explicit action. No APKs, decompiled application code, certificates, secrets or home-network captures are included. The sole vendor image is the app icon, shipped unmodified for product identification; see [asset notice](custom_components/kalfire_gi/brand/NOTICE.md).
+Tests use fake peers and Home Assistant fixtures; they never address a live fireplace. Hardware testing is a separate, explicit action. No APKs, decompiled application code, certificates, secrets or home-network captures are included. The fireplace icon was created for this project; see the [asset notice](custom_components/kalfire_gi/brand/NOTICE.md). No vendor app artwork is bundled.
 
 ## Roadmap
 
 - Improve post-command state feedback and investigate the observed startup read timeout. HACS installation, sensors and supervised HA start/stop have been confirmed on Home Assistant Green.
 - Validate more Gi models/firmwares, independently verify WAN blocking and test cold-start/long-duration offline behavior.
 - Installed beta 2 flame-height, Spark and normal stop were physically confirmed by the owner. The owner confirmed Ember Glow on/off, brightness and native flicker. Research moods and native temperature modes next.
-- Consider HACS default-directory inclusion after broader testing. Core inclusion would also benefit from publishing the independent protocol client as a separate Python package.
+- Consider publishing the independent protocol client as a separate Python package to support possible future Home Assistant Core inclusion.
 
 ## License
 
-MIT for the original implementation in this repository. Product names identify interoperability targets. The bundled Kalfire app icon remains third-party artwork, outside the MIT licence; see its [notice](custom_components/kalfire_gi/brand/NOTICE.md).
+MIT for the original implementation in this repository. Product names identify interoperability targets. The project-created fireplace icon is distributed under the same MIT licence; see its [notice](custom_components/kalfire_gi/brand/NOTICE.md).

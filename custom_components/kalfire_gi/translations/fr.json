@@ -4,15 +4,11 @@
     "step": {
       "user": {
         "title": "Connecter votre Kalfire Gi",
-        "description": "Saisissez l’adresse du foyer sur votre réseau domestique de confiance. La configuration ne fait que lire des données.",
+        "description": "Une recherche de cheminées a été effectuée sur le réseau local. Une adresse trouvée est préremplie ; si plusieurs cheminées sont détectées, choisissez-en une. Vous pouvez aussi saisir une adresse IP ou un nom d’hôte manuellement, même si aucune cheminée n’a été trouvée. La configuration lit uniquement les données. Assurez-vous que la cheminée se trouve sur le même sous-réseau que Home Assistant.",
         "data": {
           "host": "Adresse IP ou nom d’hôte",
           "port": "Port"
         }
-      },
-      "trust": {
-        "title": "Faire confiance à ce certificat du foyer ?",
-        "description": "L’appareil à l’adresse {host} a présenté cette empreinte de certificat SHA256 :\n\n{fingerprint}\n\nVérifiez que l’adresse correspond à votre foyer. Acceptez uniquement sur un réseau de confiance. Il s’agit d’une confiance à la première utilisation, sans validation par une autorité de certification du fabricant. L’empreinte sera vérifiée à chaque nouvelle connexion. Aucun jeton n’a encore été envoyé à l’appareil."
       },
       "auth_method": {
         "title": "Association locale",
@@ -23,11 +19,11 @@
       },
       "pair": {
         "title": "Ouvrir la fenêtre d’association",
-        "description": "Gardez la télécommande officielle associée et à proximité. Maintenez le bouton rond droit juste au-dessus de M3 pendant trois secondes, puis sélectionnez immédiatement Envoyer. Cette procédure suit celle de l’application Gi et ne démarre pas le foyer. L’application existante est restée fonctionnelle sur l’appareil testé."
+        "description": "Gardez la télécommande officielle associée au foyer à proximité du foyer. Maintenez le bouton rond droit situé directement au-dessus du bouton M3 enfoncé pendant 3 secondes, puis sélectionnez le bouton Envoyer ci-dessous."
       },
       "existing_token": {
         "title": "Jeton local existant de l’appareil",
-        "description": "Saisissez un jeton local de 24 caractères déjà associé. Ce n’est pas le mot de passe de votre compte cloud. Le jeton reste dans Home Assistant.",
+        "description": "Saisissez un jeton local de 24 caractères précédemment associé. Il ne s’agit pas de votre mot de passe cloud. Le jeton reste dans Home Assistant. Vous n’avez pas de jeton ? Laissez le champ vide et sélectionnez Envoyer pour revenir au choix de la méthode d’association.",
         "data": {
           "token": "Jeton local de l’appareil"
         }
@@ -39,11 +35,19 @@
           "host": "Adresse IP ou nom d’hôte",
           "port": "Port"
         }
+      },
+      "subnet": {
+        "title": "Vérifier le réseau",
+        "description": "L’adresse {host} est en dehors des sous-réseaux des interfaces réseau activées de Home Assistant. Assurez-vous que la cheminée se trouve sur le même sous-réseau que Home Assistant. Modifiez l’adresse ou essayez quand même si votre réseau route le trafic entre sous-réseaux. Les noms d’hôte ne peuvent pas être vérifiés ainsi.",
+        "menu_options": {
+          "user": "Modifier l’adresse",
+          "connect": "Essayer quand même"
+        }
       }
     },
     "error": {
       "invalid_host": "Saisissez une adresse IP ou un nom d’hôte, sans schéma d’URL ni chemin.",
-      "cannot_connect": "Impossible de communiquer avec le foyer local. Vérifiez son adresse et le port UDP 5684.",
+      "cannot_connect": "Impossible de communiquer avec le foyer local. Vérifiez son adresse et le port UDP 5684. Assurez-vous que la cheminée se trouve sur le même sous-réseau que Home Assistant.",
       "certificate_changed": "Certificat modifié. Vérifiez l’appareil avant de supprimer puis de rajouter l’intégration pour accepter explicitement le nouveau certificat.",
       "pairing_failed": "Jeton refusé. Ouvrez la fenêtre d’association avec la télécommande et sélectionnez à nouveau Envoyer.",
       "invalid_auth": "Jeton local refusé. Associez l’appareil avec la télécommande.",

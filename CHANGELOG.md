@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.1.5 — original icon and Marketplace installation
+
+- Replace the vendor app icon with project-created fireplace artwork and update the asset licence notice.
+- Document direct installation from the default catalog: Marketplace on HA 2026.11 and newer, HACS on older versions. Remove the custom-repository requirement and the completed catalog-inclusion roadmap item.
+- No device control or protocol changes.
+
+## 0.1.4 — automatic discovery and simpler setup
+
+- Promote the owner-tested beta 2 to stable without functional changes. Initial setup discovers local fireplaces, prefills an address or offers a choice, and retains manual entry.
+- Warn before connecting when an entered IPv4 address falls outside HA’s enabled subnets; add same-subnet guidance to connection errors.
+- Remember the initial certificate automatically while retaining certificate pin checks on subsequent connections. Simplify pairing instructions in all 11 languages and allow empty token entry to return to the pairing choices.
+- The owner confirmed that beta 2 appears to work correctly. All 122 offline tests and GitHub checks passed for the tested beta.
+
+## 0.1.4-beta.2 — subnet guidance
+
+- Remember the initial certificate automatically and proceed directly to pairing choices; keep certificate pin checks on every subsequent connection. Simplify pairing instructions in all languages and allow returning from token entry by submitting an empty field.
+
+- Add same-subnet guidance to connection errors and the initial setup screen in all supported languages.
+- Compare entered IPv4 addresses with the actual prefixes of enabled HA interfaces before connecting; offer address correction or an explicit attempt across subnets. Hostnames and unavailable adapter data remain unchecked.
+- Initial discovery on the same subnet was confirmed by the owner with beta 1. The owner also reported failed discovery and pairing across subnets; this does not establish a universal routing limitation.
+
+## 0.1.4-beta.1 — initial setup discovery
+
+- Search for local Gi fireplaces during initial setup, prefill a discovered address, offer a choice when several respond, and retain manual address entry. Certificate trust and physical pairing remain required.
+
 ## 0.1.3 — automatic IP address recovery
 
 - Recover an already paired Gi at a new address during startup or polling, using bounded, shared local multicast discovery and checking both the existing certificate pin and device MAC.

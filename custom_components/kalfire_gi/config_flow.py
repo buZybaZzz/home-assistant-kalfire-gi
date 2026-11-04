@@ -1,4 +1,4 @@
-"""User-confirmed certificate trust and physical local pairing."""
+"""Automatic certificate pinning on first use and physical local pairing."""
 
 import secrets
 from collections.abc import Mapping
@@ -22,7 +22,7 @@ from .const import (
     DEFAULT_PORT,
     DOMAIN,
 )
-from .discovery import async_connect_candidate
+from .discovery import async_connect_candidate, async_get_discovery, async_same_subnet
 from .gi import GiClient
 from .gi.client import validate_token
 from .gi.errors import AuthenticationError, CertificateChanged, KalfireError
@@ -37,6 +37,7 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         self._connection: dict[str, Any] = {}
         self._new_token = secrets.token_hex(12)
+        self._discovered_hosts: tuple[str, ...] | None = None
 
     @staticmethod
     @callback
@@ -71,45 +72,70 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None):
         errors = {}
+        if user_input is None and self._discovered_hosts is None:
+            self._discovered_hosts = await async_get_discovery(self.hass).async_candidates()
         if user_input is not None:
             host = user_input[CONF_HOST].strip()
             if not host or "://" in host or "/" in host:
                 errors[CONF_HOST] = "invalid_host"
             else:
                 self._connection = {CONF_HOST: host, CONF_PORT: user_input[CONF_PORT]}
-                probe = DtlsTransport(host, user_input[CONF_PORT])
-                try:
-                    self._connection[CONF_FINGERPRINT] = await probe.connect()
-                except KalfireError:
-                    errors["base"] = "cannot_connect"
-                finally:
-                    probe.close()
-                if not errors:
-                    return await self.async_step_trust()
+                if await async_same_subnet(self.hass, host) is False:
+                    return await self.async_step_subnet()
+                return await self.async_step_connect()
+        return self._show_user_form(errors, user_input)
+
+    def _show_user_form(self, errors, user_input=None):
+        """Keep the selected address when returning from a subnet warning or failure."""
+        user_input = user_input or self._connection or None
+        hosts = self._discovered_hosts or ()
+        host_field = vol.Required(CONF_HOST)
+        if user_input is not None:
+            host_field = vol.Required(CONF_HOST, default=user_input[CONF_HOST])
+        elif hosts:
+            host_field = vol.Required(CONF_HOST, default=hosts[0])
+        host_selector = (
+            selector.SelectSelector(
+                selector.SelectSelectorConfig(
+                    options=list(hosts),
+                    custom_value=True,
+                    mode=selector.SelectSelectorMode.DROPDOWN,
+                )
+            )
+            if len(hosts) > 1
+            else str
+        )
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_HOST): str,
-                    vol.Required(CONF_PORT, default=DEFAULT_PORT): vol.All(
-                        vol.Coerce(int), vol.Range(min=1, max=65535)
-                    ),
+                    host_field: host_selector,
+                    vol.Required(
+                        CONF_PORT,
+                        default=user_input[CONF_PORT] if user_input is not None else DEFAULT_PORT,
+                    ): vol.All(vol.Coerce(int), vol.Range(min=1, max=65535)),
                 }
             ),
             errors=errors,
         )
 
-    async def async_step_trust(self, user_input: dict[str, Any] | None = None):
-        if user_input is not None:
-            return await self.async_step_auth_method()
-        return self.async_show_form(
-            step_id="trust",
-            data_schema=vol.Schema({}),
-            description_placeholders={
-                "host": self._connection[CONF_HOST],
-                "fingerprint": self._connection[CONF_FINGERPRINT],
-            },
+    async def async_step_subnet(self, user_input=None):
+        return self.async_show_menu(
+            step_id="subnet",
+            menu_options=["user", "connect"],
+            description_placeholders={"host": self._connection[CONF_HOST]},
         )
+
+    async def async_step_connect(self, user_input=None):
+        """Probe only after address checks and any subnet warning were acknowledged."""
+        probe = DtlsTransport(self._connection[CONF_HOST], self._connection[CONF_PORT])
+        try:
+            self._connection[CONF_FINGERPRINT] = await probe.connect()
+        except KalfireError:
+            return self._show_user_form({"base": "cannot_connect"})
+        finally:
+            probe.close()
+        return await self.async_step_auth_method()
 
     async def async_step_auth_method(self, user_input=None):
         return self.async_show_menu(step_id="auth_method", menu_options=["pair", "existing_token"])
@@ -153,8 +179,11 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_existing_token(self, user_input: dict[str, Any] | None = None):
         errors = {}
         if user_input is not None:
+            token = user_input.get(CONF_TOKEN, "").strip()
+            if not token:
+                return await self.async_step_auth_method()
             try:
-                token = validate_token(user_input[CONF_TOKEN].strip())
+                token = validate_token(token)
                 return await self._complete(token)
             except ValueError:
                 errors[CONF_TOKEN] = "invalid_token"
@@ -168,7 +197,7 @@ class GiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="existing_token",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_TOKEN): selector.TextSelector(
+                    vol.Optional(CONF_TOKEN): selector.TextSelector(
                         selector.TextSelectorConfig(type=selector.TextSelectorType.PASSWORD)
                     )
                 }

@@ -417,3 +417,42 @@ async def test_failed_first_refresh_closes_replacement_client(hass):
         await hass.async_block_till_done()
     new.close.assert_called_once()
     assert_no_commands(old, new)
+
+
+@pytest.mark.parametrize(
+    ("host", "addresses", "expected"),
+    [
+        ("192.168.10.50", [("192.168.10.2", 24)], True),
+        ("192.168.20.50", [("192.168.10.2", 24)], False),
+        ("192.168.20.50", [("192.168.10.2", 16)], True),
+        ("192.168.20.50", [("192.168.10.2", 24), ("192.168.20.2", 24)], True),
+        ("192.168.20.50", [("127.0.0.1", 8)], None),
+        ("192.168.20.50", [], None),
+        ("fireplace.local", [("192.168.10.2", 24)], None),
+        ("2001:db8::1", [("192.168.10.2", 24)], None),
+    ],
+)
+async def test_subnet_comparison_uses_actual_prefixes(hass, host, addresses, expected):
+    from custom_components.kalfire_gi.discovery import async_same_subnet
+
+    with patch(
+        "custom_components.kalfire_gi.discovery.network.async_get_adapters",
+        return_value=[
+            {
+                "enabled": True,
+                "ipv4": [{"address": ip, "network_prefix": prefix} for ip, prefix in addresses],
+            },
+            {"enabled": False, "ipv4": [{"address": "192.168.20.2", "network_prefix": 24}]},
+        ],
+    ):
+        assert await async_same_subnet(hass, host) is expected
+
+
+async def test_subnet_unavailable_adapters_are_unknown(hass):
+    from custom_components.kalfire_gi.discovery import async_same_subnet
+
+    with patch(
+        "custom_components.kalfire_gi.discovery.network.async_get_adapters",
+        side_effect=OSError,
+    ):
+        assert await async_same_subnet(hass, HOST) is None
